@@ -54,7 +54,7 @@ public class vLogin extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 494, 279);
 		contentPane = new JPanel();
-		//this.setUndecorated(true);
+		this.setUndecorated(true);
 		this.setLocationRelativeTo(null);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

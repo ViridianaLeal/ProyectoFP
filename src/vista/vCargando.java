@@ -65,7 +65,7 @@ public class vCargando extends JFrame {
 
 		barCargando.setForeground(new Color(0, 0, 0));
 		barCargando.setStringPainted(true);
-		barCargando.setBounds(-10, 0, 450, 93);
+		barCargando.setBounds(0, 0, 484, 93);
 		contentPane.add(barCargando);
 		Cargar();
 	}

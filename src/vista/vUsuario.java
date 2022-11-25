@@ -50,7 +50,7 @@ import java.io.IOException;
 import java.awt.Toolkit;
 import java.awt.Choice;
 
-public class vUsuario extends JFrame {
+public class vUsuario extends JInternalFrame {
 
 	private JPanel contentPane;
 	private JTextField txtUser;
@@ -100,11 +100,11 @@ public class vUsuario extends JFrame {
 	}
 
 	public vUsuario() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/jyujyu.png")));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/jyujyu.png")));
 		setTitle("CRUD USUARIO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 693, 598);
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

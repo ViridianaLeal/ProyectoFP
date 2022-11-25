@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.FileInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
@@ -11,6 +12,8 @@ import modelo.Usuario;
 
 public class daoUsuario {
 	conexion cx = null;
+	FileInputStream fis;
+	int longitudBytes;
 
 	public daoUsuario() {
 		cx = new conexion();
@@ -19,11 +22,11 @@ public class daoUsuario {
 	public boolean insertarUsuario(Usuario user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO usuario VALUES(null,?,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO usuario VALUES(null,?,?,?,?)");
 			ps.setString(1, user.getUser());
-			ps.setString(2, user.getPassword());
 			ps.setString(2, convertirSHA256(user.getPassword()));
 			ps.setString(3, user.getNombre());
+			ps.setBinaryStream(4, fis,longitudBytes);
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

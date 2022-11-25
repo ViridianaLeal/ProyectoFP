@@ -1,10 +1,13 @@
 package modelo;
 
+import java.io.InputStream;
+
 public class Usuario {
 	int id;
 	String user;
 	String password;
 	String nombre;
+	String foto;
 
 	public Usuario() {
 		
@@ -41,6 +44,16 @@ public class Usuario {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	
 	
 	
 

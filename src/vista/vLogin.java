@@ -19,6 +19,7 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
 
 public class vLogin extends JFrame {
 
@@ -29,6 +30,8 @@ public class vLogin extends JFrame {
 	private JTextField txtUser;
 	private JLabel lblLogo;
 	daoUsuario dao=new daoUsuario();
+	private JLabel lblNewLabel_1;
+	private JButton btnAgregarCuenta;
 
 	/**
 	 * Launch the application.
@@ -126,8 +129,24 @@ public class vLogin extends JFrame {
 		txtUser.setColumns(10);
 		
 		lblLogo = new JLabel("New label");
-		lblLogo.setIcon(new ImageIcon(vLogin.class.getResource("/img/preparatoria.png")));
-		lblLogo.setBounds(287, 51, 123, 131);
+		lblLogo.setIcon(new ImageIcon(vLogin.class.getResource("/img/DeoClass.png")));
+		lblLogo.setBounds(282, 39, 164, 170);
 		contentPane.add(lblLogo);
+		
+		lblNewLabel_1 = new JLabel("No tienes cuenta?");
+		lblNewLabel_1.setBounds(37, 241, 141, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		btnAgregarCuenta = new JButton("agrega tu cuenta");
+		btnAgregarCuenta.setForeground(SystemColor.textHighlight);
+		btnAgregarCuenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				vUsuario vusuario= new vUsuario();
+				vusuario.setVisible(true);
+			}
+		});
+		btnAgregarCuenta.setBorder(null);
+		btnAgregarCuenta.setBounds(150, 237, 118, 23);
+		contentPane.add(btnAgregarCuenta);
 	}
 }

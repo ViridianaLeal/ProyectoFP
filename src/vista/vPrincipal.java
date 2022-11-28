@@ -74,7 +74,7 @@ public class vPrincipal extends JFrame {
 		desktopPane.add(vusuario);
 		
 		barraherramientas = new JToolBar();
-		barraherramientas.setBounds(10, 32, 424, 16);
+		barraherramientas.setBounds(10, 32, 843, 16);
 		contentPane.add(barraherramientas);
 		
 		JButton btnNewButton = new JButton("CRUD USUARIO");
@@ -84,5 +84,8 @@ public class vPrincipal extends JFrame {
 			}
 		});
 		barraherramientas.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("New button");
+		barraherramientas.add(btnNewButton_1);
 	}
 }

@@ -47,10 +47,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.Toolkit;
 import java.awt.Choice;
 
-public class vUsuario extends JInternalFrame {
+public class vUsuario extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtUser;
@@ -100,11 +102,11 @@ public class vUsuario extends JInternalFrame {
 	}
 
 	public vUsuario() {
-		//setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/jyujyu.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/jyujyu.png")));
 		setTitle("CRUD USUARIO");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 693, 598);
-		//setLocationRelativeTo(null);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -229,19 +231,19 @@ public class vUsuario extends JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileOutputStream archivo;
-					File file = new File("C:\\Users\\VIRI\\Desktop\\Repositorios\\ProyectoFP\\src\\PDF\\RegistroUsuarios.pdf");
+					URI uri = new URI(getClass().getResource("/PDF/reporteUsuarios.pdf").toString());
+					File file = new File(uri);
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					Image img = Image.getInstance(
-							"C:\\Users\\VIRI\\Desktop\\Repositorios\\ProyectoFP\\src\\img\\jyujyu.png");
+					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/jyujyu.png"));
+					Image img = Image.getInstance(getClass().getResource("/img/jyujyu.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(100, 100);
+					img.scaleToFit(200, 200);
 					doc.add(img);
 					Paragraph p = new Paragraph(10);
-					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
-							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
 					p.add(Chunk.NEWLINE);
 					p.add("CATALOGO DE USUARIOS");
 					p.add(Chunk.NEWLINE);
@@ -254,7 +256,7 @@ public class vUsuario extends JInternalFrame {
 					PdfPCell c2 = new PdfPCell(new Phrase(" USUARIO", negrita));
 					PdfPCell c3 = new PdfPCell(new Phrase(" PASSWORD", negrita));
 					PdfPCell c4 = new PdfPCell(new Phrase(" NOMBRE", negrita));
-					PdfPCell c5 = new PdfPCell(new Phrase("FOTO",negrita));
+					PdfPCell c5 = new PdfPCell(new Phrase("FOTO", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -292,13 +294,15 @@ public class vUsuario extends JInternalFrame {
 					archivo.close();
 					Desktop.getDesktop().open(file);
 				} catch (FileNotFoundException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");					
+					JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
 				} catch (DocumentException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");				
+					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
+				} catch (URISyntaxException e1) {
+					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
 				}
-			
+
 			}
 		});
 		btnPdf.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -337,34 +341,35 @@ public class vUsuario extends JInternalFrame {
 		modelo.addColumn("NOMBRE");
 		modelo.addColumn("FOTO");
 		tblUsuarios.setModel(modelo);
-		
+
 		JLabel lblNewLabel_1_2_1 = new JLabel("IMAGEN:");
 		lblNewLabel_1_2_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
 		lblNewLabel_1_2_1.setBounds(25, 218, 86, 23);
 		contentPane.add(lblNewLabel_1_2_1);
-		
+
 		txtImagen = new JTextField();
 		txtImagen.setEditable(false);
 		txtImagen.setColumns(10);
 		txtImagen.setBounds(121, 223, 246, 20);
 		contentPane.add(txtImagen);
-		
+
 		btnSeleccionarI = new JButton("Seleccionar");
 		btnSeleccionarI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FileNameExtensionFilter filtro=new FileNameExtensionFilter("Formatos de Archivos JPEG(*.JPG;*.JPEG)","jpg","jpeg");
-				JFileChooser archivo =new JFileChooser();
+				FileNameExtensionFilter filtro = new FileNameExtensionFilter("Formatos de Archivos JPEG(*.JPG;*.JPEG)",
+						"jpg", "jpeg");
+				JFileChooser archivo = new JFileChooser();
 				archivo.addChoosableFileFilter(filtro);
 				archivo.setDialogTitle("Abrir Archivo");
-				File ruta=new File("D:/usuarios");
+				File ruta = new File("D:/usuarios");
 				archivo.setCurrentDirectory(ruta);
-				int ventana=archivo.showOpenDialog(null);
-				if(ventana== JFileChooser.APPROVE_OPTION) {
-										
-					File file =archivo.getSelectedFile();
+				int ventana = archivo.showOpenDialog(null);
+				if (ventana == JFileChooser.APPROVE_OPTION) {
+
+					File file = archivo.getSelectedFile();
 					txtImagen.setText(String.valueOf(file));
-					java.awt.Image foto=getToolkit().getImage(txtImagen.getText());
-					foto=foto.getScaledInstance(300, 300, java.awt.Image.SCALE_DEFAULT);
+					java.awt.Image foto = getToolkit().getImage(txtImagen.getText());
+					foto = foto.getScaledInstance(300, 300, java.awt.Image.SCALE_DEFAULT);
 					lblFoto.setIcon(new ImageIcon(foto));
 				}
 			}
@@ -373,7 +378,7 @@ public class vUsuario extends JInternalFrame {
 		btnSeleccionarI.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnSeleccionarI.setBounds(395, 220, 106, 23);
 		contentPane.add(btnSeleccionarI);
-		
+
 		lblFoto = new JLabel("");
 		lblFoto.setBounds(391, 32, 251, 148);
 		contentPane.add(lblFoto);

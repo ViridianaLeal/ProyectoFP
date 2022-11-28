@@ -10,6 +10,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JProgressBar;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+import java.awt.Component;
+import java.awt.SystemColor;
+import javax.swing.border.LineBorder;
+import java.awt.ComponentOrientation;
+import java.awt.Font;
+import javax.swing.border.BevelBorder;
 
 public class vCargando extends JFrame {
 
@@ -43,7 +49,7 @@ public class vCargando extends JFrame {
 					}
 					if(i==100) {
 						setVisible(false);
-						vPrincipal p=new vPrincipal();
+						vIngreso p=new vIngreso();
 						p.setVisible(true);
 					}
 				}
@@ -54,7 +60,7 @@ public class vCargando extends JFrame {
 
 	public vCargando() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 93);
+		setBounds(100, 100, 737, 96);
 		contentPane = new JPanel();
 		this.setUndecorated(true);
 		this.setLocationRelativeTo(null);
@@ -62,10 +68,17 @@ public class vCargando extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		barCargando.setFont(new Font("Agency FB", Font.BOLD , 20));
+		barCargando.setInheritsPopupMenu(true);
+		barCargando.setDoubleBuffered(true);
+		barCargando.setBorder(null);
+		barCargando.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		barCargando.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		barCargando.setBackground(new Color(192, 192, 192));
 
-		barCargando.setForeground(new Color(0, 0, 0));
+		barCargando.setForeground(SystemColor.activeCaption);
 		barCargando.setStringPainted(true);
-		barCargando.setBounds(0, 0, 484, 93);
+		barCargando.setBounds(0, 0, 726, 61);
 		contentPane.add(barCargando);
 		Cargar();
 	}

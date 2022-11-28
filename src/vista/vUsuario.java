@@ -58,19 +58,16 @@ public class vUsuario extends JFrame {
 	private JTextField txtUser;
 	private JTextField txtPassword;
 	private JTextField txtNombre;
-	private JTable tblUsuarios;
 	private JLabel lblID;
 	private JButton btnAgregar;
 	private JButton btnEliminar;
 	private JButton btnEditar;
 	private JButton btnPdf;
-	private JScrollPane scrollPane;
 	daoUsuario dao = new daoUsuario();
 	DefaultTableModel modelo = new DefaultTableModel();
 	ArrayList<Usuario> lista = new ArrayList<Usuario>();
 	Usuario usuario;
 	int fila = -1;
-	private JTextField txtImagen;
 	private JButton btnSeleccionarI;
 	private JLabel lblFoto;
 	FileInputStream fis;
@@ -105,7 +102,7 @@ public class vUsuario extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/jyujyu.png")));
 		setTitle("CRUD USUARIO");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 693, 598);
+		setBounds(100, 100, 389, 381);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -171,7 +168,7 @@ public class vUsuario extends JFrame {
 		});
 		btnAgregar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(104, 312, 106, 23);
+		btnAgregar.setBounds(76, 254, 106, 23);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("Editar");
@@ -224,7 +221,7 @@ public class vUsuario extends JFrame {
 		});
 		btnEliminar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(244, 312, 103, 23);
+		btnEliminar.setBounds(214, 254, 103, 23);
 		contentPane.add(btnEliminar);
 		btnPdf = new JButton("Pdf");
 		btnPdf.addActionListener(new ActionListener() {
@@ -309,49 +306,11 @@ public class vUsuario extends JFrame {
 		btnPdf.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
 		btnPdf.setBounds(511, 312, 89, 23);
 		contentPane.add(btnPdf);
-		scrollPane = new JScrollPane();
-		scrollPane.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		scrollPane.setBounds(21, 369, 621, 158);
-		contentPane.add(scrollPane);
-		tblUsuarios = new JTable();
-		tblUsuarios.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				fila = tblUsuarios.getSelectedRow();
-				fila = tblUsuarios.getSelectedRow();
-				usuario = lista.get(fila);
-				lblID.setText("" + lista.get(fila).getId());
-				txtUser.setText(usuario.getUser());
-				txtPassword.setText(usuario.getPassword());
-				txtNombre.setText(usuario.getNombre());
-				txtImagen.setText(usuario.getFoto());
-			}
-		});
-		tblUsuarios.setModel(new DefaultTableModel(
-				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, },
-				new String[] { "New column", "New column", "New column", "New column" }));
-		scrollPane.setViewportView(tblUsuarios);
 		modelo.addColumn("ID");
 		modelo.addColumn("USER");
 		modelo.addColumn("PASSWORD");
 		modelo.addColumn("NOMBRE");
 		modelo.addColumn("FOTO");
-		tblUsuarios.setModel(modelo);
-
-		JLabel lblNewLabel_1_2_1 = new JLabel("IMAGEN:");
-		lblNewLabel_1_2_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1_2_1.setBounds(25, 218, 86, 23);
-		contentPane.add(lblNewLabel_1_2_1);
-
-		txtImagen = new JTextField();
-		txtImagen.setEditable(false);
-		txtImagen.setColumns(10);
-		txtImagen.setBounds(121, 223, 246, 20);
-		contentPane.add(txtImagen);
 
 		btnSeleccionarI = new JButton("Seleccionar");
 		btnSeleccionarI.addActionListener(new ActionListener() {
@@ -399,6 +358,5 @@ public class vUsuario extends JFrame {
 			o[4] = u.getFoto();
 			modelo.addRow(o);
 		}
-		tblUsuarios.setModel(modelo);
 	}
 }

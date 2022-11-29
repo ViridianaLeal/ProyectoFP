@@ -58,20 +58,25 @@ public class vPrincipal extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 101, 22);
+		menuBar.setBounds(0, 0, 1186, 22);
 		contentPane.add(menuBar);
 		
 		JMenu mnNewMenu = new JMenu("CRUDS");
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Usuario");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				barraherramientas.setVisible(true);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem);
 		
 		desktopPane = new JDesktopPane();
 		desktopPane.setBounds(10, 59, 365, 191);
 		desktopPane.setSize((int)ancho,(int)alto);		
 		contentPane.add(desktopPane);
-		desktopPane.add(vusuario);
+		//desktopPane.add(vusuario);
 		
 		barraherramientas = new JToolBar();
 		barraherramientas.setBounds(10, 32, 843, 16);
@@ -80,7 +85,7 @@ public class vPrincipal extends JFrame {
 		JButton btnNewButton = new JButton("CRUD USUARIO");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vusuario.setVisible(true);
+				//vusuario.setVisible(true);
 			}
 		});
 		barraherramientas.add(btnNewButton);

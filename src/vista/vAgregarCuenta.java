@@ -94,20 +94,8 @@ public class vAgregarCuenta extends JFrame {
 		btnEliminar = new JButton("ELIMINAR");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR ESTE USUARIO?",
-							"ELIMINAR USUARIO", JOptionPane.YES_NO_OPTION);
-					if (opcion == 0) {
-						if (dao.EliminarUsuario) {
-							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
-						} else {
-							JOptionPane.showMessageDialog(null, "ERROR");
-						}
-					}
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(null, "ERROR");
-				}
+				
+			
 			}
 		});
 		btnEliminar.setBounds(256, 281, 89, 23);

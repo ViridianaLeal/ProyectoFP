@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dao.daoAgregar;
+import modelo.AgregarCuenta;
 import modelo.Usuario;
 
 import javax.swing.JLabel;
@@ -28,6 +29,10 @@ public class vAgregarCuenta extends JFrame {
 	private JButton btnAgregar;
 	private JButton btnEliminar;
 	daoAgregar dao =new daoAgregar();
+	int fila = -1;
+	AgregarCuenta agregarcuenta;
+	AgregarCuenta user = new AgregarCuenta();
+	
 
 	/**
 	 * Launch the application.
@@ -87,6 +92,24 @@ public class vAgregarCuenta extends JFrame {
 		contentPane.add(lblNewLabel_1);
 		
 		btnEliminar = new JButton("ELIMINAR");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+
+					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR ESTE USUARIO?",
+							"ELIMINAR USUARIO", JOptionPane.YES_NO_OPTION);
+					if (opcion == 0) {
+						if (dao.EliminarUsuario) {
+							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
+						} else {
+							JOptionPane.showMessageDialog(null, "ERROR");
+						}
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "ERROR");
+				}
+			}
+		});
 		btnEliminar.setBounds(256, 281, 89, 23);
 		contentPane.add(btnEliminar);
 		
@@ -99,7 +122,7 @@ public class vAgregarCuenta extends JFrame {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
-					Usuario user = new Usuario();
+					AgregarCuenta user = new AgregarCuenta();
 					user.setUser(txtUsuario.getText());
 					user.setPassword(txtPassword.getText());
 					user.setNombre(txtNombre.getText());

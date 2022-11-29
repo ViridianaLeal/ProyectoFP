@@ -72,6 +72,8 @@ public class vUsuario extends JFrame {
 	private JLabel lblFoto;
 	FileInputStream fis;
 	int longitudBytes;
+	private JTable tblUsuarios;
+	private JTextField txtImagen;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -102,7 +104,7 @@ public class vUsuario extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/jyujyu.png")));
 		setTitle("CRUD USUARIO");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 389, 381);
+		setBounds(100, 100, 709, 599);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -168,7 +170,7 @@ public class vUsuario extends JFrame {
 		});
 		btnAgregar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(76, 254, 106, 23);
+		btnAgregar.setBounds(499, 36, 106, 23);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("Editar");
@@ -197,7 +199,7 @@ public class vUsuario extends JFrame {
 		});
 		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEditar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEditar.setBounds(391, 312, 89, 23);
+		btnEditar.setBounds(513, 148, 89, 23);
 		contentPane.add(btnEditar);
 		btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(new ActionListener() {
@@ -221,7 +223,7 @@ public class vUsuario extends JFrame {
 		});
 		btnEliminar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(214, 254, 103, 23);
+		btnEliminar.setBounds(499, 94, 103, 23);
 		contentPane.add(btnEliminar);
 		btnPdf = new JButton("Pdf");
 		btnPdf.addActionListener(new ActionListener() {
@@ -304,7 +306,7 @@ public class vUsuario extends JFrame {
 		});
 		btnPdf.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnPdf.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnPdf.setBounds(511, 312, 89, 23);
+		btnPdf.setBounds(509, 182, 89, 23);
 		contentPane.add(btnPdf);
 		modelo.addColumn("ID");
 		modelo.addColumn("USER");
@@ -335,12 +337,24 @@ public class vUsuario extends JFrame {
 		});
 		btnSeleccionarI.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
 		btnSeleccionarI.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnSeleccionarI.setBounds(395, 220, 106, 23);
+		btnSeleccionarI.setBounds(346, 230, 106, 23);
 		contentPane.add(btnSeleccionarI);
 
 		lblFoto = new JLabel("");
 		lblFoto.setBounds(391, 32, 251, 148);
 		contentPane.add(lblFoto);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(25, 302, 637, 230);
+		contentPane.add(scrollPane);
+		
+		tblUsuarios = new JTable();
+		scrollPane.setViewportView(tblUsuarios);
+		
+		txtImagen = new JTextField();
+		txtImagen.setBounds(111, 233, 222, 20);
+		contentPane.add(txtImagen);
+		txtImagen.setColumns(10);
 		actualizarTabla();
 	}
 

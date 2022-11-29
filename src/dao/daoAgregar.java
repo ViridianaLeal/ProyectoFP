@@ -8,9 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Conexion.conexion;
+import modelo.AgregarCuenta;
 import modelo.Usuario;
 
 public class daoAgregar {
+	protected static final boolean EliminarUsuario = false;
 	conexion cx = null;
 	FileInputStream fis;
 	int longitudBytes;
@@ -19,7 +21,7 @@ public class daoAgregar {
 		cx = new conexion();
 	}
 
-	public boolean insertarUsuario(Usuario user) {
+	public boolean insertarUsuario(AgregarCuenta user) {
 		PreparedStatement ps = null;
 		try {
 			ps = cx.conectar().prepareStatement("INSERT INTO usuario VALUES(null,?,?,?,?)");
@@ -35,15 +37,15 @@ public class daoAgregar {
 
 	}
 
-	public ArrayList<Usuario> fetchUsuarios() {
-		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+	public ArrayList<AgregarCuenta> fetchAgregarCuentas() {
+		ArrayList<AgregarCuenta> lista = new ArrayList<AgregarCuenta>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			ps = cx.conectar().prepareStatement("SELECT *FROM usuario");
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				Usuario u = new Usuario();
+				AgregarCuenta u = new AgregarCuenta();
 				u.setId(rs.getInt("id"));
 				u.setUser(rs.getString("user"));
 				u.setPassword(rs.getString("password"));
@@ -57,7 +59,7 @@ public class daoAgregar {
 		return lista;
 	}
 
-	public boolean loginUsuario(Usuario user) {
+	public boolean loginUsuario(AgregarCuenta user) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
@@ -78,11 +80,11 @@ public class daoAgregar {
 
 	}
 
-	public boolean EliminarUsuario(int U) {
+	public boolean EliminarUsuario(String U) {
 		PreparedStatement ps = null;
 		try {
 			ps = cx.conectar().prepareStatement("DELETE FROM usuario WHERE user=?");
-			ps.setInt(1, U);
+			ps.setString(1, U);
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

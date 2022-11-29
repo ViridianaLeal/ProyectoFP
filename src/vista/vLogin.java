@@ -141,10 +141,10 @@ public class vLogin extends JFrame {
 		btnAgregarCuenta.setForeground(SystemColor.textHighlight);
 		btnAgregarCuenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//vAgregarCuenta agregarcuenta = new vAgregarCuenta();
-				//agregarcuenta.setVisible(true);
-				vUsuario usuario = new vUsuario();
-				usuario.setVisible(true);
+				vAgregarCuenta agregarcuenta = new vAgregarCuenta();
+				agregarcuenta.setVisible(true);
+				//vUsuario usuario = new vUsuario();
+				//usuario.setVisible(true);
 			}
 		});
 		btnAgregarCuenta.setBorder(null);

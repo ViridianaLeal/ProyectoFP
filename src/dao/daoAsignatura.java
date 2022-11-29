@@ -71,7 +71,7 @@ public class daoAsignatura {
 
 	}
 
-	public boolean editarUsuario(Asignatura user) {
+	public boolean editarAsignatura(Asignatura user) {
 		PreparedStatement ps = null;
 		try {
 			ps = cx.conectar().prepareStatement("UPDATE usuario SET asignatura=? WHERE idprofesor=?, idasignatura");

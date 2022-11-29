@@ -17,7 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import dao.daoAsignatura;
 import dao.daoUsuario;
+import modelo.Asignatura;
 import modelo.Usuario;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -25,32 +27,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Toolkit;
+import javax.swing.JComboBox;
 
-public class vUsuario extends JFrame {
+public class vCategoria extends JFrame {
 
 	private JPanel contentPane;
 	int fila = -1;
-	private JTextField txtUser;
-	private JTextField txtPassword;
-	private JTextField txtNombre;
-	private JTable tblUsuarios;
-	private JLabel lblID;
+	private JTable tblca;
+	private JLabel lblAsig;
 	private JButton btnAgregar;
 	private JButton btnEliminar;
 	private JButton btnEditar;
 	private JButton btnBorrar;
 	private JScrollPane scrollPane;
-	daoUsuario dao = new daoUsuario();
+	daoAsignatura dao = new daoAsignatura();
 	DefaultTableModel modelo = new DefaultTableModel();
-	ArrayList<Usuario> lista = new ArrayList<Usuario>();
-	Usuario usuario;
-	
+	ArrayList<Asignatura> lista =new ArrayList<Asignatura>();
+	Asignatura asignatura;
+	private JTextField txtAsignatura;
+	private JComboBox comboBox;
+	private JLabel lblIdAsignatura;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vUsuario frame = new vUsuario();
+					vCategoria frame = new vCategoria();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -63,71 +65,45 @@ public class vUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public void limpiar() {
-		txtUser.setText("");
-		txtPassword.setText("");
-		txtNombre.setText("");
-		lblID.setText("");
+		txtAsignatura.setText(null);
 	}
 
-	public vUsuario() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/Java.jpg")));
-		setTitle("CRUD USUARIO");
+	public vCategoria() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vCategoria.class.getResource("/img/Java.jpg")));
+		setTitle("CRUD ASIGNATURA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 566, 448);
+		setBounds(100, 100, 566, 401);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		JLabel lblNewLabel = new JLabel("ID");
+		JLabel lblNewLabel = new JLabel("ID profesor");
 		lblNewLabel.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel.setBounds(25, 32, 46, 23);
+		lblNewLabel.setBounds(10, 32, 113, 23);
 		contentPane.add(lblNewLabel);
-		lblID = new JLabel("1");
-		lblID.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblID.setBounds(164, 40, 46, 14);
-		contentPane.add(lblID);
-		JLabel lblNewLabel_1 = new JLabel("USUARIO");
-		lblNewLabel_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1.setBounds(25, 66, 86, 21);
-		contentPane.add(lblNewLabel_1);
-		txtUser = new JTextField();
-		txtUser.setBounds(164, 67, 169, 20);
-		contentPane.add(txtUser);
-		txtUser.setColumns(10);
-		JLabel lblNewLabel_1_1 = new JLabel("PASSWORD");
-		lblNewLabel_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1_1.setBounds(25, 100, 129, 23);
-		contentPane.add(lblNewLabel_1_1);
-		txtPassword = new JTextField();
-		txtPassword.setColumns(10);
-		txtPassword.setBounds(164, 97, 169, 20);
-		contentPane.add(txtPassword);
-		JLabel lblNewLabel_1_2 = new JLabel("NOMBRE");
+		lblAsig = new JLabel("1");
+		lblAsig.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblAsig.setBounds(144, 73, 63, 23);
+		contentPane.add(lblAsig);
+		JLabel lblNewLabel_1_2 = new JLabel("Asignatura");
 		lblNewLabel_1_2.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1_2.setBounds(25, 131, 86, 23);
+		lblNewLabel_1_2.setBounds(10, 115, 109, 23);
 		contentPane.add(lblNewLabel_1_2);
-		txtNombre = new JTextField();
-		txtNombre.setColumns(10);
-		txtNombre.setBounds(164, 136, 169, 20);
-		contentPane.add(txtNombre);
 		btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtUser.getText().equals("") || txtPassword.getText().equals("")
-							|| txtNombre.getText().equals("")) {
+					if (txtAsignatura.getText().equals("")) {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
-					Usuario user = new Usuario();
-					user.setUser(txtUser.getText());
-					user.setPassword(txtPassword.getText());
-					user.setNombre(txtNombre.getText());
-					if (dao.insertarUsuario(user)) {
+					Asignatura user = new Asignatura();
+					user.setAsignatura(txtAsignatura.getText());
+					if (dao.insertarAsignatura(user)) {
 						actualizarTabla();
 						limpiar();
-						JOptionPane.showMessageDialog(null, "SE AGREGO CORRECTAMENTE");
+						JOptionPane.showMessageDialog(null, "LA ASIGNATURA SE AGREGO CORRECTAMENTE");
 					} else {
 						JOptionPane.showMessageDialog(null, "ERROR");
 					}
@@ -138,22 +114,19 @@ public class vUsuario extends JFrame {
 		});
 		btnAgregar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(22, 187, 106, 23);
+		btnAgregar.setBounds(383, 117, 106, 23);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtUser.getText().equals("") || txtPassword.getText().equals("")
-							|| txtNombre.getText().equals("")) {
+					if (lblAsig.getText().equals("") || txtAsignatura.getText().equals("")) {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
-					usuario.setUser(txtUser.getText());
-					usuario.setPassword(txtPassword.getText());
-					usuario.setNombre(txtNombre.getText());
-					if (dao.editarUsuario(usuario)) {
+					asignatura.setAsignatura(txtAsignatura.getText());
+					if (dao.editarAsignatura(asignatura)) {
 						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
@@ -167,16 +140,16 @@ public class vUsuario extends JFrame {
 		});
 		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEditar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEditar.setBounds(283, 187, 89, 23);
+		btnEditar.setBounds(446, 11, 89, 23);
 		contentPane.add(btnEditar);
 		btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR ESTE USUARIO?","ELIMINAR USUARIO", JOptionPane.YES_NO_OPTION);
+					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR LA ASIGNATURA?","ELIMINAR ASIGNATURA", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
-						if (dao.EliminarUsuario(lista.get(fila).getId())) {
+						if (dao.EliminarAsignatura(lista.get(fila).getIDasignatura())) {
 							actualizarTabla();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
@@ -190,21 +163,19 @@ public class vUsuario extends JFrame {
 		});
 		btnEliminar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(159, 187, 103, 23);
+		btnEliminar.setBounds(386, 62, 103, 23);
 		contentPane.add(btnEliminar);
 		btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblID.setText("");
-				txtNombre.setText(null);
-				txtPassword.setText(null);
-				txtUser.setText(null);
+				lblAsig.setText("");
+				txtAsignatura.setText(null);
 				limpiar();
 			}
 		});
 		btnBorrar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnBorrar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnBorrar.setBounds(404, 187, 89, 23);
+		btnBorrar.setBounds(333, 11, 89, 23);
 		contentPane.add(btnBorrar);
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
@@ -212,30 +183,40 @@ public class vUsuario extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		scrollPane.setBounds(22, 240, 503, 158);
+		scrollPane.setBounds(25, 170, 503, 158);
 		contentPane.add(scrollPane);
-		tblUsuarios = new JTable();
-		tblUsuarios.addMouseListener(new MouseAdapter() {
+		tblca = new JTable();
+		tblca.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fila = tblUsuarios.getSelectedRow();
-				fila = tblUsuarios.getSelectedRow();
-				usuario = lista.get(fila);
-				lblID.setText("" + lista.get(fila).getId());
-				txtUser.setText(usuario.getUser());
-				txtPassword.setText(usuario.getPassword());
-				txtNombre.setText(usuario.getNombre());
+				fila = tblca.getSelectedRow();
+				fila = tblca.getSelectedRow();
+				asignatura = lista.get(fila);
+				lblAsig.setText("" + lista.get(fila).getIDasignatura());
+				txtAsignatura.setText(""+ lista.get(fila).getAsignatura());
 			}
 		});
-		tblUsuarios.setModel(new DefaultTableModel(
+		tblca.setModel(new DefaultTableModel(
 				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, },
 				new String[] { "New column", "New column", "New column", "New column" }));
-		scrollPane.setViewportView(tblUsuarios);
+		scrollPane.setViewportView(tblca);
 		modelo.addColumn("ID");
-		modelo.addColumn("USER");
-		modelo.addColumn("PASSWORD");
-		modelo.addColumn("NOMBRE");
-		tblUsuarios.setModel(modelo);
+		modelo.addColumn("CATEGORIA");
+		tblca.setModel(modelo);
+		
+		txtAsignatura = new JTextField();
+		txtAsignatura.setBounds(144, 114, 167, 33);
+		contentPane.add(txtAsignatura);
+		txtAsignatura.setColumns(10);
+		
+		comboBox = new JComboBox();
+		comboBox.setBounds(148, 22, 127, 33);
+		contentPane.add(comboBox);
+		
+		lblIdAsignatura = new JLabel("ID asignatura");
+		lblIdAsignatura.setFont(new Font("Nirmala UI", Font.BOLD, 19));
+		lblIdAsignatura.setBounds(10, 67, 128, 30);
+		contentPane.add(lblIdAsignatura);
 		actualizarTabla();
 	}
 
@@ -243,15 +224,14 @@ public class vUsuario extends JFrame {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
-		lista = dao.fetchUsuarios();
-		for (Usuario u : lista) {
+		lista = dao.fetchAsignatura();
+		for (Asignatura u : lista) {
 			Object o[] = new Object[4];
-			o[0] = u.getId();
-			o[1] = u.getUser();
-			o[2] = u.getPassword();
-			o[3] = u.getNombre();
+			o[0] = u.getIDasignatura();
+			o[1] = u.getProfesor();
+			o[2] = u.getAsignatura();
 			modelo.addRow(o);
 		}
-		tblUsuarios.setModel(modelo);
+		tblca.setModel(modelo);
 	}
 }

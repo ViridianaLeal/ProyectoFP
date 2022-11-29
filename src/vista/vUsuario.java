@@ -372,5 +372,6 @@ public class vUsuario extends JFrame {
 			o[4] = u.getFoto();
 			modelo.addRow(o);
 		}
+		tblUsuarios.setModel(modelo);
 	}
 }

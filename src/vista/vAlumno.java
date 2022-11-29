@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
@@ -13,6 +14,17 @@ import javax.swing.JButton;
 import java.awt.Toolkit;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import dao.daoAlumno;
+import dao.daoUsuario;
+import modelo.Alumno;
+import modelo.Usuario;
+
+import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import javax.swing.DefaultComboBoxModel;
 
 public class vAlumno extends JFrame {
 
@@ -30,6 +42,11 @@ public class vAlumno extends JFrame {
 	private JButton btnEditar;
 	private JButton btnEliminar;
 	private JButton btnPdf;
+	daoAlumno dao = new daoAlumno();
+	DefaultTableModel modelo = new DefaultTableModel();
+	ArrayList<Alumno> lista = new ArrayList<Alumno>();
+	Alumno alumno;
+	int fila = -1;
 	private JTable tblAlumnos;
 
 	/**
@@ -122,6 +139,7 @@ public class vAlumno extends JFrame {
 		contentPane.add(cboPlantel);
 		
 		cboTurno = new JComboBox();
+		cboTurno.setModel(new DefaultComboBoxModel(new String[] {"Matutino", "Vespertino"}));
 		cboTurno.setBounds(114, 134, 195, 22);
 		contentPane.add(cboTurno);
 		
@@ -154,10 +172,47 @@ public class vAlumno extends JFrame {
 			}
 		));
 		scrollPane.setViewportView(tblAlumnos);
+		modelo.addColumn("ID ALUMNO");
+		modelo.addColumn("NÚMERO DE CONTROL");
+		modelo.addColumn("PLANTEL");
+		modelo.addColumn("TURNO");
+		modelo.addColumn("SEMESTRE");
+		modelo.addColumn("CARRERA");
+		modelo.addColumn("GRUPO");
+		modelo.addColumn("NOMBRE");
+		modelo.addColumn("APELLIDOS");
+		tblAlumnos.setModel(modelo);
 		
 		btnAgregar = new JButton("Agregar");
+		btnAgregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {					
+					if (txtNControl.getText().equals("") || cboPlantel.getSelectedItem().equals("")
+							|| cboTurno.getSelectedItem().equals("") || cboTurno.getSelectedItem().equals("") || cboSemestre.getSelectedItem().equals("")||cboCarrera.getSelectedItem().equals("")||cboGrupo.getSelectedItem().equals("")||txtNombre.getText().equals("") || txtApellidos.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "CAMPcbOS VACIOS ");
+						return;
+					}
+					Alumno user = new Alumno();
+					user.setNumerocontrol(Integer.parseInt(txtNControl.getText()));
+					user.setPlantel(""+cboPlantel.getSelectedItem());
+					user.setTurno(getName());
+					//user.setNombre(txtNombre.getText());
+					if (dao.insertarAlumno(user)) {
+						actualizarTabla();
+						
+						JOptionPane.showMessageDialog(null, "SE AGREGO CORRECTAMENTE");
+					} else {
+						JOptionPane.showMessageDialog(null, "ERROR");
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "ERROR");
+				}
+			}
+			
+		});
 		btnAgregar.setBounds(1076, 92, 89, 23);
 		contentPane.add(btnAgregar);
+		
 		
 		btnEditar = new JButton("Editar");
 		btnEditar.setBounds(1076, 134, 89, 23);
@@ -170,6 +225,27 @@ public class vAlumno extends JFrame {
 		btnPdf = new JButton("PDF");
 		btnPdf.setBounds(1076, 224, 89, 23);
 		contentPane.add(btnPdf);
+	}
+	
+	public void actualizarTabla() {
+		while (modelo.getRowCount() > 0) {
+			modelo.removeRow(0);
+		}
+		lista = dao.fetchAlumnos();
+		for (Alumno u : lista) {
+			Object o[] = new Object[9];
+			o[0] = u.getIdalumno();
+			o[1] = u.getNumerocontrol();
+			o[2] = u.getPlantel();
+			o[3] = u.getTurno();
+			o[4] = u.getSemestre();
+			o[5] = u.getCarrera();
+			o[6] = u.getGrupo();
+			o[7] = u.getNombre();
+			o[8] = u.getApellidos();
+ 			modelo.addRow(o);
+		}
+		tblAlumnos.setModel(modelo);
 	}
 	
 	

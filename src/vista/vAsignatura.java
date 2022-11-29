@@ -55,11 +55,11 @@ public class vAsignatura extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("ID Profesor");
-		lblNewLabel.setBounds(10, 24, 101, 23);
+		lblNewLabel.setBounds(10, 65, 101, 23);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblidasignatura = new JLabel("ID ASIGNATURA");
-		lblidasignatura.setBounds(10, 58, 101, 23);
+		lblidasignatura.setBounds(10, 31, 101, 23);
 		contentPane.add(lblidasignatura);
 		
 		JLabel lblasignatura = new JLabel("ASIGNATURA");
@@ -101,15 +101,15 @@ public class vAsignatura extends JFrame {
 		contentPane.add(btnPdf);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setBounds(114, 49, 51, 32);
+		lblNewLabel_1.setBounds(110, 11, 51, 32);
 		contentPane.add(lblNewLabel_1);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(93, 11, 113, 35);
+		comboBox.setBounds(93, 65, 185, 23);
 		contentPane.add(comboBox);
 		
 		textField = new JTextField();
-		textField.setBounds(97, 92, 141, 30);
+		textField.setBounds(97, 95, 181, 30);
 		contentPane.add(textField);
 		textField.setColumns(10);
 	}

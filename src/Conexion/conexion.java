@@ -10,7 +10,7 @@ public class conexion {
 	public Connection conectar() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			cx = DriverManager.getConnection("jdbc:sqlite:fourprogramming.db");
+			cx = DriverManager.getConnection("jdbc:sqlite:fp.db");
 			//Class.forName("com.mysql.cj.jdbc.Driver");
 			//cx = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistema","root","");
 			System.out.print("Conexión exitosa");

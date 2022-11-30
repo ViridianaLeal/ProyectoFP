@@ -74,9 +74,8 @@ public class daoAsignatura {
 		PreparedStatement ps = null;
 		try {
 			ps = cx.conectar().prepareStatement("UPDATE asignatura SET asignatura=?, profesor=?  WHERE  idasignatura");
-			ps.setInt(1, user.getIDasignatura());
-			ps.setString(2, user.getProfesor());
-			ps.setString(3, user.getAsignatura());
+			ps.setString(1, user.getProfesor());
+			ps.setString(2, user.getAsignatura());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

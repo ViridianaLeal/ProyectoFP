@@ -130,12 +130,12 @@ public class vAsignatura extends JFrame {
 					asignatura.setAsignatura(txtAsignatura.getText());
 					if (dao.editarAsignatura(asignatura)) {
 						actualizarTabla();
-						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
 					} else {
 						JOptionPane.showMessageDialog(null, "ERROR");
 					}
 				} catch (Exception e2) {
+					e2.printStackTrace();
 					JOptionPane.showMessageDialog(null, "ERROR");
 				}
 			}
@@ -170,7 +170,6 @@ public class vAsignatura extends JFrame {
 		btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblAsig.setText("");
 				txtAsignatura.setText(null);
 				limpiar();
 			}

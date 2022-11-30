@@ -195,8 +195,12 @@ public class vAlumno extends JFrame {
 					Alumno user = new Alumno();
 					user.setNumerocontrol(Integer.parseInt(txtNControl.getText()));
 					user.setPlantel(""+cboPlantel.getSelectedItem());
-					user.setTurno(getName());
-					//user.setNombre(txtNombre.getText());
+					user.setTurno(""+cboTurno.getSelectedItem());
+					user.setSemestre(""+cboSemestre.getSelectedIndex());
+					user.setCarrera(""+cboCarrera.getSelectedIndex());
+					user.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));					
+					user.setNombre(txtNombre.getText());
+					user.setApellidos(txtApellidos.getText());
 					if (dao.insertarAlumno(user)) {
 						actualizarTabla();
 						

@@ -1,17 +1,17 @@
 package modelo;
 
 public class Asignatura {
-int IDprofesor;
+String profesor;
 int IDasignatura;
 String Asignatura;
 public Asignatura() {
 
 }
-public int getIDprofesor() {
-	return IDprofesor;
+public String getProfesor() {
+	return profesor;
 }
-public void setIDprofesor(int iDprofesor) {
-	IDprofesor = iDprofesor;
+public void setProfesor(String profesor) {
+	this.profesor = profesor;
 }
 public int getIDasignatura() {
 	return IDasignatura;

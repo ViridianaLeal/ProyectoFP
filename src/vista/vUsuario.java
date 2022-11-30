@@ -38,7 +38,7 @@ public class vUsuario extends JFrame {
 	private JButton btnAgregar;
 	private JButton btnEliminar;
 	private JButton btnEditar;
-	private JButton btnBorrar;
+	private JButton btnPdf;
 	private JScrollPane scrollPane;
 	daoUsuario dao = new daoUsuario();
 	DefaultTableModel modelo = new DefaultTableModel();
@@ -192,8 +192,8 @@ public class vUsuario extends JFrame {
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
 		btnEliminar.setBounds(159, 187, 103, 23);
 		contentPane.add(btnEliminar);
-		btnBorrar = new JButton("Borrar");
-		btnBorrar.addActionListener(new ActionListener() {
+		btnPdf = new JButton("PDF");
+		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblID.setText("");
 				txtNombre.setText(null);
@@ -202,10 +202,10 @@ public class vUsuario extends JFrame {
 				limpiar();
 			}
 		});
-		btnBorrar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnBorrar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnBorrar.setBounds(404, 187, 89, 23);
-		contentPane.add(btnBorrar);
+		btnPdf.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnPdf.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
+		btnPdf.setBounds(404, 187, 89, 23);
+		contentPane.add(btnPdf);
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
 			@Override

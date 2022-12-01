@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import Conexion.conexion;
 import modelo.Alumno;
+
 import modelo.Usuario;
 
 public class daoAlumno {
@@ -39,6 +40,52 @@ public class daoAlumno {
 		}
 
 	}
+	
+	public ArrayList<Alumno> buscar(String palabra) {
+        ArrayList<Alumno> lista2 = new ArrayList<Alumno>();
+        try {
+            String sql = "SELECT * FROM alumno WHERE "
+                    + "(numerocontrol LIKE ?) OR "
+                    + "(plantel LIKE ?) OR"
+                    + "(turno LIKE ?) OR "
+                    + "(semestre LIKE ?) OR "
+                    + "(carrera LIKE ?) OR "
+                    + "(grupo LIKE ?) OR "
+                    + "(nombreLIKE ?) OR "
+                    + "(apellidos LIKE ?); ";
+            PreparedStatement ps = cx.conectar().prepareStatement(sql);
+            ps.setString(1, "%" + palabra + "%");
+            ps.setString(2, "%" + palabra + "%");
+            ps.setString(3, "%" + palabra + "%");
+            ps.setString(4, "%" + palabra + "%");
+            ps.setString(5, "%" + palabra + "%");
+            ps.setString(6, "%" + palabra + "%");
+            ps.setString(7, "%" + palabra + "%");
+            ps.setString(8, "%" + palabra + "%");
+            //System.out.println("CONSULTA" + ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Alumno p = new Alumno();
+                p.setIdalumno(rs.getInt("idAlumno"));
+                p.setNumerocontrol(rs.getInt("numerocontrol"));
+                p.setPlantel(rs.getString("plantel"));
+                p.setTurno(rs.getString("turno"));
+                p.setSemestre(rs.getString("semestre"));
+                p.setCarrera(rs.getString("carrera"));
+                p.setGrupo(rs.getInt("grupo"));
+                p.setNombre(rs.getString("nombre"));
+                p.setApellidos(rs.getString("apellidos"));
+                lista2.add(p);
+            }
+            ps.close();
+            ps = null;
+            cx.desconectar();
+        } catch (SQLException ex) {
+            System.out.println("Error en BUSCAR");
+        }
+        return lista2;
+
+    }
 
 	public ArrayList<Alumno> fetchAlumnos() {
 		ArrayList<Alumno> lista = new ArrayList<Alumno>();

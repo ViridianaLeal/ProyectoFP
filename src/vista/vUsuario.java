@@ -29,7 +29,7 @@ import java.awt.Toolkit;
 public class vUsuario extends JFrame {
 
 	private JPanel contentPane;
-	int fila = -1;
+	
 	private JTextField txtUser;
 	private JTextField txtPassword;
 	private JTextField txtNombre;
@@ -44,6 +44,7 @@ public class vUsuario extends JFrame {
 	DefaultTableModel modelo = new DefaultTableModel();
 	ArrayList<Usuario> lista = new ArrayList<Usuario>();
 	Usuario usuario;
+	int fila = -1;
 	
 
 	public static void main(String[] args) {

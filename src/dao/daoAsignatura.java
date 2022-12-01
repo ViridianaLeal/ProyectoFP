@@ -44,8 +44,8 @@ public class daoAsignatura {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Asignatura u = new Asignatura();
-				u.setProfesor(rs.getString("profesor"));
 				u.setIDasignatura(rs.getInt("idasignatura"));
+				u.setProfesor(rs.getString("profesor"));				
 				u.setAsignatura(rs.getString("asignatura"));
 				lista.add(u);
 			}
@@ -73,7 +73,7 @@ public class daoAsignatura {
 	public boolean editarAsignatura(Asignatura user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE asignatura SET asignatura=?, profesor=?  WHERE  idasignatura");
+			ps = cx.conectar().prepareStatement("UPDATE asignatura SET profesor=?, asignatura=?  WHERE  idasignatura");
 			ps.setString(1, user.getProfesor());
 			ps.setString(2, user.getAsignatura());
 			ps.executeUpdate();

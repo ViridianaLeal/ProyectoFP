@@ -100,8 +100,9 @@ public class vAsignatura extends JFrame {
 						return;
 					}
 					Asignatura user = new Asignatura();
-					user.setAsignatura(txtAsignatura.getText());
 					user.setProfesor(cboProfe.getSelectedItem().toString());
+					user.setAsignatura(txtAsignatura.getText());
+					
 					if (dao.insertarAsignatura(user)) {
 						actualizarTabla();
 						JOptionPane.showMessageDialog(null, "LA ASIGNATURA SE AGREGO CORRECTAMENTE");
@@ -202,8 +203,8 @@ public class vAsignatura extends JFrame {
 				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, },
 				new String[] { "New column", "New column", "New column", "New column" }));
 		scrollPane.setViewportView(tblca);
-		modelo.addColumn("ID profesor");
 		modelo.addColumn("ID asignatura");
+		modelo.addColumn("ID profesor");
 		modelo.addColumn("asignatura");
 		tblca.setModel(modelo);
 		
@@ -230,9 +231,9 @@ public class vAsignatura extends JFrame {
 		}
 		lista = dao.fetchAsignatura();
 		for (Asignatura u : lista) {
-			Object o[] = new Object[4];
-			o[0] = u.getProfesor();
-			o[1] = u.getIDasignatura();
+			Object o[] = new Object[3];
+			o[0] = u.getIDasignatura();
+			o[1] = u.getProfesor();
 			o[2] = u.getAsignatura();
 			modelo.addRow(o);
 		}

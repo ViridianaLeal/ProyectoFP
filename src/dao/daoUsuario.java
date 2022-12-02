@@ -19,14 +19,13 @@ public class daoUsuario {
 		cx = new conexion();
 	}
 
-	public boolean insertarUsuario(Usuario user) {
+	public boolean insertarUsuario(Usuario user) {      
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO usuario VALUES(null,?,?,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO usuario VALUES(null,?,?,?)");
 			ps.setString(1, user.getUser());
 			ps.setString(2, convertirSHA256(user.getPassword()));
 			ps.setString(3, user.getNombre());
-			ps.setBinaryStream(4, fis,longitudBytes);
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

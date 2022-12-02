@@ -23,13 +23,12 @@ public class daoProfesor {
 	public boolean insertarProfesor(Profesor user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO profesor VALUES(null,?,?,?,?,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO profesor VALUES(null,?,?,?,?,?)");
 			ps.setString(1, user.getNombre());
 			ps.setString(2, user.getApellidos());
 			ps.setInt(3,user.getClave());
 			ps.setString(4, user.getCarrera());
-			ps.setString(5,user.getAsignatura());
-			ps.setInt(6, user.getGrupos());
+			ps.setString(5,user.getFoto());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -47,15 +46,13 @@ public class daoProfesor {
                     + "(apellidos LIKE ?) OR"
                     + "(clave LIKE ?) OR "
                     + "(carrera LIKE ?) OR "
-                    + "(asignatura LIKE ?) OR "
-                    + "(grupo LIKE ?); ";
+                    + "(foto LIKE ?); ";
             PreparedStatement ps = cx.conectar().prepareStatement(sql);
             ps.setString(1, "%" + palabra + "%");
             ps.setString(2, "%" + palabra + "%");
             ps.setString(3, "%" + palabra + "%");
             ps.setString(4, "%" + palabra + "%");
             ps.setString(5, "%" + palabra + "%");
-            ps.setString(6, "%" + palabra + "%");
             //System.out.println("CONSULTA" + ps.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -65,8 +62,7 @@ public class daoProfesor {
                 p.setApellidos(rs.getString("apellidos"));
                 p.setClave(rs.getInt("clave"));
                 p.setCarrera(rs.getString("carrera"));              
-                p.setAsignatura(rs.getString("asignatura"));
-                p.setGrupos(rs.getInt("grupo"));
+                p.setFoto(rs.getString("foto"));
                 lista2.add(p);
             }
             ps.close();
@@ -93,9 +89,8 @@ public class daoProfesor {
                 u.setNombre(rs.getString("nombre"));
                 u.setApellidos(rs.getString("apellidos"));
                 u.setClave(rs.getInt("clave"));
-                u.setCarrera(rs.getString("carrera"));              
-                u.setAsignatura(rs.getString("asignatura"));
-                u.setGrupos(rs.getInt("grupo"));
+                u.setCarrera(rs.getString("carrera"));
+                u.setFoto(rs.getString("foto"));
 				lista.add(u);
 			}
 		} catch (SQLException e) {
@@ -124,13 +119,13 @@ public class daoProfesor {
 	public boolean editarProfesor(Profesor user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE profesor SET nombrel=?,apellidos=?,clave=?,carrera=?,asignatura=?,grupo=? WHERE idProfesor=?");
+			ps = cx.conectar().prepareStatement("UPDATE profesor SET nombre=?,apellidos=?,clave=?,carrera=?,foto=? WHERE idProfesor=?");
 			ps.setString(1, user.getNombre());
 			ps.setString(2, user.getApellidos());
 			ps.setInt(3,user.getClave());
 			ps.setString(4, user.getCarrera());
-			ps.setString(5, user.getAsignatura());
-			ps.setInt(6, user.getGrupos());
+			ps.setString(5, user.getFoto());
+			ps.setInt(6, user.getIdProfesor());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

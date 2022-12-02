@@ -179,6 +179,7 @@ public class vUsuario extends JFrame {
 					if (opcion == 0) {
 						if (dao.EliminarUsuario(lista.get(fila).getId())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");

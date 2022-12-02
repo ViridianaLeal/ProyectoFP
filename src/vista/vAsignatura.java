@@ -204,7 +204,7 @@ public class vAsignatura extends JFrame {
 				new String[] { "New column", "New column", "New column", "New column" }));
 		scrollPane.setViewportView(tblca);
 		modelo.addColumn("ID asignatura");
-		modelo.addColumn("ID profesor");
+		modelo.addColumn("profesor");
 		modelo.addColumn("asignatura");
 		tblca.setModel(modelo);
 		

@@ -127,13 +127,10 @@ public class daoProfesor {
 			ps = cx.conectar().prepareStatement("UPDATE profesor SET nombrel=?,apellidos=?,clave=?,carrera=?,asignatura=?,grupo=? WHERE idProfesor=?");
 			ps.setString(1, user.getNombre());
 			ps.setString(2, user.getApellidos());
-			ps.setInt(3,user.get());
-			ps.setString(4, user.getSemestre());
-			ps.setString(5,user.getCarrera());
-			ps.setInt(6, user.getGrupo());
-			ps.setString(7, user.getNombre());
-			ps.setString(8, user.getApellidos());
-			ps.setInt(9,user.getIdalumno());
+			ps.setInt(3,user.getClave());
+			ps.setString(4, user.getCarrera());
+			ps.setString(5, user.getAsignatura());
+			ps.setInt(6, user.getGrupos());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

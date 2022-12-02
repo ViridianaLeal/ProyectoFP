@@ -10,5 +10,17 @@
 	<classpathentry kind="lib" path="itextpdf-5.5.9.jar"/>
 	<classpathentry kind="lib" path="jgoodies-common-1.8.0.jar" sourcepath="jgoodies-common-1.8.0-sources.jar"/>
 	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="src/img/Roboto-BlackItalic.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-Bold.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-BoldItalic.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-Italic.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-Light.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-LightItalic.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-Medium.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-MediumItalic.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-Regular.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-Thin.ttf"/>
+	<classpathentry kind="lib" path="src/img/Roboto-ThinItalic.ttf"/>
+	<classpathentry kind="lib" path="src/AbsoluteLayout.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

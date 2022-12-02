@@ -25,6 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.Toolkit;
+import java.awt.Color;
 
 public class vCarrera extends JFrame {
 
@@ -43,9 +44,6 @@ public class vCarrera extends JFrame {
 	Carrera carrera;
 	int fila = -1;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -65,6 +63,7 @@ public class vCarrera extends JFrame {
 	}
 
 	public vCarrera() {
+		setBackground(new Color(0, 128, 192));
 		setTitle("AGREGAR CARRERAS");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vCarrera.class.getResource("/img/DeoClass.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -10,6 +10,7 @@ public class Alumno {
 	int grupo;
 	String nombre;
 	String apellidos;
+	String foto;
 	
 	public Alumno() {
 		
@@ -86,5 +87,14 @@ public class Alumno {
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+	
 
 }

@@ -23,7 +23,7 @@ public class daoAlumno {
 	public boolean insertarAlumno(Alumno user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO alumno VALUES(null,?,?,?,?,?,?,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO alumno VALUES(null,?,?,?,?,?,?,?,?,?)");
 			ps.setInt(1, user.getNumerocontrol());
 			ps.setString(2, user.getPlantel());
 			ps.setString(3,user.getTurno());
@@ -32,6 +32,7 @@ public class daoAlumno {
 			ps.setInt(6, user.getGrupo());
 			ps.setString(7, user.getNombre());
 			ps.setString(8, user.getApellidos());
+			ps.setString(9, user.getFoto());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -52,7 +53,8 @@ public class daoAlumno {
                     + "(carrera LIKE ?) OR "
                     + "(grupo LIKE ?) OR "
                     + "(nombreLIKE ?) OR "
-                    + "(apellidos LIKE ?); ";
+                    + "(apellidos LIKE ?)  OR"
+                    + "(foto LIKE ?); ";
             PreparedStatement ps = cx.conectar().prepareStatement(sql);
             ps.setString(1, "%" + palabra + "%");
             ps.setString(2, "%" + palabra + "%");
@@ -62,6 +64,7 @@ public class daoAlumno {
             ps.setString(6, "%" + palabra + "%");
             ps.setString(7, "%" + palabra + "%");
             ps.setString(8, "%" + palabra + "%");
+            ps.setString(9, "%" + palabra + "%");
             //System.out.println("CONSULTA" + ps.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -75,6 +78,7 @@ public class daoAlumno {
                 p.setGrupo(rs.getInt("grupo"));
                 p.setNombre(rs.getString("nombre"));
                 p.setApellidos(rs.getString("apellidos"));
+                p.setFoto(rs.getString("foto"));
                 lista2.add(p);
             }
             ps.close();
@@ -105,6 +109,7 @@ public class daoAlumno {
 				u.setGrupo(rs.getInt("grupo"));
 				u.setNombre(rs.getString("nombre"));
 				u.setApellidos(rs.getString("apellidos"));
+				u.setFoto(rs.getString("foto"));
 				lista.add(u);
 			}
 		} catch (SQLException e) {
@@ -133,7 +138,7 @@ public class daoAlumno {
 	public boolean editarAlumno(Alumno user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE alumno SET numerocontrol=?,plantel=?,turno=?,semestre=?,carrera=?,grupo=?,nombre=?,apellidos=? WHERE idAlumno=?");
+			ps = cx.conectar().prepareStatement("UPDATE alumno SET numerocontrol=?,plantel=?,turno=?,semestre=?,carrera=?,grupo=?,nombre=?,apellidos=?,foto=? WHERE idAlumno=?");
 			ps.setInt(1, user.getNumerocontrol());
 			ps.setString(2, user.getPlantel());
 			ps.setString(3,user.getTurno());
@@ -142,7 +147,8 @@ public class daoAlumno {
 			ps.setInt(6, user.getGrupo());
 			ps.setString(7, user.getNombre());
 			ps.setString(8, user.getApellidos());
-			ps.setInt(9,user.getIdalumno());
+			ps.setString(9, user.getFoto());
+			ps.setInt(10,user.getIdalumno());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

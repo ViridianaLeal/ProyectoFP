@@ -35,6 +35,7 @@ import javax.swing.UIManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JSeparator;
+import java.awt.Toolkit;
 
 
 public class vLogin extends JFrame {
@@ -69,6 +70,7 @@ public class vLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public vLogin() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vLogin.class.getResource("/img/DeoClass.png")));
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 506, 345);

@@ -6,23 +6,19 @@ public class Profesor {
 	String apellidos;
 	int clave;
 	String carrera;
-	String asignatura;
-	int grupos;
+	String foto;
 	
 	public Profesor() {
 		
 	}
-	
 
 	public int getIdProfesor() {
 		return idProfesor;
 	}
 
-
 	public void setIdProfesor(int idProfesor) {
 		this.idProfesor = idProfesor;
 	}
-
 
 	public String getNombre() {
 		return nombre;
@@ -56,20 +52,14 @@ public class Profesor {
 		this.carrera = carrera;
 	}
 
-	public String getAsignatura() {
-		return asignatura;
+	public String getFoto() {
+		return foto;
 	}
 
-	public void setAsignatura(String asignatura) {
-		this.asignatura = asignatura;
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
-	public int getGrupos() {
-		return grupos;
-	}
 
-	public void setGrupos(int grupos) {
-		this.grupos = grupos;
-	}
-
+	
 }

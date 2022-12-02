@@ -65,16 +65,24 @@ public class vCargando extends JFrame {
 		this.setUndecorated(true);
 		this.setLocationRelativeTo(null);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
+		
+		
+		
+		
+
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		barCargando.setFont(new Font("Agency FB", Font.BOLD , 20));
+		barCargando.setForeground(Color.WHITE);
+		barCargando.setBorderPainted(false);
+		barCargando.setFont(new Font("Consolas", Font.PLAIN, 14));
 		barCargando.setInheritsPopupMenu(true);
 		barCargando.setDoubleBuffered(true);
 		barCargando.setBorder(null);
 		barCargando.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		barCargando.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		barCargando.setBackground(new Color(192, 192, 192));
+		barCargando.setBackground(new Color(43, 81, 111));
 
 		barCargando.setForeground(SystemColor.activeCaption);
 		barCargando.setStringPainted(true);

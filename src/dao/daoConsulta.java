@@ -41,7 +41,7 @@ public class daoConsulta {
 				Consulta u = new Consulta();
 				u.setID(rs.getInt("id"));
 				u.setNombre(rs.getString("nombre"));
-				u.setComentario(rs.getString("consulta"));
+				u.setComentario(rs.getString("texto"));
 				u.setDestino(rs.getString("destino"));
 				lista.add(u);
 			}

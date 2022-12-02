@@ -33,6 +33,7 @@ import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.ComponentOrientation;
 
 public class vConsulta extends JFrame {
 
@@ -50,8 +51,8 @@ public class vConsulta extends JFrame {
 	ArrayList<Consulta> lista = new ArrayList<Consulta>();
 	Consulta consulta;
 	int fila = -1;
-	private JTextArea txtComentario;
 	private JComboBox cboDestiny;
+	private JTextField txtComentario;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -94,12 +95,13 @@ public class vConsulta extends JFrame {
 		lblNewLabel_1.setBounds(423, 12, 86, 21);
 		contentPane.add(lblNewLabel_1);
 		txtNA = new JTextField();
+		txtNA.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
 		txtNA.setBounds(331, 44, 169, 34);
 		contentPane.add(txtNA);
 		txtNA.setColumns(10);
 		JLabel lblNewLabel_1_1 = new JLabel("Dudas, preguntas o consultas ");
 		lblNewLabel_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1_1.setBounds(25, 55, 273, 23);
+		lblNewLabel_1_1.setBounds(35, 52, 273, 23);
 		contentPane.add(lblNewLabel_1_1);
 		btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
@@ -112,11 +114,12 @@ public class vConsulta extends JFrame {
 					Consulta user = new Consulta();
 					user.setNombre(txtNA.getText());
 					user.setComentario(txtNA.getText());
+					user.setDestino(cboDestiny.getSelectedItem().toString());
 					if (dao.insertarComentario(user)) {
 						actualizarTabla();
 						JOptionPane.showMessageDialog(null, "EL COMENTARIO HA SIDO RECIBIDO");
 					} else {
-						JOptionPane.showMessageDialog(null, "ERROR HUBO UN ERRR EN LA MATRIX");
+						JOptionPane.showMessageDialog(null, "HUBO UN ERROR EN LA MATRIX");
 					}
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "QUE MAL HUBO UN ERROR EN LA MATRIX :(");
@@ -125,23 +128,25 @@ public class vConsulta extends JFrame {
 		});
 		btnAgregar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(539, 31, 106, 34);
+		btnAgregar.setBounds(394, 89, 106, 34);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtNA.getText().equals("") || txtComentario.getText().equals("")) {
+					if (txtNA.getText().equals("") || txtComentario.getText().equals("") 
+							|| cboDestiny.getSelectedItem().equals(""))  {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
 					consulta.setNombre(txtNA.getText());
 					consulta.setComentario(txtComentario.getText());
+					consulta.setDestino(cboDestiny.getSelectedItem().toString());
 					if (dao.editarConsulta(consulta)) {
 						actualizarTabla();
 						limpiar();
-						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
+						JOptionPane.showMessageDialog(null, "EL COMENTARIO SE ACTUALIZO  CORRECTAMENTE");
 					} else {
 						JOptionPane.showMessageDialog(null, "ERROR");
 					}
@@ -152,14 +157,14 @@ public class vConsulta extends JFrame {
 		});
 		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEditar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEditar.setBounds(539, 127, 89, 34);
+		btnEditar.setBounds(539, 89, 89, 34);
 		contentPane.add(btnEditar);
 		btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 
-					int opcion = JOptionPane.showConfirmDialog(null, "¿EL MENSAJE?",
+					int opcion = JOptionPane.showConfirmDialog(null, "¿DESEA ELIMIAR EL MENSAJE?",
 							"ELIMINAR COMENTARIO", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
 						if (dao.EliminarComentario(lista.get(fila).getID())) {
@@ -176,7 +181,7 @@ public class vConsulta extends JFrame {
 		});
 		btnEliminar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(539, 82, 103, 34);
+		btnEliminar.setBounds(394, 149, 103, 34);
 		contentPane.add(btnEliminar);
 		btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
@@ -188,7 +193,7 @@ public class vConsulta extends JFrame {
 		});
 		btnBorrar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnBorrar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnBorrar.setBounds(539, 172, 89, 34);
+		btnBorrar.setBounds(539, 149, 89, 34);
 		contentPane.add(btnBorrar);
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
@@ -208,6 +213,7 @@ public class vConsulta extends JFrame {
 				lblID.setText("" + lista.get(fila).getID());
 				txtNA.setText(consulta.getNombre());
 				txtComentario.setText(consulta.getComentario());
+				cboDestiny.setSelectedItem(consulta.getDestino());
 			}
 		});
 		tblUsuarios.setModel(new DefaultTableModel(
@@ -220,27 +226,31 @@ public class vConsulta extends JFrame {
 		modelo.addColumn("DESTINATARIO");
 		tblUsuarios.setModel(modelo);
 		
-		txtComentario = new JTextArea();
-		txtComentario.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		txtComentario.setBounds(25, 135, 308, 122);
-		contentPane.add(txtComentario);
-		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Escribelas aqui debajo:");
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 17));
-		lblNewLabel_1_1_1.setBounds(10, 87, 273, 23);
+		lblNewLabel_1_1_1.setBounds(35, 97, 273, 23);
 		contentPane.add(lblNewLabel_1_1_1);
 		
 		cboDestiny = new JComboBox();
+		cboDestiny.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
 		cboDestiny.setModel(new DefaultComboBoxModel(new String[] {"Profesor", "Jefe de control", "Orientadora en grupo"}));
-		cboDestiny.setBounds(394, 278, 140, 34);
+		cboDestiny.setBounds(434, 277, 169, 34);
 		contentPane.add(cboDestiny);
 		
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("¿Quien recibira el mensaje?");
 		lblNewLabel_1_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1_1_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 17));
-		lblNewLabel_1_1_1_1.setBounds(355, 244, 273, 23);
+		lblNewLabel_1_1_1_1.setBounds(372, 228, 273, 23);
 		contentPane.add(lblNewLabel_1_1_1_1);
+		
+		txtComentario = new JTextField();
+		txtComentario.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
+		txtComentario.setHorizontalAlignment(SwingConstants.CENTER);
+		txtComentario.setBorder(new LineBorder(Color.BLACK, 2, true));
+		txtComentario.setBounds(25, 127, 301, 118);
+		contentPane.add(txtComentario);
+		txtComentario.setColumns(10);
 		actualizarTabla();
 	}
 
@@ -250,7 +260,7 @@ public class vConsulta extends JFrame {
 		}
 		lista = dao.fetchConsultas();
 		for (Consulta u : lista) {
-			Object o[] = new Object[3];
+			Object o[] = new Object[4];
 			o[0] = u.getID();
 			o[1] = u.getNombre();
 			o[2] = u.getComentario();

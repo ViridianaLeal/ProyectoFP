@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Conexion.conexion;
+import modelo.Profesor;
 import modelo.Usuario;
 
 public class daoUsuario {
@@ -34,6 +35,41 @@ public class daoUsuario {
 		}
 
 	}
+	
+	public ArrayList<Usuario> buscar(String palabra) {
+        ArrayList<Usuario> lista2 = new ArrayList<Usuario>();
+        try {
+            String sql = "SELECT * FROM usuario WHERE "
+                    + "(id LIKE ?) OR "
+                    + "(user LIKE ?) OR"
+                    + "(password LIKE ?) OR "
+                    + "(nombre LIKE ?); ";
+            PreparedStatement ps = cx.conectar().prepareStatement(sql);
+            ps.setString(1, "%" + palabra + "%");
+            ps.setString(2, "%" + palabra + "%");
+            ps.setString(3, "%" + palabra + "%");
+            ps.setString(4, "%" + palabra + "%");
+            //System.out.println("CONSULTA" + ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario p = new Usuario();
+                p.setId(rs.getInt("id"));
+                p.setUser(rs.getString("user"));
+                p.setPassword(rs.getString("password"));
+                p.setNombre(rs.getString("nombre"));               
+                lista2.add(p);
+            }
+            ps.close();
+            ps = null;
+            cx.desconectar();
+        } catch (SQLException ex) {
+        	ex.printStackTrace();
+            System.out.println("Error en BUSCAR");
+        }
+        return lista2;
+
+    }
+
 
 	public ArrayList<Usuario> fetchUsuarios() {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();

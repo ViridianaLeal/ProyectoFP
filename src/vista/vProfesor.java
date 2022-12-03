@@ -297,19 +297,16 @@ public class vProfesor extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileOutputStream archivo;
-					// File("C:\\Users\\Alumnos\\Desktop\\Viridiana305\\TercerParcial305\\src\\PDF\\ReporteUsuarios.pdf");
-					URI uri = new URI(getClass().getResource("/PDF/ReporteProfesores.pdf").toString());
-		            File file = new File(uri);
-		            archivo = new FileOutputStream(file);
+					File file = new File(
+							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteCarreras.pdf");
+					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/logo.png"));
-					// Image img =
-					// Image.getInstance("C:\\Users\\Alumnos\\Desktop\\Viridiana305\\TercerParcial305\\src\\img\\jyujyu.png");
-					Image img = Image.getInstance(getClass().getResource("/img/jyujyu.png"));
+					Image img = Image.getInstance(
+							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\img\\DeoClass.png");
 					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(200, 200);
+					img.scaleToFit(100, 100);
 					doc.add(img);
 					Paragraph p = new Paragraph(10);
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
@@ -320,7 +317,7 @@ public class vProfesor extends JFrame {
 					p.add(Chunk.NEWLINE);
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
-					PdfPTable tabla = new PdfPTable(4);
+					PdfPTable tabla = new PdfPTable(6);
 					tabla.setWidthPercentage(100);
 					PdfPCell c1 = new PdfPCell(new Phrase(" ID PROFESOR", negrita));
 					PdfPCell c2 = new PdfPCell(new Phrase(" NOMBRE", negrita));
@@ -375,8 +372,6 @@ public class vProfesor extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
-				} catch (URISyntaxException e1) {
-					e1.printStackTrace();
 				}
 			
 			}

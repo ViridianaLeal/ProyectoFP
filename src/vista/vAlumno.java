@@ -57,6 +57,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 
 public class vAlumno extends JFrame {
 
@@ -114,6 +115,7 @@ public class vAlumno extends JFrame {
 		cboGrupo.setSelectedItem("");
 		txtNombre.setText("");
 		txtApellidos.setText("");
+		lblFoto.setText("");
 	}
 
 	public vAlumno() {
@@ -224,6 +226,7 @@ public class vAlumno extends JFrame {
 				cboGrupo.setSelectedItem("" + alumno.getGrupo());
 				txtNombre.setText(alumno.getNombre());
 				txtApellidos.setText(alumno.getApellidos());
+				lblFoto.setText(alumno.getFoto());
 			}
 		});
 		tblAlumnos.setModel(
@@ -243,6 +246,7 @@ public class vAlumno extends JFrame {
 		modelo.addColumn("GRUPO");
 		modelo.addColumn("NOMBRE");
 		modelo.addColumn("APELLIDOS");
+		modelo.addColumn("FOTO");
 		tblAlumnos.setModel(modelo);
 		actualizarTabla();
 
@@ -265,6 +269,7 @@ public class vAlumno extends JFrame {
 					alumno.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
 					alumno.setNombre(txtNombre.getText());
 					alumno.setApellidos(txtApellidos.getText());
+					alumno.setFoto(lblFoto.getText());
 					if (dao.editarAlumno(alumno)) {
 						actualizarTabla();
 						limpiar();
@@ -308,7 +313,8 @@ public class vAlumno extends JFrame {
 		btnEliminar.setBounds(1107, 179, 30, 30);
 		contentPane.add(btnEliminar);
 
-		btnPdf = new JButton("PDF");
+		btnPdf = new JButton("");
+		btnPdf.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -322,10 +328,10 @@ public class vAlumno extends JFrame {
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
 					java.awt.Image img2 = Toolkit.getDefaultToolkit()
-							.getImage(getClass().getResource("/img/jyujyu.png"));
+							.getImage(getClass().getResource("/img/DeoClass.png"));
 					// Image img =
 					// Image.getInstance("C:\\Users\\Rene\\Documents\\NetBeansProjects\\Java_MVC_MySQL\\src\\img\\i2.png");
-					Image img = Image.getInstance(getClass().getResource("/img/jyujyu.png"));
+					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
 					img.scaleToFit(200, 200);
 					doc.add(img);
@@ -338,10 +344,10 @@ public class vAlumno extends JFrame {
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
 					// Tabla de datos
-					PdfPTable tabla = new PdfPTable(9);
+					PdfPTable tabla = new PdfPTable(10);
 					tabla.setWidthPercentage(100);
 					PdfPCell c1 = new PdfPCell(new Phrase("ID ALUMNO", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase("NÚMERO DE CONTROL", negrita));
+					PdfPCell c2 = new PdfPCell(new Phrase("N°CONTROL", negrita));
 					PdfPCell c3 = new PdfPCell(new Phrase("PLANTEL", negrita));
 					PdfPCell c4 = new PdfPCell(new Phrase("TURNO", negrita));
 					PdfPCell c5 = new PdfPCell(new Phrase("SEMESTRE", negrita));
@@ -349,6 +355,7 @@ public class vAlumno extends JFrame {
 					PdfPCell c7 = new PdfPCell(new Phrase("GRUPO", negrita));
 					PdfPCell c8 = new PdfPCell(new Phrase("NOMBRE", negrita));
 					PdfPCell c9 = new PdfPCell(new Phrase("APELLIDOS", negrita));
+					PdfPCell c10 = new PdfPCell(new Phrase("FOTO", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -358,6 +365,7 @@ public class vAlumno extends JFrame {
 					c7.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c8.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c9.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c10.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -367,6 +375,7 @@ public class vAlumno extends JFrame {
 					c7.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c8.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c9.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					c10.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					tabla.addCell(c1);
 					tabla.addCell(c2);
 					tabla.addCell(c3);
@@ -376,6 +385,7 @@ public class vAlumno extends JFrame {
 					tabla.addCell(c7);
 					tabla.addCell(c8);
 					tabla.addCell(c9);
+					tabla.addCell(c10);
 					// Agregar los registros
 					for (Alumno pro : lista) {
 						tabla.addCell("" + pro.getIdalumno());
@@ -387,6 +397,7 @@ public class vAlumno extends JFrame {
 						tabla.addCell("" + pro.getGrupo());
 						tabla.addCell(pro.getNombre());
 						tabla.addCell(pro.getApellidos());
+						tabla.addCell(pro.getFoto());
 					}
 					doc.add(tabla);
 					Paragraph p1 = new Paragraph(10);
@@ -408,15 +419,17 @@ public class vAlumno extends JFrame {
 				}
 			}
 		});
-		btnPdf.setBounds(1076, 224, 89, 23);
+		btnPdf.setBounds(1107, 220, 30, 30);
 		contentPane.add(btnPdf);
 
-		lblFoto = new JLabel("New label");
-		lblFoto.setBounds(98, 354, 108, 125);
+		lblFoto = new JLabel("");
+		lblFoto.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		lblFoto.setBounds(116, 354, 108, 125);
 		contentPane.add(lblFoto);
 
-		JLabel lblNewLabel_1 = new JLabel("BUSCAR");
-		lblNewLabel_1.setBounds(366, 409, 46, 14);
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-buscar-cliente-30.png")));
+		lblNewLabel_1.setBounds(406, 395, 30, 30);
 		contentPane.add(lblNewLabel_1);
 
 		txtBuscar = new JTextField();
@@ -431,13 +444,14 @@ public class vAlumno extends JFrame {
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
 		
-		btnLimpiar = new JButton("Limpiar");
+		btnLimpiar = new JButton("");
+		btnLimpiar.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-broom-with-a-lot-of-dust-30.png")));
 		btnLimpiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiar();
 			}
 		});
-		btnLimpiar.setBounds(1076, 256, 89, 23);
+		btnLimpiar.setBounds(1107, 266, 30, 30);
 		contentPane.add(btnLimpiar);
 		
 		btnAgregar = new JButton("");
@@ -459,6 +473,7 @@ public class vAlumno extends JFrame {
 					user.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
 					user.setNombre(txtNombre.getText());
 					user.setApellidos(txtApellidos.getText());
+					user.setFoto(lblFoto.getText());
 					if (dao.insertarAlumno(user)) {
 						actualizarTabla();
 						limpiar();
@@ -475,15 +490,19 @@ public class vAlumno extends JFrame {
 		});
 		btnAgregar.setBounds(1107, 73, 30, 30);
 		contentPane.add(btnAgregar);
+		
+		JLabel lblNewLabel_2 = new JLabel("FOTO");
+		lblNewLabel_2.setBounds(10, 354, 46, 14);
+		contentPane.add(lblNewLabel_2);
 	}
 
 	public void actualizarTabla() {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
-		lista = dao.fetchAlumnos();
+		lista = dao.fetcAlumnos();
 		for (Alumno u : lista) {
-			Object o[] = new Object[9];
+			Object o[] = new Object[10];
 			o[0] = u.getIdalumno();
 			o[1] = u.getNumerocontrol();
 			o[2] = u.getPlantel();
@@ -493,6 +512,7 @@ public class vAlumno extends JFrame {
 			o[6] = u.getGrupo();
 			o[7] = u.getNombre();
 			o[8] = u.getApellidos();
+			o[9] = u.getFoto();
 			modelo.addRow(o);
 		}
 		tblAlumnos.setModel(modelo);
@@ -504,15 +524,17 @@ public class vAlumno extends JFrame {
 		}
 		lista = dao.buscar(palabra);
 		for (Alumno p : lista) {
-			Object item[] = new Object[8];
-			item[0] = p.getNumerocontrol();
-			item[1] = p.getPlantel();
-			item[2] = p.getTurno();
-			item[3] = p.getSemestre();
-			item[4] = p.getCarrera();
-			item[5] = p.getGrupo();
-			item[6] = p.getNombre();
-			item[7] = p.getApellidos();
+			Object item[] = new Object[10];
+			item[0] = p.getIdalumno();
+			item[1] = p.getNumerocontrol();
+			item[2] = p.getPlantel();
+			item[3] = p.getTurno();
+			item[4] = p.getSemestre();
+			item[5] = p.getCarrera();
+			item[6] = p.getGrupo();
+			item[7] = p.getNombre();
+			item[8] = p.getApellidos();
+			item[9] = p.getFoto();
 			modelo.addRow(item);
 		}
 		tblAlumnos.setModel(modelo);

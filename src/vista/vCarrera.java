@@ -1,15 +1,29 @@
 package vista;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import dao.daoCarrera;
 import dao.daoUsuario;
 import modelo.Carrera;
+import modelo.Foto;
 import modelo.Usuario;
 
 import javax.swing.JLabel;
@@ -23,9 +37,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Toolkit;
 import java.awt.Color;
+import java.awt.Desktop;
 
 public class vCarrera extends JFrame {
 
@@ -179,6 +198,7 @@ public class vCarrera extends JFrame {
 					if (opcion == 0) {
 						if (dao.EliminarCarrera(lista.get(fila).getIdCarrera())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");
@@ -204,6 +224,67 @@ public class vCarrera extends JFrame {
 		contentPane.add(btnLimpiar);
 
 		btnPdf = new JButton("");
+		btnPdf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					FileOutputStream archivo;
+					File file = new File(
+							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteCarreras.pdf");
+					archivo = new FileOutputStream(file);
+					Document doc = new Document();
+					PdfWriter.getInstance(doc, archivo);
+					doc.open();
+					Image img = Image.getInstance(
+							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\img\\DeoClass.png");
+					img.setAlignment(Element.ALIGN_CENTER);
+					img.scaleToFit(100, 100);
+					doc.add(img);
+					Paragraph p = new Paragraph(10);
+					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
+							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+					p.add(Chunk.NEWLINE);
+					p.add("CATALOGO DE CARRERAS");
+					p.add(Chunk.NEWLINE);
+					p.add(Chunk.NEWLINE);
+					p.setAlignment(Element.ALIGN_CENTER);
+					doc.add(p);
+					PdfPTable tabla = new PdfPTable(2);
+					tabla.setWidthPercentage(100);
+					PdfPCell c1 = new PdfPCell(new Phrase(" ID CARRERAS", negrita));
+					PdfPCell c2 = new PdfPCell(new Phrase("CARRERAS", negrita));
+					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c1.setBackgroundColor(BaseColor.GRAY);
+					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					tabla.addCell(c1);
+					tabla.addCell(c2);
+
+					for (Carrera u : lista) {
+						tabla.addCell("" + u.getIdCarrera());
+						tabla.addCell(u.getCarrera());
+
+					}
+
+					doc.add(tabla);
+					Paragraph p1 = new Paragraph(10);
+					p1.add(Chunk.NEWLINE);
+					p1.add("NÚMERO DE REGISTRO " + lista.size());
+					p1.add(Chunk.NEWLINE);
+					p1.add(Chunk.NEWLINE);
+					p1.setAlignment(Element.ALIGN_RIGHT);
+					doc.add(p1);
+					doc.close();
+					archivo.close();
+					Desktop.getDesktop().open(file);
+				} catch (FileNotFoundException e1) {
+					JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
+				} catch (DocumentException e1) {
+					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
+				}
+			}
+		});
 		btnPdf.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.setBounds(343, 251, 30, 39);
 		contentPane.add(btnPdf);

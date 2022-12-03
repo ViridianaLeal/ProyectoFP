@@ -13,7 +13,6 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -22,51 +21,46 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import dao.daoCarrera;
-import dao.daoGrupo;
-import dao.daoPlantel;
-import dao.daoSemestre;
-import dao.daoUsuario;
+import dao.daoFoto;
 import modelo.Carrera;
-import modelo.Grupo;
-import modelo.Plantel;
-import modelo.Semestre;
+import modelo.Foto;
 import modelo.Usuario;
 
+import java.awt.Toolkit;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+
+import java.awt.Font;
+import javax.swing.border.BevelBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.awt.Toolkit;
 
-public class vGrupo extends JFrame {
+public class vFoto extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtGrupo;
-	private JLabel lblIdGrupo;
-	private JTable tblGrupo;
-	private JButton btnEditar;
-	private JButton btnEliminar;
-	private JButton btnLimpiar;
+	private JLabel lblFoto;
+	private JLabel lblIdFoto;
+	private JTable tblFotos;
 	private JButton btnPdf;
-	private JButton btnAgregar;
-	daoGrupo dao = new daoGrupo();
+	private JButton btnLimpiar;
+	private JButton btnEliminar;
+	private JButton btnEditar;
+	daoFoto dao = new daoFoto();
 	DefaultTableModel modelo = new DefaultTableModel();
-	ArrayList<Grupo> lista = new ArrayList<Grupo>();
-	Grupo grupo;
+	ArrayList<Foto> lista = new ArrayList<Foto>();
+	Foto foto;
 	int fila = -1;
-
 	/**
 	 * Launch the application.
 	 */
@@ -74,7 +68,7 @@ public class vGrupo extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vGrupo frame = new vGrupo();
+					vFoto frame = new vFoto();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -82,103 +76,103 @@ public class vGrupo extends JFrame {
 			}
 		});
 	}
-
+ 
 	public void limpiar() {
-		lblIdGrupo.setText("");
-		txtGrupo.setText("");
+		lblFoto.setText("");
+		lblIdFoto.setText("");
 	}
-
-	public vGrupo() {
-		setTitle("AGREGAR GRUPOS");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(vCarrera.class.getResource("/img/DeoClass.png")));
+	
+	public vFoto() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vFoto.class.getResource("/img/DeoClass.png")));
+		setTitle("AGREGAR FOTOS");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 460, 376);
+		setBounds(100, 100, 534, 526);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
-		JLabel lblNewLabel = new JLabel("ID GRUPO");
-		lblNewLabel.setBounds(22, 31, 114, 14);
+		
+		JLabel lblNewLabel = new JLabel("ID FOTO");
+		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
+		lblNewLabel.setBounds(22, 36, 102, 25);
 		contentPane.add(lblNewLabel);
-
-		JLabel lblNewLabel_1 = new JLabel("GRUPO");
-		lblNewLabel_1.setBounds(22, 71, 64, 14);
+		
+		JLabel lblNewLabel_1 = new JLabel("FOTO");
+		lblNewLabel_1.setFont(new Font("Consolas", Font.PLAIN, 18));
+		lblNewLabel_1.setBounds(21, 75, 91, 31);
 		contentPane.add(lblNewLabel_1);
-
-		txtGrupo = new JTextField();
-		txtGrupo.setBounds(111, 68, 300, 20);
-		contentPane.add(txtGrupo);
-		txtGrupo.setColumns(10);
-
-		lblIdGrupo = new JLabel("0");
-		lblIdGrupo.setBounds(112, 31, 46, 14);
-		contentPane.add(lblIdGrupo);
-
+		
+		lblIdFoto = new JLabel("0");
+		lblIdFoto.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblIdFoto.setBounds(134, 36, 115, 18);
+		contentPane.add(lblIdFoto);
+		
+		lblFoto = new JLabel("");
+		lblFoto.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		lblFoto.setBounds(132, 82, 138, 131);
+		contentPane.add(lblFoto);
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(22, 110, 389, 113);
+		scrollPane.setBounds(10, 237, 498, 183);
 		contentPane.add(scrollPane);
-
-		tblGrupo = new JTable();
-		tblGrupo
-				.setModel(
-						new DefaultTableModel(
-								new Object[][] { { null, null }, { null, null }, { null, null }, { null, null },
-										{ null, null }, { null, null }, },
-								new String[] { "New column", "New column" }));
-		tblGrupo.addMouseListener(new MouseAdapter() {
+		
+		tblFotos = new JTable();
+		tblFotos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fila = tblGrupo.getSelectedRow();
-				grupo = lista.get(fila);
-				lblIdGrupo.setText("" + lista.get(fila).getIdGrupo());
-				txtGrupo.setText(""+grupo.getGrupo());
+				fila = tblFotos.getSelectedRow();
+				foto = lista.get(fila);
+				lblIdFoto.setText("" + lista.get(fila).getIdFoto());
+				lblFoto.setText(foto.getFoto());
 			}
 		});
-		scrollPane.setViewportView(tblGrupo);
-		modelo.addColumn("ID GRUPO");
-		modelo.addColumn("GRUPO");
-		tblGrupo.setModel(modelo);
+		tblFotos.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null},
+				{null, null},
+				{null, null},
+			},
+			new String[] {
+				"New column", "New column"
+			}
+		));
+		scrollPane.setViewportView(tblFotos);
+		modelo.addColumn("ID FOTO");
+		modelo.addColumn("FOTO");
+		tblFotos.setModel(modelo);
 		actualizarTabla();
-
-		btnAgregar = new JButton("");
-		btnAgregar.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
+		
+		JButton btnAgregar = new JButton("");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtGrupo.getText().equals("")) {
-						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
-						return;
-					}
-					Grupo user = new Grupo();
-					user.setGrupo(Integer.parseInt(txtGrupo.getText().toString()));
-					if (dao.insertarGrupo(user)) {
+					
+					Foto user = new Foto();
+					user.setFoto(lblFoto.getText());
+					if (dao.insertarFoto(user)) {
 						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE AGREGO CORRECTAMENTE");
-					} else {
-						JOptionPane.showMessageDialog(null, "ERROR");
+					
 					}
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "ERROR");
 				}
 			}
 		});
-		btnAgregar.setBounds(82, 260, 30, 30);
+		btnAgregar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
+		btnAgregar.setBounds(77, 441, 30, 30);
 		contentPane.add(btnAgregar);
-
+		
 		btnEditar = new JButton("");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtGrupo.getText().equals("")) {
-						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
-						return;
-					}
-					grupo.setGrupo(Integer.parseInt(txtGrupo.getText()));
-					if (dao.editarGrupo(grupo)) {
+					
+					foto.setFoto(lblFoto.getText());
+					if (dao.editarFoto(foto)) {
 						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
@@ -190,19 +184,19 @@ public class vGrupo extends JFrame {
 				}
 			}
 		});
-		btnEditar.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-lápiz-30.png")));
-		btnEditar.setBounds(147, 260, 30, 30);
+		btnEditar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-lápiz-30.png")));
+		btnEditar.setBounds(146, 441, 30, 30);
 		contentPane.add(btnEditar);
-
+		
 		btnEliminar = new JButton("");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR GRUPO?",
-							"ELIMINAR GRUPO", JOptionPane.YES_NO_OPTION);
+					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR LA FOTO?",
+							"ELIMINAR FOTO", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
-						if (dao.EliminarGrupo(lista.get(fila).getIdGrupo())) {
+						if (dao.EliminarFoto(lista.get(fila).getIdFoto())) {
 							actualizarTabla();
 							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
@@ -215,27 +209,27 @@ public class vGrupo extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-eliminar-30.png")));
-		btnEliminar.setBounds(215, 260, 30, 30);
+		btnEliminar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setBounds(240, 441, 30, 30);
 		contentPane.add(btnEliminar);
-
+		
 		btnLimpiar = new JButton("");
 		btnLimpiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiar();
 			}
 		});
-		btnLimpiar.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-broom-with-a-lot-of-dust-30.png")));
-		btnLimpiar.setBounds(277, 251, 37, 39);
+		btnLimpiar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-broom-with-a-lot-of-dust-30.png")));
+		btnLimpiar.setBounds(329, 441, 30, 30);
 		contentPane.add(btnLimpiar);
-
+		
 		btnPdf = new JButton("");
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileOutputStream archivo;
 					File file = new File(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteGrupos.pdf");
+							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteFotos.pdf");
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
@@ -249,15 +243,15 @@ public class vGrupo extends JFrame {
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
 							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
 					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE GRUPOS");
+					p.add("CATALOGO DE FOTOS");
 					p.add(Chunk.NEWLINE);
 					p.add(Chunk.NEWLINE);
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
 					PdfPTable tabla = new PdfPTable(2);
 					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase(" ID GRUPOS", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase("GRUPOS", negrita));
+					PdfPCell c1 = new PdfPCell(new Phrase(" ID FOTO", negrita));
+					PdfPCell c2 = new PdfPCell(new Phrase("FOTO", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c1.setBackgroundColor(BaseColor.GRAY);
@@ -265,9 +259,9 @@ public class vGrupo extends JFrame {
 					tabla.addCell(c1);
 					tabla.addCell(c2);
 
-					for (Grupo u : lista) {
-						tabla.addCell("" + u.getIdGrupo());
-						tabla.addCell(""+u.getGrupo());
+					for (Foto u : lista) {
+						tabla.addCell("" + u.getIdFoto());
+						tabla.addCell(u.getFoto());
 
 					}
 
@@ -290,23 +284,25 @@ public class vGrupo extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
 				}
 			}
+			
 		});
-		btnPdf.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-pdf-30.png")));
-		btnPdf.setBounds(343, 251, 30, 39);
+		btnPdf.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-pdf-30.png")));
+		btnPdf.setBounds(413, 441, 30, 30);
 		contentPane.add(btnPdf);
 	}
-
+	
 	public void actualizarTabla() {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
-		lista = dao.fetchGrupos();
-		for  (Grupo u : lista) {
+		lista = dao.fetcFotos();
+		for (Foto u : lista) {
 			Object o[] = new Object[2];
-			o[0] = u.getIdGrupo();
-			o[1] = u.getGrupo();
+			o[0] = u.getIdFoto();
+			o[1] = u.getFoto();
 			modelo.addRow(o);
 		}
-		tblGrupo.setModel(modelo);
+		tblFotos.setModel(modelo);
 	}
+	
 }

@@ -29,6 +29,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import dao.daoProfesor;
 import dao.daoUsuario;
+import modelo.Alumno;
 import modelo.Profesor;
 import modelo.Usuario;
 
@@ -49,6 +50,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class vProfesor extends JFrame {
 
@@ -295,7 +298,7 @@ public class vProfesor extends JFrame {
 				try {
 					FileOutputStream archivo;
 					// File("C:\\Users\\Alumnos\\Desktop\\Viridiana305\\TercerParcial305\\src\\PDF\\ReporteUsuarios.pdf");
-					URI uri = new URI(getClass().getResource("/PDF/ReporteUsuarios.pdf").toString());
+					URI uri = new URI(getClass().getResource("/PDF/ReporteProfesores.pdf").toString());
 		            File file = new File(uri);
 		            archivo = new FileOutputStream(file);
 					Document doc = new Document();
@@ -312,35 +315,46 @@ public class vProfesor extends JFrame {
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
 							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
 					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE USUARIOS");
+					p.add("CATALOGO DE PROFESORES");
 					p.add(Chunk.NEWLINE);
 					p.add(Chunk.NEWLINE);
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
 					PdfPTable tabla = new PdfPTable(4);
 					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase(" ID USUARIO", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase(" USUARIO", negrita));
-					PdfPCell c3 = new PdfPCell(new Phrase(" PASSWORD", negrita));
-					PdfPCell c4 = new PdfPCell(new Phrase(" NOMBRE", negrita));
+					PdfPCell c1 = new PdfPCell(new Phrase(" ID PROFESOR", negrita));
+					PdfPCell c2 = new PdfPCell(new Phrase(" NOMBRE", negrita));
+					PdfPCell c3 = new PdfPCell(new Phrase(" APELLIDOS", negrita));
+					PdfPCell c4 = new PdfPCell(new Phrase(" CLAVE", negrita));
+					PdfPCell c5 = new PdfPCell(new Phrase(" CARRERA", negrita));
+					PdfPCell c6 = new PdfPCell(new Phrase(" FOTO", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c6.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					tabla.addCell(c1);
 					tabla.addCell(c2);
 					tabla.addCell(c3);
 					tabla.addCell(c4);
+					tabla.addCell(c5);
+					tabla.addCell(c6);
+					
 
 					for (Profesor u : lista) {
-						tabla.addCell("" + u.getId());
-						tabla.addCell(u.getUser());
-						tabla.addCell(u.getPassword());
+						tabla.addCell("" + u.getIdProfesor());
 						tabla.addCell(u.getNombre());
+						tabla.addCell(u.getApellidos());
+						tabla.addCell(""+u.getClave());
+						tabla.addCell(u.getCarrera());
+						tabla.addCell(u.getFoto());
 
 					}
 
@@ -379,6 +393,12 @@ public class vProfesor extends JFrame {
 		contentPane.add(lblNewLabel_6);
 
 		txtBuscar = new JTextField();
+		txtBuscar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				refrescarTabla2(txtBuscar.getText().toString());
+			}
+		});
 		txtBuscar.setBounds(587, 316, 282, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
@@ -400,5 +420,25 @@ public class vProfesor extends JFrame {
 			modelo.addRow(o);
 		}
 		tblProfesotes.setModel(modelo);
+	}
+	
+	public void refrescarTabla2(String palabra) {
+		while (modelo.getRowCount() > 0) {
+			modelo.removeRow(0);
+		}
+		lista = dao.buscar(palabra);
+		for (Profesor p : lista) {
+			Object item[] = new Object[6];
+			item[0] = p.getIdProfesor();
+			item[1] = p.getNombre();
+			item[2] = p.getApellidos();
+			item[3] = p.getClave();
+			item[4] = p.getCarrera();
+			item[5] = p.getFoto();
+			
+			modelo.addRow(item);
+		}
+		tblProfesotes.setModel(modelo);
+
 	}
 }

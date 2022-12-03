@@ -102,7 +102,6 @@ public class vAsignatura extends JFrame {
 					Asignatura user = new Asignatura();
 					user.setProfesor(cboProfe.getSelectedItem().toString());
 					user.setAsignatura(txtAsignatura.getText());
-					
 					if (dao.insertarAsignatura(user)) {
 						actualizarTabla();
 						JOptionPane.showMessageDialog(null, "LA ASIGNATURA SE AGREGO CORRECTAMENTE");
@@ -150,7 +149,8 @@ public class vAsignatura extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR LA ASIGNATURA?","ELIMINAR ASIGNATURA", JOptionPane.YES_NO_OPTION);
+					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR LA ASIGNATURA?",
+							"ELIMINAR ASIGNATURA", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
 						if (dao.EliminarAsignatura(lista.get(fila).getIDasignatura())) {
 							actualizarTabla();

@@ -39,7 +39,7 @@ public class vConsulta extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtNA;
-	private JTable tblUsuarios;
+	private JTable tblConsulta;
 	private JLabel lblID;
 	private JButton btnAgregar;
 	private JButton btnEliminar;
@@ -52,7 +52,7 @@ public class vConsulta extends JFrame {
 	Consulta consulta;
 	int fila = -1;
 	private JComboBox cboDestiny;
-	private JTextField txtComentario;
+	private JTextField txtC;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -69,7 +69,7 @@ public class vConsulta extends JFrame {
 
 	public void limpiar() {
 		txtNA.setText("");
-		txtComentario.setText("");
+		txtC.setText("");
 	}
 
 	public vConsulta() {
@@ -107,13 +107,14 @@ public class vConsulta extends JFrame {
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtNA.getText().equals("") || txtComentario.getText().equals("")||cboDestiny.getSelectedItem().equals("")) {
-						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
+					if (txtNA.getText().equals("") || txtC.getText().equals("")||
+							cboDestiny.getSelectedItem().equals("")) {
+						JOptionPane.showMessageDialog(null, "LLENA CORRECTAMENTE TUS DATOS ");
 						return;
 					}
 					Consulta user = new Consulta();
 					user.setNombre(txtNA.getText());
-					user.setComentario(txtNA.getText());
+					user.setComentario(txtC.getText());
 					user.setDestino(cboDestiny.getSelectedItem().toString());
 					if (dao.insertarComentario(user)) {
 						actualizarTabla();
@@ -122,7 +123,8 @@ public class vConsulta extends JFrame {
 						JOptionPane.showMessageDialog(null, "HUBO UN ERROR EN LA MATRIX");
 					}
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(null, "QUE MAL HUBO UN ERROR EN LA MATRIX :(");
+					JOptionPane.showMessageDialog(null, "QUE MAL  \n\n"
+							+ " HUBO UN ERROR EN LA MATRIX :(");
 				}
 			}
 		});
@@ -135,13 +137,13 @@ public class vConsulta extends JFrame {
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtNA.getText().equals("") || txtComentario.getText().equals("") 
+					if (txtNA.getText().equals("") || txtC.getText().equals("") 
 							|| cboDestiny.getSelectedItem().equals(""))  {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
 					consulta.setNombre(txtNA.getText());
-					consulta.setComentario(txtComentario.getText());
+					consulta.setComentario(txtC.getText());
 					consulta.setDestino(cboDestiny.getSelectedItem().toString());
 					if (dao.editarConsulta(consulta)) {
 						actualizarTabla();
@@ -186,7 +188,7 @@ public class vConsulta extends JFrame {
 		btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtComentario.setText(null);
+				txtC.setText(null);
 				txtNA.setText(null);
 				limpiar();
 			}
@@ -203,28 +205,28 @@ public class vConsulta extends JFrame {
 		});
 		scrollPane.setBounds(37, 339, 581, 158);
 		contentPane.add(scrollPane);
-		tblUsuarios = new JTable();
-		tblUsuarios.addMouseListener(new MouseAdapter() {
+		tblConsulta = new JTable();
+		tblConsulta.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fila = tblUsuarios.getSelectedRow();
-				fila = tblUsuarios.getSelectedRow();
+				fila = tblConsulta.getSelectedRow();
+				fila = tblConsulta.getSelectedRow();
 				consulta = lista.get(fila);
 				lblID.setText("" + lista.get(fila).getID());
-				txtNA.setText(consulta.getNombre());
-				txtComentario.setText(consulta.getComentario());
-				cboDestiny.setSelectedItem(consulta.getDestino());
+				txtNA.setText(""+ lista.get(fila).getNombre());
+				txtC.setText(""+ lista.get(fila).getComentario());
+				cboDestiny.setSelectedItem(""+lista.get(fila).getDestino());
 			}
 		});
-		tblUsuarios.setModel(new DefaultTableModel(
+		tblConsulta.setModel(new DefaultTableModel(
 				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, },
 				new String[] { "New column", "New column", "New column", "New column" }));
-		scrollPane.setViewportView(tblUsuarios);
-		modelo.addColumn("ID");
-		modelo.addColumn("NOMBRE Y APELLIDO");
+		scrollPane.setViewportView(tblConsulta);
+		modelo.addColumn("NO° de consulta");
+		modelo.addColumn("NOMBRE");
 		modelo.addColumn("COMENTARIO");
 		modelo.addColumn("DESTINATARIO");
-		tblUsuarios.setModel(modelo);
+		tblConsulta.setModel(modelo);
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Escribelas aqui debajo:");
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -244,13 +246,13 @@ public class vConsulta extends JFrame {
 		lblNewLabel_1_1_1_1.setBounds(372, 228, 273, 23);
 		contentPane.add(lblNewLabel_1_1_1_1);
 		
-		txtComentario = new JTextField();
-		txtComentario.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
-		txtComentario.setHorizontalAlignment(SwingConstants.CENTER);
-		txtComentario.setBorder(new LineBorder(Color.BLACK, 2, true));
-		txtComentario.setBounds(25, 127, 301, 118);
-		contentPane.add(txtComentario);
-		txtComentario.setColumns(10);
+		txtC = new JTextField();
+		txtC.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
+		txtC.setHorizontalAlignment(SwingConstants.CENTER);
+		txtC.setBorder(new LineBorder(Color.BLACK, 2, true));
+		txtC.setBounds(25, 127, 301, 118);
+		contentPane.add(txtC);
+		txtC.setColumns(10);
 		actualizarTabla();
 	}
 
@@ -267,6 +269,6 @@ public class vConsulta extends JFrame {
 			o[3] = u.getDestino();
 			modelo.addRow(o);
 		}
-		tblUsuarios.setModel(modelo);
+		tblConsulta.setModel(modelo);
 	}
 }

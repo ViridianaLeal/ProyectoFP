@@ -41,7 +41,7 @@ public class daoConsulta {
 				Consulta u = new Consulta();
 				u.setID(rs.getInt("id"));
 				u.setNombre(rs.getString("nombre"));
-				u.setComentario(rs.getString("texto"));
+				u.setComentario(rs.getString("comentario"));
 				u.setDestino(rs.getString("destino"));
 				lista.add(u);
 			}
@@ -68,7 +68,7 @@ public class daoConsulta {
 	public boolean editarConsulta(Consulta user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE consulta SET texto=?,nombre=?,destino=? WHERE id=?");
+			ps = cx.conectar().prepareStatement("UPDATE consulta SET nombre=?,comentario=?,destino=? WHERE id=?");
 			ps.setInt(1, user.getID());
 			ps.setString(2, user.getNombre());
 			ps.setString(3, user.getComentario());

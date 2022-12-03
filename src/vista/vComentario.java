@@ -34,8 +34,13 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.ComponentOrientation;
+import javax.swing.ImageIcon;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.UIManager;
 
-public class vConsulta extends JFrame {
+public class vComentario extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtNA;
@@ -58,7 +63,7 @@ public class vConsulta extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vConsulta frame = new vConsulta();
+					vComentario frame = new vComentario();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -72,11 +77,11 @@ public class vConsulta extends JFrame {
 		txtC.setText("");
 	}
 
-	public vConsulta() {
+	public vComentario() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/Java.jpg")));
 		setTitle("CRUD CONSULTA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 704, 547);
+		setBounds(100, 100, 670, 547);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -91,19 +96,22 @@ public class vConsulta extends JFrame {
 		lblID.setBounds(97, 7, 148, 34);
 		contentPane.add(lblID);
 		JLabel lblNewLabel_1 = new JLabel("Nombre");
+		lblNewLabel_1.setHorizontalTextPosition(SwingConstants.RIGHT);
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1.setBounds(423, 12, 86, 21);
+		lblNewLabel_1.setBounds(436, 31, 86, 21);
 		contentPane.add(lblNewLabel_1);
 		txtNA = new JTextField();
 		txtNA.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
-		txtNA.setBounds(331, 44, 169, 34);
+		txtNA.setBounds(355, 82, 169, 34);
 		contentPane.add(txtNA);
 		txtNA.setColumns(10);
 		JLabel lblNewLabel_1_1 = new JLabel("Dudas, preguntas o consultas ");
 		lblNewLabel_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
 		lblNewLabel_1_1.setBounds(35, 52, 273, 23);
 		contentPane.add(lblNewLabel_1_1);
-		btnAgregar = new JButton("Agregar");
+		btnAgregar = new JButton("");
+		btnAgregar.setIcon(new ImageIcon(vComentario.class.getResource("/img/Avion2.png")));
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -128,12 +136,12 @@ public class vConsulta extends JFrame {
 				}
 			}
 		});
-		btnAgregar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnAgregar.setBorder(new EtchedBorder(EtchedBorder.LOWERED, UIManager.getColor("Button.focus"), Color.LIGHT_GRAY));
 		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(394, 89, 106, 34);
+		btnAgregar.setBounds(216, 255, 73, 73);
 		contentPane.add(btnAgregar);
 
-		btnEditar = new JButton("Editar");
+		btnEditar = new JButton("Modificar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -159,9 +167,10 @@ public class vConsulta extends JFrame {
 		});
 		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEditar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEditar.setBounds(539, 89, 89, 34);
+		btnEditar.setBounds(418, 132, 89, 34);
 		contentPane.add(btnEditar);
-		btnEliminar = new JButton("Eliminar");
+		btnEliminar = new JButton("");
+		btnEliminar.setIcon(new ImageIcon(vComentario.class.getResource("/img/Bote.jpg")));
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -181,11 +190,11 @@ public class vConsulta extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnEliminar.setBorder(new EtchedBorder(EtchedBorder.RAISED, UIManager.getColor("Button.focus"), new Color(192, 192, 192)));
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(394, 149, 103, 34);
+		btnEliminar.setBounds(110, 255, 66, 73);
 		contentPane.add(btnEliminar);
-		btnBorrar = new JButton("Borrar");
+		btnBorrar = new JButton("Borrar ambos campos");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtC.setText(null);
@@ -195,7 +204,7 @@ public class vConsulta extends JFrame {
 		});
 		btnBorrar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnBorrar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnBorrar.setBounds(539, 149, 89, 34);
+		btnBorrar.setBounds(374, 177, 169, 34);
 		contentPane.add(btnBorrar);
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
@@ -237,13 +246,13 @@ public class vConsulta extends JFrame {
 		cboDestiny = new JComboBox();
 		cboDestiny.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
 		cboDestiny.setModel(new DefaultComboBoxModel(new String[] {"Profesor", "Jefe de control", "Orientadora en grupo"}));
-		cboDestiny.setBounds(434, 277, 169, 34);
+		cboDestiny.setBounds(402, 259, 169, 34);
 		contentPane.add(cboDestiny);
 		
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("¿Quien recibira el mensaje?");
 		lblNewLabel_1_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1_1_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 17));
-		lblNewLabel_1_1_1_1.setBounds(372, 228, 273, 23);
+		lblNewLabel_1_1_1_1.setBounds(336, 224, 273, 23);
 		contentPane.add(lblNewLabel_1_1_1_1);
 		
 		txtC = new JTextField();

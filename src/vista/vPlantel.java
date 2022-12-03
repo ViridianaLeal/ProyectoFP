@@ -200,6 +200,7 @@ public class vPlantel extends JFrame {
 					if (opcion == 0) {
 						if (dao.EliminarPlantel(lista.get(fila).getIdPlantel())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");

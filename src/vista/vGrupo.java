@@ -204,6 +204,7 @@ public class vGrupo extends JFrame {
 					if (opcion == 0) {
 						if (dao.EliminarGrupo(lista.get(fila).getIdGrupo())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");

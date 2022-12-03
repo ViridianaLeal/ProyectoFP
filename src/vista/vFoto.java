@@ -198,6 +198,7 @@ public class vFoto extends JFrame {
 					if (opcion == 0) {
 						if (dao.EliminarFoto(lista.get(fila).getIdFoto())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");

@@ -198,6 +198,7 @@ public class vCarrera extends JFrame {
 					if (opcion == 0) {
 						if (dao.EliminarCarrera(lista.get(fila).getIdCarrera())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");

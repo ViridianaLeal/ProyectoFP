@@ -202,6 +202,7 @@ public class vSemestre extends JFrame {
 					if (opcion == 0) {
 						if (dao.EliminarSemestre(lista.get(fila).getIdSemestre())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");

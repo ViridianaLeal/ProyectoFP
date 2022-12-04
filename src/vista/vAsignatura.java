@@ -33,7 +33,7 @@ import javax.swing.DefaultComboBoxModel;
 public class vAsignatura extends JFrame {
 
 	private JPanel contentPane;
-	int fila = -1;
+	
 	private JTable tblca;
 	private JLabel lblAsig;
 	private JButton btnAgregar;
@@ -44,6 +44,7 @@ public class vAsignatura extends JFrame {
 	daoAsignatura dao = new daoAsignatura();
 	DefaultTableModel modelo = new DefaultTableModel();
 	ArrayList<Asignatura> lista =new ArrayList<Asignatura>();
+	int fila = -1;
 	Asignatura asignatura;
 	private JTextField txtAsignatura;
 	private JComboBox cboProfe;

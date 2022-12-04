@@ -20,11 +20,11 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import dao.daoAsignatura;
-import dao.daoCalificaciones;
-import modelo.Asignatura;
+import dao.daoProfesor;
+import dao.daoPromedio;
 import modelo.Calificaciones;
-import modelo.Usuario;
+import modelo.Profesor;
+import modelo.Promedio;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,49 +39,50 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.SpinnerNumberModel;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.Toolkit;
 
-public class vCalificaciones extends JFrame {
+public class vPromedio extends JFrame {
 
 	private JPanel contentPane;
-	private JLabel lblIdCal;
 	private JTextField txtAlumno;
 	private JTextField txtProfesor;
-	private JComboBox cboCarrera;
 	private JComboBox cboSemestre;
+	private JComboBox cboCarrera;
 	private JComboBox cboGrupo;
-	private JComboBox cboAsignatura;
-	private JTable tblCalificaciones;
-	private JButton btnEditar;
+	private JTextField txtAsignatura;
+	private JSpinner spnCali;
+	private JSpinner spnPromedio;
+	private JTable tblPromedios;
 	private JButton btnAgregar;
-	private JButton btnEliminar;
 	private JButton btnPdf;
+	private JButton btnEliminar;
+	private JButton btnEditar;
 	private JTextField txtBuscar;
-	daoCalificaciones dao = new daoCalificaciones();
+	daoPromedio dao = new daoPromedio();
 	DefaultTableModel modelo = new DefaultTableModel();
-	ArrayList<Calificaciones> lista =new ArrayList<Calificaciones>();
+	ArrayList<Promedio> lista = new ArrayList<Promedio>();
+	Promedio promedio;
 	int fila = -1;
-	Calificaciones calificaciones;
-	private JSpinner spnCal;
+	private JLabel lblPromedioId;
 
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vCalificaciones frame = new vCalificaciones();
+					vPromedio frame = new vPromedio();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -91,146 +92,160 @@ public class vCalificaciones extends JFrame {
 	}
 	
 	public void limpiar() {
-		lblIdCal.setText("");
+		lblPromedioId.setText("");
 		txtAlumno.setText("");
 		txtProfesor.setText("");
 		cboSemestre.setSelectedItem("");
 		cboCarrera.setSelectedItem("");
 		cboGrupo.setSelectedItem("");
-		cboAsignatura.setSelectedItem("");
-		spnCal.setValue(0);
+		txtAsignatura.setText("");
+		spnCali.setValue(0);
+		spnPromedio.setValue(0);
 	}
 
-	public vCalificaciones() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(vCalificaciones.class.getResource("/img/DeoClass.png")));
-		setTitle("AGREGAR CALIFICACIONES");
+	
+	public vPromedio() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vPromedio.class.getResource("/img/DeoClass.png")));
+		setTitle("AGREGAR PROMEDIO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1145, 462);
+		setBounds(100, 100, 1061, 422);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("ID CALIFICACIONES");
-		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblNewLabel.setBounds(10, 23, 165, 14);
+		JLabel lblNewLabel = new JLabel("ID PROMEDIO");
+		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblNewLabel.setBounds(10, 11, 171, 24);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblAlumno = new JLabel("ALUMNO");
-		lblAlumno.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblAlumno.setBounds(10, 62, 165, 14);
+		lblAlumno.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblAlumno.setBounds(10, 47, 171, 24);
 		contentPane.add(lblAlumno);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("PROFESOR");
-		lblNewLabel_1_1.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblNewLabel_1_1.setBounds(10, 100, 165, 14);
-		contentPane.add(lblNewLabel_1_1);
+		JLabel lblProfesor = new JLabel("PROFESOR");
+		lblProfesor.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblProfesor.setBounds(10, 82, 171, 24);
+		contentPane.add(lblProfesor);
 		
-		JLabel lblNewLabel_1_2 = new JLabel("SEMESTRE");
-		lblNewLabel_1_2.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblNewLabel_1_2.setBounds(10, 138, 165, 14);
-		contentPane.add(lblNewLabel_1_2);
+		JLabel lblSemestre = new JLabel("SEMESTRE");
+		lblSemestre.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblSemestre.setBounds(10, 117, 171, 24);
+		contentPane.add(lblSemestre);
 		
-		JLabel lblNewLabel_1_3 = new JLabel("CARERA");
-		lblNewLabel_1_3.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblNewLabel_1_3.setBounds(10, 172, 165, 14);
-		contentPane.add(lblNewLabel_1_3);
+		JLabel lblCarrera = new JLabel("CARRERA");
+		lblCarrera.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblCarrera.setBounds(10, 149, 171, 24);
+		contentPane.add(lblCarrera);
 		
-		JLabel lblNewLabel_1_4 = new JLabel("GRUPO");
-		lblNewLabel_1_4.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblNewLabel_1_4.setBounds(10, 216, 165, 14);
-		contentPane.add(lblNewLabel_1_4);
+		JLabel lblGrupo = new JLabel("GRUPO");
+		lblGrupo.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblGrupo.setBounds(10, 184, 171, 24);
+		contentPane.add(lblGrupo);
 		
-		JLabel lblNewLabel_1_5 = new JLabel("ASIGNATURA");
-		lblNewLabel_1_5.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblNewLabel_1_5.setBounds(10, 256, 165, 14);
-		contentPane.add(lblNewLabel_1_5);
+		JLabel lblAsignatura = new JLabel("ASIGNATURA");
+		lblAsignatura.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblAsignatura.setBounds(10, 219, 171, 24);
+		contentPane.add(lblAsignatura);
 		
-		JLabel lblNewLabel_1_6 = new JLabel("CALIFICACIONES");
-		lblNewLabel_1_6.setFont(new Font("Consolas", Font.PLAIN, 16));
-		lblNewLabel_1_6.setBounds(10, 296, 165, 14);
-		contentPane.add(lblNewLabel_1_6);
+		JLabel lblCalificaciones = new JLabel("CALIFICACIONES");
+		lblCalificaciones.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblCalificaciones.setBounds(10, 257, 171, 24);
+		contentPane.add(lblCalificaciones);
 		
-		lblIdCal = new JLabel("");
-		lblIdCal.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblIdCal.setBounds(197, 23, 92, 13);
-		contentPane.add(lblIdCal);
+		JLabel lblPromedio = new JLabel("PROMEDIO");
+		lblPromedio.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblPromedio.setBounds(10, 296, 171, 24);
+		contentPane.add(lblPromedio);
+		
+		lblPromedioId = new JLabel("");
+		lblPromedioId.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblPromedioId.setBounds(191, 11, 85, 17);
+		contentPane.add(lblPromedioId);
 		
 		txtAlumno = new JTextField();
-		txtAlumno.setBounds(197, 58, 181, 20);
+		txtAlumno.setBounds(190, 48, 197, 20);
 		contentPane.add(txtAlumno);
 		txtAlumno.setColumns(10);
 		
 		txtProfesor = new JTextField();
-		txtProfesor.setColumns(10);
-		txtProfesor.setBounds(197, 96, 181, 20);
+		txtProfesor.setBounds(191, 83, 196, 20);
 		contentPane.add(txtProfesor);
+		txtProfesor.setColumns(10);
 		
 		cboSemestre = new JComboBox();
-		cboSemestre.setBounds(197, 133, 182, 22);
+		cboSemestre.setBounds(191, 117, 196, 22);
 		contentPane.add(cboSemestre);
 		
 		cboCarrera = new JComboBox();
-		cboCarrera.setBounds(197, 167, 181, 22);
+		cboCarrera.setBounds(191, 149, 196, 22);
 		contentPane.add(cboCarrera);
 		
 		cboGrupo = new JComboBox();
-		cboGrupo.setModel(new DefaultComboBoxModel(new String[] {"305"}));
-		cboGrupo.setBounds(197, 211, 181, 22);
+		cboGrupo.setModel(new DefaultComboBoxModel(new String[] {"101", "102", "103", "104", "105", "106", "107"}));
+		cboGrupo.setBounds(191, 184, 197, 22);
 		contentPane.add(cboGrupo);
 		
-		cboAsignatura = new JComboBox();
-		cboAsignatura.setBounds(197, 251, 181, 22);
-		contentPane.add(cboAsignatura);
+		txtAsignatura = new JTextField();
+		txtAsignatura.setBounds(190, 220, 197, 20);
+		contentPane.add(txtAsignatura);
+		txtAsignatura.setColumns(10);
 		
-		spnCal = new JSpinner();
-		spnCal.setModel(new SpinnerNumberModel(0.0, 0.0, 10.0, 0.1));
-		spnCal.setBounds(195, 292, 183, 20);
-		contentPane.add(spnCal);
+		spnCali = new JSpinner();
+		spnCali.setModel(new SpinnerNumberModel(0.0, 0.0, 10.0, 0.1));
+		spnCali.setBounds(191, 258, 196, 20);
+		contentPane.add(spnCali);
+		
+		spnPromedio = new JSpinner();
+		spnPromedio.setModel(new SpinnerNumberModel(0.0, 0.0, 10.0, 0.1));
+		spnPromedio.setBounds(191, 297, 196, 20);
+		contentPane.add(spnPromedio);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(388, 23, 720, 333);
+		scrollPane.setBounds(403, 28, 632, 281);
 		contentPane.add(scrollPane);
 		
-		tblCalificaciones = new JTable();
-		tblCalificaciones.addMouseListener(new MouseAdapter() {
+		tblPromedios = new JTable();
+		tblPromedios.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fila = tblCalificaciones.getSelectedRow();
-				calificaciones= lista.get(fila);
-				lblIdCal.setText("" + lista.get(fila).getIdCalificaciones());
-				txtAlumno.setText(calificaciones.getAlumno());
-				txtProfesor.setText(calificaciones.getProfesor());
-				cboSemestre.setSelectedItem(calificaciones.getSemestre());
-				cboCarrera.setSelectedItem(calificaciones.getCarrera());
-				cboGrupo.setSelectedItem(calificaciones.getGrupo());
-				cboAsignatura.setSelectedItem(calificaciones.getAsignatura());
-				spnCal.setValue(calificaciones.getCalificaciones());
+				fila = tblPromedios.getSelectedRow();
+				promedio= lista.get(fila);
+				lblPromedioId.setText("" + lista.get(fila).getIdPromedio());
+				txtAlumno.setText(promedio.getAlumno());
+				txtProfesor.setText(promedio.getProfesor());
+				cboSemestre.setSelectedItem(promedio.getSemestre());
+				cboCarrera.setSelectedItem(promedio.getCarrera());
+				cboGrupo.setSelectedItem(promedio.getGrupo());
+				txtAsignatura.setText(promedio.getAsignaturas());
+				spnCali.setValue(promedio.getCalificaciones());
+				spnPromedio.setValue(promedio.getPromedio());
 			}
 		});
-		tblCalificaciones.setModel(new DefaultTableModel(
+		tblPromedios.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
+				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
 			}
 		));
-		scrollPane.setViewportView(tblCalificaciones);
-		modelo.addColumn("ID ");
-		modelo.addColumn("Alumno");
+		scrollPane.setViewportView(tblPromedios);
+		modelo.addColumn("ID PROMEDIO");
+		modelo.addColumn("ALUMNO");
 		modelo.addColumn("PROFESOR");
 		modelo.addColumn("SEMESTRE");
 		modelo.addColumn("CARRERA");
 		modelo.addColumn("GRUPO");
-		modelo.addColumn("ASIGNATURA");
+		modelo.addColumn("ASINATURA");
 		modelo.addColumn("CALIFICACIONES");
-		tblCalificaciones.setModel(modelo);
+		modelo.addColumn("PROMEDIO");
+		tblPromedios.setModel(modelo);
 		actualizarTabla();
 		
 		btnAgregar = new JButton("");
@@ -241,15 +256,16 @@ public class vCalificaciones extends JFrame {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
-					Calificaciones user = new Calificaciones();
+					Promedio user = new Promedio();
 					user.setAlumno(txtAlumno.getText());
 					user.setProfesor(txtProfesor.getText());
 					user.setSemestre(""+cboSemestre.getSelectedItem());
 					user.setCarrera(""+cboCarrera.getSelectedItem());
 					user.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
-					user.setAsignatura(""+cboAsignatura.getSelectedItem());
-					user.setCalificaciones(Double.parseDouble(spnCal.getValue().toString()));
-					if (dao.insertarCalificacion(user)) {
+					user.setAsignaturas(txtAsignatura.getText());
+					user.setCalificaciones(Double.parseDouble(spnCali.getValue().toString()));
+					user.setPromedio(Double.parseDouble(spnPromedio.getValue().toString()));
+					if (dao.insertarPromedio(user)) {
 						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE AGREGO CORRECTAMENTE");
@@ -263,8 +279,8 @@ public class vCalificaciones extends JFrame {
 				}
 			}
 		});
-		btnAgregar.setIcon(new ImageIcon(vCalificaciones.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
-		btnAgregar.setBounds(44, 355, 30, 30);
+		btnAgregar.setIcon(new ImageIcon(vPromedio.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
+		btnAgregar.setBounds(802, 349, 30, 30);
 		contentPane.add(btnAgregar);
 		
 		btnEditar = new JButton("");
@@ -275,14 +291,15 @@ public class vCalificaciones extends JFrame {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
-					calificaciones.setAlumno(txtAlumno.getText());
-					calificaciones.setProfesor(txtProfesor.getText());
-					calificaciones.setSemestre("" + cboSemestre.getSelectedItem());
-					calificaciones.setCarrera(""+cboCarrera.getSelectedItem());
-					calificaciones.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
-					calificaciones.setAsignatura(""+cboAsignatura.getSelectedItem());
-					calificaciones.setCalificaciones(Double.parseDouble(spnCal.getValue().toString()));
-					if (dao.editarCalificaciones(calificaciones)) {
+					promedio.setAlumno(txtAlumno.getText());
+					promedio.setProfesor(txtProfesor.getText());
+					promedio.setSemestre("" + cboSemestre.getSelectedItem());
+					promedio.setCarrera(""+cboCarrera.getSelectedItem());
+					promedio.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
+					promedio.setAsignaturas(txtAsignatura.getText());
+					promedio.setCalificaciones(Double.parseDouble(spnCali.getValue().toString()));
+					promedio.setPromedio(Double.parseDouble(spnPromedio.getValue().toString()));
+					if (dao.editarPromedio(promedio)) {
 						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
@@ -294,9 +311,10 @@ public class vCalificaciones extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERROR");
 				}
 			}
+			
 		});
-		btnEditar.setIcon(new ImageIcon(vCalificaciones.class.getResource("/img/icons8-lápiz-30.png")));
-		btnEditar.setBounds(97, 355, 30, 30);
+		btnEditar.setIcon(new ImageIcon(vPromedio.class.getResource("/img/icons8-lápiz-30.png")));
+		btnEditar.setBounds(849, 349, 30, 30);
 		contentPane.add(btnEditar);
 		
 		btnEliminar = new JButton("");
@@ -304,10 +322,10 @@ public class vCalificaciones extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR ESTA CALIFICACIÓN?",
-							"ELIMINAR CALIFICACIÓN", JOptionPane.YES_NO_OPTION);
+					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR ESTE PROMEDIO?",
+							"ELIMINAR PROMEDIO", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
-						if (dao.EliminarCalificacion(lista.get(fila).getIdCalificaciones())) {
+						if (dao.EliminarPromedio(lista.get(fila).getIdPromedio())) {
 							actualizarTabla();
 							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
@@ -320,8 +338,8 @@ public class vCalificaciones extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vCalificaciones.class.getResource("/img/icons8-eliminar-30.png")));
-		btnEliminar.setBounds(145, 355, 30, 30);
+		btnEliminar.setIcon(new ImageIcon(vPromedio.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setBounds(900, 349, 30, 30);
 		contentPane.add(btnEliminar);
 		
 		btnPdf = new JButton("");
@@ -330,7 +348,7 @@ public class vCalificaciones extends JFrame {
 				try {
 					FileOutputStream archivo;
 					File file = new File(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteCalificaciones.pdf");
+							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReportePromedio.pdf");
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
@@ -344,14 +362,14 @@ public class vCalificaciones extends JFrame {
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
 							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
 					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE CALIFICACIONES");
+					p.add("CATALOGO DE PROMEDIOS");
 					p.add(Chunk.NEWLINE);
 					p.add(Chunk.NEWLINE);
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
-					PdfPTable tabla = new PdfPTable(8);
+					PdfPTable tabla = new PdfPTable(9);
 					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase(" ID CALIFICACIONES", negrita));
+					PdfPCell c1 = new PdfPCell(new Phrase(" ID PROMEDIO", negrita));
 					PdfPCell c2 = new PdfPCell(new Phrase(" ALUMNO", negrita));
 					PdfPCell c3 = new PdfPCell(new Phrase(" PROFESOR", negrita));
 					PdfPCell c4 = new PdfPCell(new Phrase(" SEMESTRE", negrita));
@@ -359,6 +377,7 @@ public class vCalificaciones extends JFrame {
 					PdfPCell c6 = new PdfPCell(new Phrase(" GRUPO", negrita));
 					PdfPCell c7 = new PdfPCell(new Phrase(" ASIGNATURA", negrita));
 					PdfPCell c8 = new PdfPCell(new Phrase(" CALIFICACIONES", negrita));
+					PdfPCell c9 = new PdfPCell(new Phrase(" PROMEDIO", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -367,7 +386,7 @@ public class vCalificaciones extends JFrame {
 					c6.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c7.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c8.setHorizontalAlignment(Element.ALIGN_CENTER);
-					
+					c9.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c1.setBackgroundColor(BaseColor.GRAY);
 					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -376,7 +395,7 @@ public class vCalificaciones extends JFrame {
 					c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c7.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c8.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					
+					c9.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					tabla.addCell(c1);
 					tabla.addCell(c2);
 					tabla.addCell(c3);
@@ -385,19 +404,19 @@ public class vCalificaciones extends JFrame {
 					tabla.addCell(c6);
 					tabla.addCell(c7);
 					tabla.addCell(c8);
-					
+					tabla.addCell(c9);
 					
 
-					for (Calificaciones u : lista) {
-						tabla.addCell("" + u.getIdCalificaciones());
+					for (Promedio u : lista) {
+						tabla.addCell("" + u.getIdPromedio());
 						tabla.addCell(u.getAlumno());
 						tabla.addCell(u.getProfesor());
 						tabla.addCell(u.getSemestre());
 						tabla.addCell(u.getCarrera());
 						tabla.addCell(""+u.getGrupo());
-						tabla.addCell(u.getAsignatura());
-						tabla.addCell(""+u.getIdCalificaciones());
-						
+						tabla.addCell(u.getAsignaturas());
+						tabla.addCell(""+u.getCalificaciones());
+						tabla.addCell(""+u.getPromedio());
 
 					}
 
@@ -421,14 +440,14 @@ public class vCalificaciones extends JFrame {
 				}
 			}
 		});
-		btnPdf.setIcon(new ImageIcon(vCalificaciones.class.getResource("/img/icons8-pdf-30.png")));
-		btnPdf.setBounds(197, 355, 30, 30);
+		btnPdf.setIcon(new ImageIcon(vPromedio.class.getResource("/img/icons8-pdf-30.png")));
+		btnPdf.setBounds(957, 349, 30, 30);
 		contentPane.add(btnPdf);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(vCalificaciones.class.getResource("/img/icons8-buscar-cliente-30.png")));
-		lblNewLabel_1.setBounds(561, 374, 30, 29);
-		contentPane.add(lblNewLabel_1);
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon(vPromedio.class.getResource("/img/icons8-buscar-cliente-30.png")));
+		lblNewLabel_2.setBounds(461, 341, 30, 30);
+		contentPane.add(lblNewLabel_2);
 		
 		txtBuscar = new JTextField();
 		txtBuscar.addKeyListener(new KeyAdapter() {
@@ -437,7 +456,7 @@ public class vCalificaciones extends JFrame {
 				refrescarTabla2(txtBuscar.getText().toString());
 			}
 		});
-		txtBuscar.setBounds(604, 383, 312, 20);
+		txtBuscar.setBounds(501, 349, 272, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
 	}
@@ -446,20 +465,21 @@ public class vCalificaciones extends JFrame {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
-		lista = dao.feCalificaciones();
-		for (Calificaciones u : lista) {
-			Object o[] = new Object[8];
-			o[0] = u.getIdCalificaciones();
+		lista = dao.fechsPromedios();
+		for (Promedio u : lista) {
+			Object o[] = new Object[9];
+			o[0] = u.getIdPromedio();
 			o[1] = u.getAlumno();
 			o[2] = u.getProfesor();
 			o[3] = u.getSemestre();
 			o[4] = u.getCarrera();
 			o[5] = u.getGrupo();
-			o[6] = u.getAsignatura();
+			o[6] = u.getAsignaturas();
 			o[7] = u.getCalificaciones();
+			o[8] = u.getPromedio();
 			modelo.addRow(o);
 		}
-		tblCalificaciones.setModel(modelo);
+		tblPromedios.setModel(modelo);
 	}
 
 	public void refrescarTabla2(String palabra) {
@@ -467,19 +487,20 @@ public class vCalificaciones extends JFrame {
 			modelo.removeRow(0);
 		}
 		lista = dao.buscar(palabra);
-		for (Calificaciones p : lista) {
-			Object item[] = new Object[8];
-			item[0] = p.getIdCalificaciones();
+		for (Promedio p : lista) {
+			Object item[] = new Object[9];
+			item[0] = p.getIdPromedio();
 			item[1] = p.getAlumno();
 			item[2] = p.getProfesor();
 			item[3] = p.getSemestre();
 			item[4] = p.getCarrera();
 			item[5] = p.getGrupo();
-			item[6] = p.getAsignatura();
-			item[7] = p.getIdCalificaciones();
+			item[6] = p.getAsignaturas();
+			item[7] = p.getCalificaciones();
+			item[8] = p.getPromedio();
 			modelo.addRow(item);
 		}
-		tblCalificaciones.setModel(modelo);
+		tblPromedios.setModel(modelo);
 
 	}
 }

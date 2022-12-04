@@ -98,6 +98,8 @@ public class vActividad extends JFrame {
 		dcFecha.setDateFormatString("");
 	}
 	public vActividad() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vActividad.class.getResource("/img/DeoClass.png")));
+		setTitle("ACTIVIDADES");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 558, 478);
 		setLocationRelativeTo(cboClase);

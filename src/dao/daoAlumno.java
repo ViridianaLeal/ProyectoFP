@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import Conexion.conexion;
 import modelo.Alumno;
+
 import modelo.Profesor;
 import modelo.Usuario;
 
@@ -41,6 +42,33 @@ public class daoAlumno {
 		}
 
 	}
+	
+	public ArrayList<Alumno> selectAlumnos() {
+        ArrayList<Alumno> listax = new ArrayList<Alumno>();
+        try {
+            String sql="SELECT * FROM alumno";
+            PreparedStatement st = cx.conectar().prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Alumno x = new Alumno();
+                x.setIdalumno(rs.getInt("idAlumno"));
+				x.setNumerocontrol(rs.getInt("numerocontrol"));
+				x.setPlantel(rs.getString("plantel"));
+				x.setTurno(rs.getString("turno"));
+				x.setSemestre(rs.getString("semestre"));
+				x.setCarrera(rs.getString("carrera"));
+				x.setGrupo(rs.getInt("grupo"));
+				x.setNombre(rs.getString("nombre"));
+				x.setApellidos(rs.getString("apellido"));
+				x.setFoto(rs.getString("foto"));
+                listax.add(x);
+            }
+            cx.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return listax;
+    }
 
 	public ArrayList<Alumno> buscar(String palabra) {
 		ArrayList<Alumno> lista2 = new ArrayList<Alumno>();

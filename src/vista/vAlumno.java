@@ -36,10 +36,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
 import dao.daoAlumno;
-import dao.daoCategoria;
+
 import dao.daoUsuario;
 import modelo.Alumno;
-import modelo.Categoria;
+
 import modelo.Plantel;
 import modelo.Usuario;
 
@@ -49,6 +49,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -132,7 +133,7 @@ public class vAlumno extends JFrame {
 	}
 	
 	public void cargarPlantel() {
-		listaPlanteles = daopla.insertarAlumno();
+		listaPlanteles = daopla.sel();
 		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
 		for (Plantel plantel : listaPlanteles) {
 			modelcombo.addElement(plantel.getPlantel());
@@ -524,26 +525,7 @@ public class vAlumno extends JFrame {
 	}
 
 	
-	private void btnCargarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarFotoActionPerformed
-        JFileChooser selector = new JFileChooser();
-        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
-        selector.setFileFilter(filtroImagen);
-        int r = selector.showOpenDialog(null);
-        if (r == JFileChooser.APPROVE_OPTION) {
-            try {
-                File f = selector.getSelectedFile();
-                ImageIcon img = new ImageIcon(selector.getSelectedFile().toURL());
-                imgOri = img;
-                Image image = img.get // transform it
-                Image newimg = image.getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
-                URL urlImage = selector.getSelectedFile().toURL();
-                imagenActual = convetirImagen(urlImage);
-                lblImagen.setIcon(new ImageIcon(newimg));
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(CRUDImage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnCargarFotoActionPerformed
+	
 
 	
 

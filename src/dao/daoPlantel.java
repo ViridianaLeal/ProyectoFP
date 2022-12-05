@@ -6,20 +6,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Conexion.conexion;
+import modelo.Alumno;
 import modelo.Carrera;
+
 import modelo.Plantel;
 
+
 public class daoPlantel {
+	Alumno a;
+	ArrayList<Plantel> lista;
 	conexion cx = null;
+
 	public daoPlantel() {
-		cx = new conexion();		
+		cx = new conexion();
+		lista = new ArrayList<Plantel>();
+		a = new Alumno();
 	}
-	
-	public boolean insertarPlantel(Plantel user) {
+
+	public boolean insertarPlantel(Plantel a) {
 		PreparedStatement ps = null;
 		try {
 			ps = cx.conectar().prepareStatement("INSERT INTO plantel VALUES(null,?)");
-			ps.setString(1, user.getPlantel());	
+			ps.setString(1, a.getPlantel());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -28,6 +36,25 @@ public class daoPlantel {
 		}
 
 	}
+	
+	public ArrayList<Plantel> selectPlantel() {
+        ArrayList<Plantel> listax = new ArrayList<Plantel>();
+        try {
+            String sql="SELECT * FROM plantel";
+            PreparedStatement st = cx.conectar().prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+            	Plantel x = new Plantel();
+                x.setIdPlantel(rs.getInt("idPlantel"));
+                x.setPlantel(rs.getString("plantel"));
+                listax.add(x);
+            }
+            cx.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return listax;
+    }
 
 	public ArrayList<Plantel> fetchPlantels() {
 		ArrayList<Plantel> lista = new ArrayList<Plantel>();
@@ -48,8 +75,6 @@ public class daoPlantel {
 		}
 		return lista;
 	}
-
-	
 
 	public boolean EliminarPlantel(int Id) {
 		PreparedStatement ps = null;
@@ -80,7 +105,4 @@ public class daoPlantel {
 
 	}
 
-	
 }
-
-

@@ -6,10 +6,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.Toolkit;
@@ -34,9 +36,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.security.TSAClientBouncyCastle;
 
 import dao.daoAlumno;
+import dao.daoCategoria;
 import dao.daoUsuario;
 import modelo.Alumno;
-
+import modelo.Categoria;
+import modelo.Plantel;
 import modelo.Usuario;
 
 import java.awt.event.ActionListener;
@@ -50,6 +54,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.concurrent.Phaser;
 import java.awt.event.ActionEvent;
+
+import javax.print.DocFlavor.URL;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -58,6 +64,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class vAlumno extends JFrame {
 
@@ -84,6 +92,11 @@ public class vAlumno extends JFrame {
 	private JTextField txtBuscar;
 	private JButton btnLimpiar;
 	private JButton btnAgregar;
+	ImageIcon imgOri = null;
+    String imagenActual = "";
+    private JButton btnCargar;
+    daoAlumno daopla = new daoAlumno();
+	ArrayList<Plantel> listaPlanteles = new ArrayList<Plantel>();
 
 	/**
 	 * Launch the application.
@@ -116,6 +129,15 @@ public class vAlumno extends JFrame {
 		txtNombre.setText("");
 		txtApellidos.setText("");
 		lblFoto.setText("");
+	}
+	
+	public void cargarPlantel() {
+		listaPlanteles = daopla.insertarAlumno();
+		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
+		for (Plantel plantel : listaPlanteles) {
+			modelcombo.addElement(plantel.getPlantel());
+		}
+		cboPlantel.setModel(modelcombo);
 	}
 
 	public vAlumno() {
@@ -185,6 +207,11 @@ public class vAlumno extends JFrame {
 		txtApellidos.setColumns(10);
 
 		cboPlantel = new JComboBox();
+		cboPlantel.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
 		cboPlantel.setBounds(114, 92, 195, 22);
 		contentPane.add(cboPlantel);
 
@@ -318,19 +345,16 @@ public class vAlumno extends JFrame {
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					
 					FileOutputStream archivo;
-					File file = new File(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\RAlumnos.pdf");
-					// URI uri = new URI(getClass().getResource("//pdf//RAlumnos.pdf").toString());
-					// File file = new File(uri);
+					URI uri = new URI(getClass().getResource("/pdf/RAlumnos.pdf").toString());
+					File file = new File(uri);
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit()
-							.getImage(getClass().getResource("/img/DeoClass.png"));
-					// Image img =
-					// Image.getInstance("C:\\Users\\Rene\\Documents\\NetBeansProjects\\Java_MVC_MySQL\\src\\img\\i2.png");
+					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					
 					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
 					img.scaleToFit(200, 200);
@@ -416,6 +440,9 @@ public class vAlumno extends JFrame {
 
 				} catch (IOException ex) {
 
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -495,6 +522,30 @@ public class vAlumno extends JFrame {
 		lblNewLabel_2.setBounds(10, 354, 46, 14);
 		contentPane.add(lblNewLabel_2);
 	}
+
+	
+	private void btnCargarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarFotoActionPerformed
+        JFileChooser selector = new JFileChooser();
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+        selector.setFileFilter(filtroImagen);
+        int r = selector.showOpenDialog(null);
+        if (r == JFileChooser.APPROVE_OPTION) {
+            try {
+                File f = selector.getSelectedFile();
+                ImageIcon img = new ImageIcon(selector.getSelectedFile().toURL());
+                imgOri = img;
+                Image image = img.get // transform it
+                Image newimg = image.getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                URL urlImage = selector.getSelectedFile().toURL();
+                imagenActual = convetirImagen(urlImage);
+                lblImagen.setIcon(new ImageIcon(newimg));
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(CRUDImage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnCargarFotoActionPerformed
+
+	
 
 	public void actualizarTabla() {
 		while (modelo.getRowCount() > 0) {

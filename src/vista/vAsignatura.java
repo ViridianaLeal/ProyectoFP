@@ -128,6 +128,7 @@ public class vAsignatura extends JFrame {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
+					asignatura.setProfesor(""+cboProfe.getSelectedItem());
 					asignatura.setAsignatura(txtAsignatura.getText());
 					if (dao.editarAsignatura(asignatura)) {
 						actualizarTabla();
@@ -193,11 +194,10 @@ public class vAsignatura extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				fila = tblca.getSelectedRow();
-				fila = tblca.getSelectedRow();
 				asignatura = lista.get(fila);
 				lblAsig.setText("" + lista.get(fila).getIDasignatura());
-				txtAsignatura.setText(""+ lista.get(fila).getAsignatura());
-				cboProfe.setSelectedItem(""+lista.get(fila).getProfesor());
+				cboProfe.setSelectedItem(""+asignatura.getProfesor());
+				txtAsignatura.setText(asignatura.getAsignatura());
 			}
 		});
 		tblca.setModel(new DefaultTableModel(

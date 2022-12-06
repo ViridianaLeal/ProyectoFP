@@ -43,6 +43,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
@@ -252,16 +254,16 @@ public class vUsuario extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileOutputStream archivo;
-					File file = new File(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteUsuarios.pdf");
+					URI uri = new URI(getClass().getResource("/pdf/ReporteUsuarios.pdf").toString());
+					File file = new File(uri);
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					Image img = Image.getInstance(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\img\\DeoClass.png");
+					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(100, 100);
+					img.scaleToFit(200, 200);
 					doc.add(img);
 					Paragraph p = new Paragraph(10);
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
@@ -316,6 +318,9 @@ public class vUsuario extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});

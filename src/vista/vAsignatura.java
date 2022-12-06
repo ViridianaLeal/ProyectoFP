@@ -29,10 +29,13 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import dao.daoAsignatura;
+import dao.daoProfesor;
 import modelo.Alumno;
 import modelo.Asignatura;
+import modelo.Profesor;
 
 import javax.swing.JButton;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -52,7 +55,6 @@ public class vAsignatura extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblIdAsignatura;
 	private JTextField txtAsig;
-	private JComboBox cboProfesor;
 	private JTable tblAsig;
 	private JButton btnAgregar;
 	private JButton btnPdf;
@@ -76,10 +78,11 @@ public class vAsignatura extends JFrame {
 			}
 		});
 	}
+	
+	
 
 	public void limpiar() {
 		lblIdAsignatura.setText("");
-		cboProfesor.setSelectedItem("");
 		txtAsig.setText("");
 	}
 
@@ -99,14 +102,9 @@ public class vAsignatura extends JFrame {
 		lblNewLabel.setBounds(33, 33, 204, 24);
 		contentPane.add(lblNewLabel);
 
-		JLabel lblProfesor = new JLabel("PROFESOR");
-		lblProfesor.setFont(new Font("Consolas", Font.PLAIN, 20));
-		lblProfesor.setBounds(33, 81, 204, 24);
-		contentPane.add(lblProfesor);
-
 		JLabel lblIasignatura = new JLabel("ASIGNATURA");
 		lblIasignatura.setFont(new Font("Consolas", Font.PLAIN, 20));
-		lblIasignatura.setBounds(33, 126, 204, 24);
+		lblIasignatura.setBounds(43, 68, 204, 24);
 		contentPane.add(lblIasignatura);
 
 		lblIdAsignatura = new JLabel("");
@@ -115,13 +113,9 @@ public class vAsignatura extends JFrame {
 		contentPane.add(lblIdAsignatura);
 
 		txtAsig = new JTextField();
-		txtAsig.setBounds(261, 127, 230, 20);
+		txtAsig.setBounds(273, 69, 230, 20);
 		contentPane.add(txtAsig);
 		txtAsig.setColumns(10);
-
-		cboProfesor = new JComboBox();
-		cboProfesor.setBounds(263, 81, 228, 22);
-		contentPane.add(cboProfesor);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 174, 556, 238);
@@ -134,7 +128,6 @@ public class vAsignatura extends JFrame {
 				fila = tblAsig.getSelectedRow();
 				asignatura = lista.get(fila);
 				lblIasignatura.setText("" + lista.get(fila).getIdAsignatura());
-				cboProfesor.setSelectedItem("" + asignatura.getProfesor());
 				txtAsig.setText(asignatura.getAsignatura());
 			}
 		});
@@ -143,7 +136,6 @@ public class vAsignatura extends JFrame {
 				new String[] { "New column", "New column", "New column" }));
 		scrollPane.setViewportView(tblAsig);
 		modelo.addColumn("ID ASIGNATURA");
-		modelo.addColumn("PROFESOR");
 		modelo.addColumn("ASIGNATURA");
 		tblAsig.setModel(modelo);
 
@@ -156,7 +148,6 @@ public class vAsignatura extends JFrame {
 						return;
 					}
 					Asignatura user = new Asignatura();
-					user.setProfesor("" + cboProfesor.getSelectedIndex());
 					user.setAsignatura(txtAsig.getText());
 					if (dao.insertarAsignatura(user)) {
 						actualizarTabla();
@@ -183,7 +174,6 @@ public class vAsignatura extends JFrame {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
-					asignatura.setProfesor("" + cboProfesor.getSelectedIndex());
 					asignatura.setAsignatura(txtAsig.getText());
 					if (dao.editarAsignatura(asignatura)) {
 						actualizarTabla();
@@ -252,24 +242,19 @@ public class vAsignatura extends JFrame {
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
 					// Tabla de datos
-					PdfPTable tabla = new PdfPTable(3);
+					PdfPTable tabla = new PdfPTable(2);
 					tabla.setWidthPercentage(100);
 					PdfPCell c1 = new PdfPCell(new Phrase("ID ASIGNATURA", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase("PROFESOR", negrita));
-					PdfPCell c3 = new PdfPCell(new Phrase("ASIGNATURA", negrita));
+					PdfPCell c2 = new PdfPCell(new Phrase("ASIGNATURA", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					tabla.addCell(c1);
 					tabla.addCell(c2);
-					tabla.addCell(c3);
 					// Agregar los registros
 					for (Asignatura pro : lista) {
 						tabla.addCell("" + pro.getIdAsignatura());
-						tabla.addCell("" + pro.getProfesor());
 						tabla.addCell(pro.getAsignatura());
 					}
 					doc.add(tabla);
@@ -306,10 +291,9 @@ public class vAsignatura extends JFrame {
 		}
 		lista = dao.fetcAsignaturas();
 		for (Asignatura u : lista) {
-			Object o[] = new Object[3];
+			Object o[] = new Object[2];
 			o[0] = u.getIdAsignatura();
-			o[1] = u.getProfesor();
-			o[2] = u.getAsignatura();
+			o[1] = u.getAsignatura();
 			modelo.addRow(o);
 		}
 		tblAsig.setModel(modelo);

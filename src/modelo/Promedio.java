@@ -8,7 +8,6 @@ public class Promedio {
 	String carrera;
 	int grupo;
 	String asignaturas;
-	Double calificaciones;
 	Double promedio;
 	
 	
@@ -34,6 +33,16 @@ public class Promedio {
 
 	public void setAlumno(String alumno) {
 		this.alumno = alumno;
+	}
+
+
+	public String getProfesor() {
+		return profesor;
+	}
+
+
+	public void setProfesor(String profesor) {
+		this.profesor = profesor;
 	}
 
 
@@ -77,16 +86,6 @@ public class Promedio {
 	}
 
 
-	public Double getCalificaciones() {
-		return calificaciones;
-	}
-
-
-	public void setCalificaciones(Double calificaciones) {
-		this.calificaciones = calificaciones;
-	}
-
-
 	public Double getPromedio() {
 		return promedio;
 	}
@@ -96,15 +95,5 @@ public class Promedio {
 		this.promedio = promedio;
 	}
 
-
-	public String getProfesor() {
-		return profesor;
-	}
-
-
-	public void setProfesor(String profesor) {
-		this.profesor = profesor;
-	}
-	
 
 }

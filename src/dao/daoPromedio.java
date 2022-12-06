@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Conexion.conexion;
-import modelo.Calificaciones;
 import modelo.Promedio;
 
 public class daoPromedio {
@@ -18,15 +17,14 @@ public class daoPromedio {
 	public boolean insertarPromedio(Promedio user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO promedio VALUES(null,?,?,?,?,?,?,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO promedio VALUES(null,?,?,?,?,?,?,?)");
 			ps.setString(1, user.getAlumno());
 			ps.setString(2, user.getProfesor());
 			ps.setString(3, user.getSemestre ());
 			ps.setString(4, user.getCarrera());
 			ps.setInt(5, user.getGrupo());
 			ps.setString(6, user.getAsignaturas());
-			ps.setDouble(7, user.getCalificaciones());
-			ps.setDouble(8, user.getPromedio());
+			ps.setDouble(7, user.getPromedio());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -47,7 +45,6 @@ public class daoPromedio {
 					+ "(carrera LIKE ?) OR "
 					+ "(grupo LIKE ?) OR "
 					+ "(asignatura LIKE ?) OR " 
-					+ "(calificaciones LIKE ?) OR "
 					+ "(promedio LIKE ?); ";
 			PreparedStatement ps = cx.conectar().prepareStatement(sql);
 			ps.setString(1, "%" + palabra + "%");
@@ -58,7 +55,6 @@ public class daoPromedio {
 			ps.setString(6, "%" + palabra + "%");
 			ps.setString(7, "%" + palabra + "%");
 			ps.setString(8, "%" + palabra + "%");
-			ps.setString(9, "%" + palabra + "%");
 			// System.out.println("CONSULTA" + ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -70,7 +66,6 @@ public class daoPromedio {
 				p.setCarrera(rs.getString("carrera"));
 				p.setGrupo(rs.getInt("grupo"));
 				p.setAsignaturas(rs.getString("asignatura"));
-				p.setCalificaciones(rs.getDouble("calificaciones"));
 				p.setPromedio(rs.getDouble("promedio"));
 				lista2.add(p);
 			}
@@ -101,7 +96,6 @@ public class daoPromedio {
 				u.setCarrera(rs.getString("carrera"));
 				u.setGrupo(rs.getInt("grupo"));
 				u.setAsignaturas(rs.getString("asignatura"));
-				u.setCalificaciones(rs.getDouble("calificaciones"));
 				u.setPromedio(rs.getDouble("promedio"));
 				lista.add(u);
 			}
@@ -129,16 +123,15 @@ public class daoPromedio {
 	public boolean editarPromedio(Promedio user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE promedio SET alumno=?,profesor=?,semestre=?,carrera=?,grupo=?,asignatura=?,calificaciones=?,promedio=? WHERE idPromedio=?");
+			ps = cx.conectar().prepareStatement("UPDATE promedio SET alumno=?,profesor=?,semestre=?,carrera=?,grupo=?,asignatura=?,promedio=? WHERE idPromedio=?");
 			ps.setString(1, user.getAlumno());
 			ps.setString(2, user.getProfesor());
 			ps.setString(3, user.getSemestre ());
 			ps.setString(4, user.getCarrera());
 			ps.setInt(5, user.getGrupo());
 			ps.setString(6, user.getAsignaturas());
-			ps.setDouble(7, user.getCalificaciones());
-			ps.setDouble(8, user.getIdPromedio());
-			ps.setInt(9, user.getIdPromedio());
+			ps.setDouble(7, user.getIdPromedio());
+			ps.setInt(8, user.getIdPromedio());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

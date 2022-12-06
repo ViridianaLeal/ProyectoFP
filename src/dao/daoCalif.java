@@ -6,28 +6,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Conexion.conexion;
-import modelo.Alumno;
-import modelo.Calificaciones;
+import modelo.Calificacion;
+import modelo.Promedio;
 
-public class daoCalificaciones {
+public class daoCalif {
 	conexion cx = null;
-
-	public daoCalificaciones() {
+	public daoCalif() {
 		cx = new conexion();
-		
 	}
 	
-	public boolean insertarCalificacion(Calificaciones user) {
+	public boolean insertarCal(Calificacion user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO calificaciones VALUES(null,?,?,?,?,?,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO cali VALUES(null,?,?,?,?,?,?,?)");
 			ps.setString(1, user.getAlumno());
 			ps.setString(2, user.getProfesor());
 			ps.setString(3, user.getSemestre ());
 			ps.setString(4, user.getCarrera());
 			ps.setInt(5, user.getGrupo());
 			ps.setString(6, user.getAsignatura());
-			ps.setDouble(7, user.getCalificaciones());
+			ps.setDouble(7, user.getCalificacio());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -37,18 +35,18 @@ public class daoCalificaciones {
 
 	}
 
-	public ArrayList<Calificaciones> buscar(String palabra) {
-		ArrayList<Calificaciones> lista2 = new ArrayList<Calificaciones>();
+	public ArrayList<Calificacion> buscar(String palabra) {
+		ArrayList<Calificacion> lista2 = new ArrayList<Calificacion>();
 		try {
-			String sql = "SELECT * FROM calificaciones WHERE "
-		            + "(idCalificaciones LIKE ?) OR " 
+			String sql = "SELECT * FROM cali WHERE "
+		            + "(idCali LIKE ?) OR " 
 					+ "(alumno LIKE ?) OR"
 					+ "(profesor LIKE ?) OR " 
 					+ "(semestre LIKE ?) OR "
 					+ "(carrera LIKE ?) OR "
 					+ "(grupo LIKE ?) OR "
 					+ "(asignatura LIKE ?) OR " 
-					+ "(calificaciones LIKE ?); ";
+					+ "(calificacion LIKE ?); ";
 			PreparedStatement ps = cx.conectar().prepareStatement(sql);
 			ps.setString(1, "%" + palabra + "%");
 			ps.setString(2, "%" + palabra + "%");
@@ -61,15 +59,15 @@ public class daoCalificaciones {
 			// System.out.println("CONSULTA" + ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				Calificaciones p = new Calificaciones();
-				p.setIdCalificaciones(rs.getInt("idCalificaciones"));
+				Calificacion p = new Calificacion();
+				p.setIdCali(rs.getInt("idCali"));
 				p.setAlumno(rs.getString("alumno"));
 				p.setProfesor(rs.getString("profesor"));
 				p.setSemestre(rs.getString("semestre"));
 				p.setCarrera(rs.getString("carrera"));
 				p.setGrupo(rs.getInt("grupo"));
 				p.setAsignatura(rs.getString("asignatura"));
-				p.setCalificaciones(rs.getDouble("calificaciones"));
+				p.setCalificacio(rs.getDouble("calificacion"));
 				lista2.add(p);
 			}
 			ps.close();
@@ -83,23 +81,23 @@ public class daoCalificaciones {
 
 	}
 
-	public ArrayList<Calificaciones> feCalificaciones() {
-		ArrayList<Calificaciones> lista = new ArrayList<Calificaciones>();
+	public ArrayList<Calificacion> fechsCalificacions() {
+		ArrayList<Calificacion> lista = new ArrayList<Calificacion>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = cx.conectar().prepareStatement("SELECT *FROM calificaciones");
+			ps = cx.conectar().prepareStatement("SELECT *FROM cali");
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				Calificaciones u = new Calificaciones();
-				u.setIdCalificaciones(rs.getInt("idCalificaciones"));
+				Calificacion u = new Calificacion();
+				u.setIdCali(rs.getInt("idCali"));
 				u.setAlumno(rs.getString("alumno"));
 				u.setProfesor(rs.getString("profesor"));
 				u.setSemestre(rs.getString("semestre"));
 				u.setCarrera(rs.getString("carrera"));
 				u.setGrupo(rs.getInt("grupo"));
 				u.setAsignatura(rs.getString("asignatura"));
-				u.setCalificaciones(rs.getDouble("calificaciones"));
+				u.setCalificacio(rs.getDouble("calificacion"));
 				lista.add(u);
 			}
 		} catch (SQLException e) {
@@ -109,10 +107,10 @@ public class daoCalificaciones {
 		return lista;
 	}
 
-	public boolean EliminarCalificacion(int Id) {
+	public boolean EliminarCali(int Id) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("DELETE FROM calificaciones WHERE idCalificaciones=?");
+			ps = cx.conectar().prepareStatement("DELETE FROM cali WHERE idCali=?");
 			ps.setInt(1, Id);
 			ps.executeUpdate();
 			return true;
@@ -123,27 +121,24 @@ public class daoCalificaciones {
 
 	}
 
-	public boolean editarCalificaciones(Calificaciones user) {
+	public boolean editarCali(Calificacion user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE calificaciones SET alumno=?,profesor=?,semestre=?,carrera=?,grupo=?,asignatura=?,calificaciones=? WHERE idCalificaciones=?");
+			ps = cx.conectar().prepareStatement("UPDATE cali SET alumno=?,profesor=?,semestre=?,carrera=?,grupo=?,asignatura=?,calificacion=? WHERE idCali=?");
 			ps.setString(1, user.getAlumno());
 			ps.setString(2, user.getProfesor());
 			ps.setString(3, user.getSemestre ());
 			ps.setString(4, user.getCarrera());
 			ps.setInt(5, user.getGrupo());
 			ps.setString(6, user.getAsignatura());
-			ps.setDouble(7, user.getCalificaciones());
-			ps.setInt(8, user.getIdCalificaciones());
+			ps.setDouble(7, user.getCalificacio());
+			ps.setDouble(8, user.getIdCali());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
+
 }
-
-
-

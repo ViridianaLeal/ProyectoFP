@@ -390,7 +390,6 @@ public class vAlumno extends JFrame {
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
 					FileOutputStream archivo;
 					URI uri = new URI(getClass().getResource("/pdf/RAlumnos.pdf").toString());
 					File file = new File(uri);
@@ -399,7 +398,6 @@ public class vAlumno extends JFrame {
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
 					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
-					
 					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
 					img.scaleToFit(200, 200);

@@ -69,10 +69,11 @@ public class daoConsulta {
 		PreparedStatement ps = null;
 		try {
 			ps = cx.conectar().prepareStatement("UPDATE consulta SET nombre=?,comentario=?,destino=? WHERE id=?");
-			ps.setInt(1, user.getID());
-			ps.setString(2, user.getNombre());
-			ps.setString(3, user.getComentario());
-			ps.setString(4, user.getDestino());
+			
+			ps.setString(1, user.getNombre());
+			ps.setString(2, user.getComentario());
+			ps.setString(3, user.getDestino());
+			ps.setInt(4, user.getID());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

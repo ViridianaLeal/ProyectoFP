@@ -78,10 +78,10 @@ public class vComentario extends JFrame {
 	}
 
 	public vComentario() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/Java.jpg")));
-		setTitle("CRUD CONSULTA");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vComentario.class.getResource("/img/logoDeo.png")));
+		setTitle("COMENTARIO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 670, 547);
+		setBounds(100, 100, 925, 668);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -99,16 +99,16 @@ public class vComentario extends JFrame {
 		lblNewLabel_1.setHorizontalTextPosition(SwingConstants.RIGHT);
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1.setBounds(436, 31, 86, 21);
+		lblNewLabel_1.setBounds(10, 45, 86, 21);
 		contentPane.add(lblNewLabel_1);
 		txtNA = new JTextField();
 		txtNA.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
-		txtNA.setBounds(355, 82, 169, 34);
+		txtNA.setBounds(120, 52, 308, 23);
 		contentPane.add(txtNA);
 		txtNA.setColumns(10);
 		JLabel lblNewLabel_1_1 = new JLabel("Dudas, preguntas o consultas ");
 		lblNewLabel_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1_1.setBounds(35, 52, 273, 23);
+		lblNewLabel_1_1.setBounds(25, 213, 273, 23);
 		contentPane.add(lblNewLabel_1_1);
 		btnAgregar = new JButton("");
 		btnAgregar.setIcon(new ImageIcon(vComentario.class.getResource("/img/Avion2.png")));
@@ -138,7 +138,7 @@ public class vComentario extends JFrame {
 		});
 		btnAgregar.setBorder(new EtchedBorder(EtchedBorder.LOWERED, UIManager.getColor("Button.focus"), Color.LIGHT_GRAY));
 		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(216, 255, 73, 73);
+		btnAgregar.setBounds(810, 312, 73, 73);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("Modificar");
@@ -167,7 +167,7 @@ public class vComentario extends JFrame {
 		});
 		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEditar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEditar.setBounds(418, 132, 89, 34);
+		btnEditar.setBounds(619, 306, 89, 34);
 		contentPane.add(btnEditar);
 		btnEliminar = new JButton("");
 		btnEliminar.setIcon(new ImageIcon(vComentario.class.getResource("/img/Bote.jpg")));
@@ -192,7 +192,7 @@ public class vComentario extends JFrame {
 		});
 		btnEliminar.setBorder(new EtchedBorder(EtchedBorder.RAISED, UIManager.getColor("Button.focus"), new Color(192, 192, 192)));
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(110, 255, 66, 73);
+		btnEliminar.setBounds(718, 312, 66, 73);
 		contentPane.add(btnEliminar);
 		btnBorrar = new JButton("Borrar ambos campos");
 		btnBorrar.addActionListener(new ActionListener() {
@@ -204,7 +204,7 @@ public class vComentario extends JFrame {
 		});
 		btnBorrar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnBorrar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnBorrar.setBounds(374, 177, 169, 34);
+		btnBorrar.setBounds(539, 351, 169, 34);
 		contentPane.add(btnBorrar);
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
@@ -212,7 +212,7 @@ public class vComentario extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		scrollPane.setBounds(37, 339, 581, 158);
+		scrollPane.setBounds(25, 460, 856, 158);
 		contentPane.add(scrollPane);
 		tblConsulta = new JTable();
 		tblConsulta.addMouseListener(new MouseAdapter() {
@@ -240,26 +240,26 @@ public class vComentario extends JFrame {
 		JLabel lblNewLabel_1_1_1 = new JLabel("Escribelas aqui debajo:");
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 17));
-		lblNewLabel_1_1_1.setBounds(35, 97, 273, 23);
+		lblNewLabel_1_1_1.setBounds(-18, 250, 273, 23);
 		contentPane.add(lblNewLabel_1_1_1);
 		
 		cboDestiny = new JComboBox();
 		cboDestiny.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
 		cboDestiny.setModel(new DefaultComboBoxModel(new String[] {"Profesor", "Jefe de control", "Orientadora en grupo"}));
-		cboDestiny.setBounds(402, 259, 169, 34);
+		cboDestiny.setBounds(25, 150, 169, 34);
 		contentPane.add(cboDestiny);
 		
 		JLabel lblNewLabel_1_1_1_1 = new JLabel("¿Quien recibira el mensaje?");
 		lblNewLabel_1_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1_1_1_1.setFont(new Font("Nirmala UI", Font.BOLD, 17));
-		lblNewLabel_1_1_1_1.setBounds(336, 224, 273, 23);
+		lblNewLabel_1_1_1_1.setBounds(0, 109, 273, 23);
 		contentPane.add(lblNewLabel_1_1_1_1);
 		
 		txtC = new JTextField();
 		txtC.setFont(new Font("Arial Unicode MS", Font.ITALIC, 15));
 		txtC.setHorizontalAlignment(SwingConstants.CENTER);
 		txtC.setBorder(new LineBorder(Color.BLACK, 2, true));
-		txtC.setBounds(25, 127, 301, 118);
+		txtC.setBounds(25, 299, 301, 118);
 		contentPane.add(txtC);
 		txtC.setColumns(10);
 		actualizarTabla();

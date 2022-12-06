@@ -43,16 +43,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextField;
 
 public class vEntrega extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblIdEntrega;
-	private JComboBox cboClase;
 	private JDateChooser dcFecha;
 	private JComboBox cboEntrega;
 	private JTable tblEntrega;
@@ -60,12 +62,13 @@ public class vEntrega extends JFrame {
 	private JButton btnEditar;
 	private JButton btnEliminar;
 	private JButton btnPdf;
-	private JComboBox cboActividad;
 	daoEntrega dao = new daoEntrega();
 	DefaultTableModel modelo = new DefaultTableModel();
 	ArrayList<Entrega> lista = new ArrayList<Entrega>();
 	Entrega entrega;
 	int fila = -1;
+	private JTextField txtClase;
+	private JTextField txtActividad;
 
 	
 	public static void main(String[] args) {
@@ -83,8 +86,8 @@ public class vEntrega extends JFrame {
 	
 	public void limpiar() {
 		lblIdEntrega.setText("");
-		cboClase.setSelectedItem("");
-		cboActividad.setSelectedItem("");
+		txtClase.setText("");
+		txtActividad.setText("");
 		dcFecha.setDateFormatString("");
 		cboEntrega.setSelectedItem("");
 	}
@@ -131,14 +134,6 @@ public class vEntrega extends JFrame {
 		lblIdEntrega.setBounds(149, 11, 98, 24);
 		contentPane.add(lblIdEntrega);
 		
-		cboClase = new JComboBox();
-		cboClase.setBounds(149, 51, 194, 22);
-		contentPane.add(cboClase);
-		
-		cboActividad = new JComboBox();
-		cboActividad.setBounds(149, 93, 194, 22);
-		contentPane.add(cboActividad);
-		
 		dcFecha = new JDateChooser();
 		dcFecha.setBounds(149, 136, 194, 20);
 		contentPane.add(dcFecha);
@@ -169,8 +164,8 @@ public class vEntrega extends JFrame {
 				fila = tblEntrega.getSelectedRow();
 				entrega = lista.get(fila);
 				lblIdEntrega.setText("" + lista.get(fila).getIdEntrega());
-				cboClase.setSelectedItem(entrega.getClase());
-				cboActividad.setSelectedItem(entrega.getActividad());
+				txtClase.setText(entrega.getClase());
+				txtActividad.setText(entrega.getActividad());
 				dcFecha.setDateFormatString(entrega.getFecha());
 				cboEntrega.setSelectedItem(entrega.getEntrega());
 			}
@@ -189,8 +184,8 @@ public class vEntrega extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {				
 					Entrega user = new Entrega();
-					user.setClase(""+cboClase.getSelectedItem());
-					user.setActividad(""+cboActividad.getSelectedItem());
+					user.setClase(txtClase.getText());
+					user.setActividad(txtActividad.getText());
 					user.setFecha(dcFecha.getDateFormatString());
 					user.setEntrega(""+cboEntrega.getSelectedItem());
 					if (dao.insertarEntrega(user)) {
@@ -215,8 +210,8 @@ public class vEntrega extends JFrame {
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					entrega.setClase(""+cboClase.getSelectedItem());
-					entrega.setActividad(""+cboActividad.getSelectedItem());
+					entrega.setClase(txtClase.getText());
+					entrega.setActividad(txtActividad.getText());
 					entrega.setFecha(dcFecha.getDateFormatString());
 					entrega.setEntrega(""+cboEntrega.getSelectedItem());
 					if (dao.editarEntrega(entrega)) {
@@ -266,16 +261,16 @@ public class vEntrega extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileOutputStream archivo;
-					File file = new File(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteEntrega.pdf");
+					URI uri = new URI(getClass().getResource("/pdf/ReporteEntrega.pdf").toString());
+					File file = new File(uri);
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					Image img = Image.getInstance(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\img\\DeoClass.png");
+					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(100, 100);
+					img.scaleToFit(200, 200);
 					doc.add(img);
 					Paragraph p = new Paragraph(10);
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
@@ -335,12 +330,25 @@ public class vEntrega extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
-			}
+			} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnPdf.setIcon(new ImageIcon(vEntrega.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.setBounds(569, 50, 30, 30);
 		contentPane.add(btnPdf);
+		
+		txtClase = new JTextField();
+		txtClase.setBounds(148, 51, 195, 20);
+		contentPane.add(txtClase);
+		txtClase.setColumns(10);
+		
+		txtActividad = new JTextField();
+		txtActividad.setBounds(145, 94, 198, 20);
+		contentPane.add(txtActividad);
+		txtActividad.setColumns(10);
 	}
 	
 	public void actualizarTabla() {

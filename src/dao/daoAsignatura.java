@@ -18,9 +18,8 @@ public class daoAsignatura {
 	public boolean insertarAsignatura(Asignatura user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO asignatura  VALUES(null,?,?)");
-			ps.setString(1, user.getProfesor());
-			ps.setString(2, user.getAsignatura());
+			ps = cx.conectar().prepareStatement("INSERT INTO asignatura  VALUES(null,?)");
+			ps.setString(1, user.getAsignatura());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -44,7 +43,6 @@ public class daoAsignatura {
 			while (rs.next()) {
 				Asignatura u = new Asignatura();
 				u.setIdAsignatura(rs.getInt("idAsignatura"));
-				u.setProfesor(rs.getString("profesor"));
 				u.setAsignatura(rs.getString("asignatura"));
 				lista.add(u);
 			}
@@ -72,10 +70,9 @@ public class daoAsignatura {
 	public boolean editarAsignatura(Asignatura user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE asignatura SET profesor=?,asignatura=? WHERE idAsignatura=?");
-			ps.setString(1, user.getProfesor());
-			ps.setString(2, user.getAsignatura());
-			ps.setInt(10, user.getIdAsignatura());
+			ps = cx.conectar().prepareStatement("UPDATE asignatura SET asignatura=? WHERE idAsignatura=?");
+			ps.setString(1, user.getAsignatura());
+			ps.setInt(2, user.getIdAsignatura());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

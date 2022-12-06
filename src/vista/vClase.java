@@ -37,6 +37,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import dao.daoClase;
 import dao.daoGrupo;
 import dao.daoProfesor;
+import modelo.Alumno;
 import modelo.Clase;
 import modelo.Grupo;
 import modelo.Profesor;
@@ -46,6 +47,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
@@ -71,9 +74,10 @@ public class vClase extends JFrame {
 	ArrayList<Clase> lista = new ArrayList<Clase>();
 	Clase clase;
 	int fila = -1;
-	private JComboBox cboGrupo;
 	daoGrupo daoG = new daoGrupo();
 	ArrayList<Grupo> listaGrupos = new ArrayList<Grupo>();
+	private JTextField txtGrupo;
+	private JButton btnLimpiar;
 
 	/**
 	 * Launch the application.
@@ -95,18 +99,11 @@ public class vClase extends JFrame {
 		lblIdClase.setText("");
 		txtclave.setText("");
 		txtProfesor.setText("");
-		cboGrupo.setSelectedItem("");
+		txtGrupo.setText("");
 		txtClase.setText("");
 	}
 
-	public void cargarGrupos() {
-		listaGrupos = daoG.fetchGrupos();
-		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
-		for (Grupo grupo : listaGrupos) {
-			modelcombo.addElement(grupo.getGrupo());
-		}
-		cboGrupo.setModel(modelcombo);
-	}
+	
 
 	public vClase() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vClase.class.getResource("/img/DeoClass.png")));
@@ -165,17 +162,6 @@ public class vClase extends JFrame {
 		txtClase.setBounds(150, 167, 170, 20);
 		contentPane.add(txtClase);
 
-		cboGrupo = new JComboBox();
-		cboGrupo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				cargarGrupos();
-			}
-		});
-		cboGrupo.setModel(new DefaultComboBoxModel(new String[] { "305", "505" }));
-		cboGrupo.setBounds(153, 127, 167, 22);
-		contentPane.add(cboGrupo);
-
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 208, 584, 233);
 		contentPane.add(scrollPane);
@@ -189,7 +175,7 @@ public class vClase extends JFrame {
 				lblIdClase.setText("" + lista.get(fila).getIdClase());
 				txtclave.setText(clase.getClave());
 				txtProfesor.setText(clase.getProfesor());
-				cboGrupo.setSelectedItem("" + clase.getGrupo());
+				txtGrupo.setText(""+clase.getGrupo());
 				txtClase.setText(clase.getClase());
 			}
 		});
@@ -219,7 +205,7 @@ public class vClase extends JFrame {
 					Clase user = new Clase();
 					user.setClave(txtclave.getText());
 					user.setProfesor(txtProfesor.getText());
-					user.setGrupo(listaGrupos.get(cboGrupo.getSelectedIndex()).getIdGrupo());
+					user.setGrupo(Integer.parseInt(txtGrupo.getText().toString()));
 					user.setClase(txtClase.getText());
 					if (dao.insertarClase(user)) {
 						actualizarTabla();
@@ -250,7 +236,7 @@ public class vClase extends JFrame {
 					}
 					clase.setClave(txtclave.getText());
 					clase.setProfesor(txtProfesor.getText());
-					clase.setGrupo(listaGrupos.get(cboGrupo.getSelectedIndex()).getIdGrupo());
+					clase.setGrupo(Integer.parseInt(txtGrupo.getText().toString()));
 					clase.setClase(txtClase.getText());
 					if (dao.editarClase(clase)) {
 						actualizarTabla();
@@ -298,16 +284,16 @@ public class vClase extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileOutputStream archivo;
-					File file = new File(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReporteClases.pdf");
+					URI uri = new URI(getClass().getResource("/pdf/ReporteClases.pdf").toString());
+					File file = new File(uri);
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					Image img = Image.getInstance(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\img\\DeoClass.png");
+					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(100, 100);
+					img.scaleToFit(200, 200);
 					doc.add(img);
 					Paragraph p = new Paragraph(10);
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
@@ -318,13 +304,14 @@ public class vClase extends JFrame {
 					p.add(Chunk.NEWLINE);
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
+					// Tabla de datos
 					PdfPTable tabla = new PdfPTable(5);
 					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase(" ID CLASE", negrita));
+					PdfPCell c1 = new PdfPCell(new Phrase("ID CLASE", negrita));
 					PdfPCell c2 = new PdfPCell(new Phrase("CLAVE", negrita));
-					PdfPCell c3 = new PdfPCell(new Phrase(" PROFESOR", negrita));
-					PdfPCell c4 = new PdfPCell(new Phrase(" GRUPO", negrita));
-					PdfPCell c5 = new PdfPCell(new Phrase(" CLASE", negrita));
+					PdfPCell c3 = new PdfPCell(new Phrase("PROFESOR", negrita));
+					PdfPCell c4 = new PdfPCell(new Phrase("GRUPO", negrita));
+					PdfPCell c5 = new PdfPCell(new Phrase("CLASE", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -340,20 +327,18 @@ public class vClase extends JFrame {
 					tabla.addCell(c3);
 					tabla.addCell(c4);
 					tabla.addCell(c5);
-
-					for (Clase u : lista) {
-						tabla.addCell("" + u.getIdClase());
-						tabla.addCell(u.getClave());
-						tabla.addCell(u.getProfesor());
-						tabla.addCell("" + buscarGrupos(u.getGrupo()));
-						tabla.addCell(u.getClase());
-
+					// Agregar los registros
+					for (Clase pro : lista) {
+						tabla.addCell("" + pro.getIdClase());
+						tabla.addCell("" + pro.getClave());
+						tabla.addCell(pro.getProfesor());
+						tabla.addCell(""+pro.getGrupo());
+						tabla.addCell(pro.getClase());
 					}
-
 					doc.add(tabla);
 					Paragraph p1 = new Paragraph(10);
 					p1.add(Chunk.NEWLINE);
-					p1.add("NÚMERO DE REGISTRO " + lista.size());
+					p1.add("NÚMERO DE REGISTROS: " + lista.size());
 					p1.add(Chunk.NEWLINE);
 					p1.add(Chunk.NEWLINE);
 					p1.setAlignment(Element.ALIGN_RIGHT);
@@ -361,12 +346,15 @@ public class vClase extends JFrame {
 					doc.close();
 					archivo.close();
 					Desktop.getDesktop().open(file);
-				} catch (FileNotFoundException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
-				} catch (DocumentException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
-				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
+				} catch (FileNotFoundException ex) {
+
+				} catch (DocumentException ex) {
+
+				} catch (IOException ex) {
+
+				} catch (URISyntaxException e1) {
+					
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -389,22 +377,27 @@ public class vClase extends JFrame {
 		txtBuscar.setBounds(183, 481, 274, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
-	}
-
-	public int buscarGrupos(int idGrupo) {
-
-		int gr = 0;
-		for (Grupo gru : listaGrupos) {
-			if (gru.getIdGrupo() == idGrupo) {
-				gr = gru.getGrupo();
+		
+		txtGrupo = new JTextField();
+		txtGrupo.setBounds(149, 128, 170, 20);
+		contentPane.add(txtGrupo);
+		txtGrupo.setColumns(10);
+		
+		btnLimpiar = new JButton("");
+		btnLimpiar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiar();
 			}
-		}
-		System.out.print("" + gr);
-		return gr;
+		});
+		btnLimpiar.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-broom-with-a-lot-of-dust-30.png")));
+		btnLimpiar.setBounds(447, 140, 30, 30);
+		contentPane.add(btnLimpiar);
 	}
+
+	
 
 	public void actualizarTabla() {
-		cargarGrupos();
+		
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
@@ -414,7 +407,7 @@ public class vClase extends JFrame {
 			o[0] = u.getIdClase();
 			o[1] = u.getClave();
 			o[2] = u.getProfesor();
-			o[3] = buscarGrupos(u.getGrupo());
+			o[3] = u.getGrupo();
 			o[4] = u.getClase();
 			modelo.addRow(o);
 		}
@@ -422,7 +415,7 @@ public class vClase extends JFrame {
 	}
 
 	public void refrescarTabla2(String palabra) {
-		cargarGrupos();
+		
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
@@ -432,7 +425,7 @@ public class vClase extends JFrame {
 			item[0] = p.getIdClase();
 			item[1] = p.getClave();
 			item[2] = p.getProfesor();
-			item[3] = buscarGrupos(p.getGrupo());
+			item[3] = p.getGrupo();
 			item[4] = p.getClass();
 
 			modelo.addRow(item);
@@ -440,5 +433,4 @@ public class vClase extends JFrame {
 		tblClases.setModel(modelo);
 
 	}
-
 }

@@ -20,11 +20,16 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import dao.daoCarrera;
+import dao.daoGrupo;
 import dao.daoProfesor;
 import dao.daoPromedio;
-import modelo.Calificaciones;
+import dao.daoSemestre;
+import modelo.Carrera;
+import modelo.Grupo;
 import modelo.Profesor;
 import modelo.Promedio;
+import modelo.Semestre;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -51,18 +56,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.Toolkit;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class vPromedio extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtAlumno;
 	private JTextField txtProfesor;
-	private JComboBox cboSemestre;
-	private JComboBox cboCarrera;
-	private JComboBox cboGrupo;
 	private JTextField txtAsignatura;
-	private JSpinner spnCali;
 	private JSpinner spnPromedio;
 	private JTable tblPromedios;
 	private JButton btnAgregar;
@@ -76,6 +83,15 @@ public class vPromedio extends JFrame {
 	Promedio promedio;
 	int fila = -1;
 	private JLabel lblPromedioId;
+	daoSemestre daoS = new daoSemestre();
+	ArrayList<Semestre> listaSemestre=new ArrayList<Semestre>();
+	daoCarrera daoCa = new daoCarrera();
+	ArrayList<Carrera> listaCarreras= new ArrayList<Carrera>();
+	daoGrupo daoG = new daoGrupo();
+	ArrayList<Grupo> listaGrupos=new ArrayList<Grupo>();
+	private JTextField txtSemestre;
+	private JTextField txtCarrera;
+	private JTextField txtGrupo;
 
 	
 	public static void main(String[] args) {
@@ -95,13 +111,14 @@ public class vPromedio extends JFrame {
 		lblPromedioId.setText("");
 		txtAlumno.setText("");
 		txtProfesor.setText("");
-		cboSemestre.setSelectedItem("");
-		cboCarrera.setSelectedItem("");
-		cboGrupo.setSelectedItem("");
+		txtSemestre.setText("");
+		txtCarrera.setText("");
+		txtGrupo.setText("");
 		txtAsignatura.setText("");
-		spnCali.setValue(0);
 		spnPromedio.setValue(0);
 	}
+	
+	
 
 	
 	public vPromedio() {
@@ -151,14 +168,9 @@ public class vPromedio extends JFrame {
 		lblAsignatura.setBounds(10, 219, 171, 24);
 		contentPane.add(lblAsignatura);
 		
-		JLabel lblCalificaciones = new JLabel("CALIFICACIONES");
-		lblCalificaciones.setFont(new Font("Consolas", Font.PLAIN, 20));
-		lblCalificaciones.setBounds(10, 257, 171, 24);
-		contentPane.add(lblCalificaciones);
-		
 		JLabel lblPromedio = new JLabel("PROMEDIO");
 		lblPromedio.setFont(new Font("Consolas", Font.PLAIN, 20));
-		lblPromedio.setBounds(10, 296, 171, 24);
+		lblPromedio.setBounds(10, 254, 171, 24);
 		contentPane.add(lblPromedio);
 		
 		lblPromedioId = new JLabel("");
@@ -176,32 +188,19 @@ public class vPromedio extends JFrame {
 		contentPane.add(txtProfesor);
 		txtProfesor.setColumns(10);
 		
-		cboSemestre = new JComboBox();
-		cboSemestre.setBounds(191, 117, 196, 22);
-		contentPane.add(cboSemestre);
-		
-		cboCarrera = new JComboBox();
-		cboCarrera.setBounds(191, 149, 196, 22);
-		contentPane.add(cboCarrera);
-		
-		cboGrupo = new JComboBox();
-		cboGrupo.setModel(new DefaultComboBoxModel(new String[] {"101", "102", "103", "104", "105", "106", "107"}));
-		cboGrupo.setBounds(191, 184, 197, 22);
-		contentPane.add(cboGrupo);
-		
 		txtAsignatura = new JTextField();
 		txtAsignatura.setBounds(190, 220, 197, 20);
 		contentPane.add(txtAsignatura);
 		txtAsignatura.setColumns(10);
 		
-		spnCali = new JSpinner();
-		spnCali.setModel(new SpinnerNumberModel(0.0, 0.0, 10.0, 0.1));
-		spnCali.setBounds(191, 258, 196, 20);
-		contentPane.add(spnCali);
-		
 		spnPromedio = new JSpinner();
+		spnPromedio.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				
+			}
+		});
 		spnPromedio.setModel(new SpinnerNumberModel(0.0, 0.0, 10.0, 0.1));
-		spnPromedio.setBounds(191, 297, 196, 20);
+		spnPromedio.setBounds(191, 255, 196, 20);
 		contentPane.add(spnPromedio);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -217,11 +216,10 @@ public class vPromedio extends JFrame {
 				lblPromedioId.setText("" + lista.get(fila).getIdPromedio());
 				txtAlumno.setText(promedio.getAlumno());
 				txtProfesor.setText(promedio.getProfesor());
-				cboSemestre.setSelectedItem(promedio.getSemestre());
-				cboCarrera.setSelectedItem(promedio.getCarrera());
-				cboGrupo.setSelectedItem(promedio.getGrupo());
+				txtSemestre.setText(promedio.getSemestre());
+				txtCarrera.setText(promedio.getCarrera());
+				txtGrupo.setText(""+promedio.getGrupo());
 				txtAsignatura.setText(promedio.getAsignaturas());
-				spnCali.setValue(promedio.getCalificaciones());
 				spnPromedio.setValue(promedio.getPromedio());
 			}
 		});
@@ -243,7 +241,6 @@ public class vPromedio extends JFrame {
 		modelo.addColumn("CARRERA");
 		modelo.addColumn("GRUPO");
 		modelo.addColumn("ASINATURA");
-		modelo.addColumn("CALIFICACIONES");
 		modelo.addColumn("PROMEDIO");
 		tblPromedios.setModel(modelo);
 		actualizarTabla();
@@ -259,11 +256,10 @@ public class vPromedio extends JFrame {
 					Promedio user = new Promedio();
 					user.setAlumno(txtAlumno.getText());
 					user.setProfesor(txtProfesor.getText());
-					user.setSemestre(""+cboSemestre.getSelectedItem());
-					user.setCarrera(""+cboCarrera.getSelectedItem());
-					user.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
+					user.setSemestre(txtSemestre.getText());
+					user.setCarrera(txtCarrera.getText());
+					user.setGrupo(Integer.parseInt(txtGrupo.getText().toString()));
 					user.setAsignaturas(txtAsignatura.getText());
-					user.setCalificaciones(Double.parseDouble(spnCali.getValue().toString()));
 					user.setPromedio(Double.parseDouble(spnPromedio.getValue().toString()));
 					if (dao.insertarPromedio(user)) {
 						actualizarTabla();
@@ -293,11 +289,10 @@ public class vPromedio extends JFrame {
 					}
 					promedio.setAlumno(txtAlumno.getText());
 					promedio.setProfesor(txtProfesor.getText());
-					promedio.setSemestre("" + cboSemestre.getSelectedItem());
-					promedio.setCarrera(""+cboCarrera.getSelectedItem());
-					promedio.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
+					promedio.setSemestre(txtSemestre.getText());
+					promedio.setCarrera(txtCarrera.getText());
+					promedio.setGrupo(Integer.parseInt(txtGrupo.getText().toString()));
 					promedio.setAsignaturas(txtAsignatura.getText());
-					promedio.setCalificaciones(Double.parseDouble(spnCali.getValue().toString()));
 					promedio.setPromedio(Double.parseDouble(spnPromedio.getValue().toString()));
 					if (dao.editarPromedio(promedio)) {
 						actualizarTabla();
@@ -347,27 +342,27 @@ public class vPromedio extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					FileOutputStream archivo;
-					File file = new File(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\pdf\\ReportePromedio.pdf");
+					URI uri = new URI(getClass().getResource("/pdf/ReportePromedio.pdf").toString());
+					File file = new File(uri);
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					Image img = Image.getInstance(
-							"C:\\Users\\virip\\OneDrive\\Escritorio\\Repositorios\\ProyectoFP\\src\\img\\DeoClass.png");
+					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(100, 100);
+					img.scaleToFit(200, 200);
 					doc.add(img);
 					Paragraph p = new Paragraph(10);
 					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
 							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
 					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE PROMEDIOS");
+					p.add("PROMEDIO");
 					p.add(Chunk.NEWLINE);
 					p.add(Chunk.NEWLINE);
 					p.setAlignment(Element.ALIGN_CENTER);
 					doc.add(p);
-					PdfPTable tabla = new PdfPTable(9);
+					PdfPTable tabla = new PdfPTable(8);
 					tabla.setWidthPercentage(100);
 					PdfPCell c1 = new PdfPCell(new Phrase(" ID PROMEDIO", negrita));
 					PdfPCell c2 = new PdfPCell(new Phrase(" ALUMNO", negrita));
@@ -376,8 +371,7 @@ public class vPromedio extends JFrame {
 					PdfPCell c5 = new PdfPCell(new Phrase(" CARRERA", negrita));
 					PdfPCell c6 = new PdfPCell(new Phrase(" GRUPO", negrita));
 					PdfPCell c7 = new PdfPCell(new Phrase(" ASIGNATURA", negrita));
-					PdfPCell c8 = new PdfPCell(new Phrase(" CALIFICACIONES", negrita));
-					PdfPCell c9 = new PdfPCell(new Phrase(" PROMEDIO", negrita));
+					PdfPCell c8 = new PdfPCell(new Phrase(" PROMEDIO", negrita));
 					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -386,7 +380,6 @@ public class vPromedio extends JFrame {
 					c6.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c7.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c8.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c9.setHorizontalAlignment(Element.ALIGN_CENTER);
 					c1.setBackgroundColor(BaseColor.GRAY);
 					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -395,7 +388,6 @@ public class vPromedio extends JFrame {
 					c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c7.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					c8.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c9.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					tabla.addCell(c1);
 					tabla.addCell(c2);
 					tabla.addCell(c3);
@@ -404,7 +396,6 @@ public class vPromedio extends JFrame {
 					tabla.addCell(c6);
 					tabla.addCell(c7);
 					tabla.addCell(c8);
-					tabla.addCell(c9);
 					
 
 					for (Promedio u : lista) {
@@ -415,7 +406,6 @@ public class vPromedio extends JFrame {
 						tabla.addCell(u.getCarrera());
 						tabla.addCell(""+u.getGrupo());
 						tabla.addCell(u.getAsignaturas());
-						tabla.addCell(""+u.getCalificaciones());
 						tabla.addCell(""+u.getPromedio());
 
 					}
@@ -437,6 +427,9 @@ public class vPromedio extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -459,15 +452,34 @@ public class vPromedio extends JFrame {
 		txtBuscar.setBounds(501, 349, 272, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
+		
+		txtSemestre = new JTextField();
+		txtSemestre.setBounds(191, 118, 196, 20);
+		contentPane.add(txtSemestre);
+		txtSemestre.setColumns(10);
+		
+		txtCarrera = new JTextField();
+		txtCarrera.setBounds(190, 150, 197, 20);
+		contentPane.add(txtCarrera);
+		txtCarrera.setColumns(10);
+		
+		txtGrupo = new JTextField();
+		txtGrupo.setBounds(191, 185, 196, 20);
+		contentPane.add(txtGrupo);
+		txtGrupo.setColumns(10);
 	}
 	
+
+	
+	
 	public void actualizarTabla() {
+		
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
 		lista = dao.fechsPromedios();
 		for (Promedio u : lista) {
-			Object o[] = new Object[9];
+			Object o[] = new Object[8];
 			o[0] = u.getIdPromedio();
 			o[1] = u.getAlumno();
 			o[2] = u.getProfesor();
@@ -475,8 +487,7 @@ public class vPromedio extends JFrame {
 			o[4] = u.getCarrera();
 			o[5] = u.getGrupo();
 			o[6] = u.getAsignaturas();
-			o[7] = u.getCalificaciones();
-			o[8] = u.getPromedio();
+			o[7] = u.getPromedio();
 			modelo.addRow(o);
 		}
 		tblPromedios.setModel(modelo);
@@ -488,7 +499,7 @@ public class vPromedio extends JFrame {
 		}
 		lista = dao.buscar(palabra);
 		for (Promedio p : lista) {
-			Object item[] = new Object[9];
+			Object item[] = new Object[8];
 			item[0] = p.getIdPromedio();
 			item[1] = p.getAlumno();
 			item[2] = p.getProfesor();
@@ -496,8 +507,7 @@ public class vPromedio extends JFrame {
 			item[4] = p.getCarrera();
 			item[5] = p.getGrupo();
 			item[6] = p.getAsignaturas();
-			item[7] = p.getCalificaciones();
-			item[8] = p.getPromedio();
+			item[7] = p.getPromedio();
 			modelo.addRow(item);
 		}
 		tblPromedios.setModel(modelo);

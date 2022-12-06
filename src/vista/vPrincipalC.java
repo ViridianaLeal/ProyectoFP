@@ -65,7 +65,7 @@ public class vPrincipalC extends JFrame {
 		mntmActivi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-				     File path = new File ("src\\pdf\\RAlumnos.pdf");
+				     File path = new File ("src\\pdf\\ReporteActividades.pdf");
 				     Desktop.getDesktop().open(path);
 				}catch (IOException ex) {
 				     ex.printStackTrace();
@@ -91,7 +91,7 @@ public class vPrincipalC extends JFrame {
 		mntmGrupos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-				     File path = new File ("src\\pdf\\RAlumnos.pdf");
+				     File path = new File ("src\\pdf\\ReporteGrupos.pdf");
 				     Desktop.getDesktop().open(path);
 				}catch (IOException ex) {
 				     ex.printStackTrace();
@@ -104,7 +104,7 @@ public class vPrincipalC extends JFrame {
 		mntmCalificacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-				     File path = new File ("src\\pdf\\RAlumnos.pdf");
+				     File path = new File ("src\\pdf\\ReporteCalificaciones.pdf");
 				     Desktop.getDesktop().open(path);
 				}catch (IOException ex) {
 				     ex.printStackTrace();
@@ -117,7 +117,7 @@ public class vPrincipalC extends JFrame {
 		mntmClases.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-				     File path = new File ("src\\pdf\\RAlumnos.pdf");
+				     File path = new File ("src\\pdf\\ReporteClases.pdf");
 				     Desktop.getDesktop().open(path);
 				}catch (IOException ex) {
 				     ex.printStackTrace();

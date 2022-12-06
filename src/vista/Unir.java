@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class Unir extends JFrame {
 
@@ -47,7 +48,10 @@ public class Unir extends JFrame {
 	 * Create the frame.
 	 */
 	public Unir() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Unir.class.getResource("/img/DeoClass.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setUndecorated(true);
+		setLocationRelativeTo(null);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -57,11 +61,11 @@ public class Unir extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("CLASE");
 		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
-		lblNewLabel.setBounds(54, 11, 150, 36);
+		lblNewLabel.setBounds(54, 52, 150, 36);
 		contentPane.add(lblNewLabel);
 		
 		txtClase = new JTextField();
-		txtClase.setBounds(82, 58, 285, 20);
+		txtClase.setBounds(82, 99, 285, 20);
 		contentPane.add(txtClase);
 		txtClase.setColumns(10);
 		
@@ -82,17 +86,17 @@ public class Unir extends JFrame {
 			}
 		}
 		});
-		btnNewButton.setBounds(177, 168, 89, 23);
+		btnNewButton.setBounds(178, 208, 89, 23);
 		contentPane.add(btnNewButton);
 		
 		txtClave = new JTextField();
 		txtClave.setColumns(10);
-		txtClave.setBounds(72, 137, 285, 20);
+		txtClave.setBounds(82, 177, 285, 20);
 		contentPane.add(txtClave);
 		
 		JLabel lblClave = new JLabel("CLAVE");
 		lblClave.setFont(new Font("Consolas", Font.PLAIN, 20));
-		lblClave.setBounds(54, 94, 150, 36);
+		lblClave.setBounds(73, 130, 150, 36);
 		contentPane.add(lblClave);
 	}
 

@@ -21,6 +21,7 @@ public class vIngreso extends JFrame {
 	private JRadioButton rdbAlumno;
 	ButtonGroup grupo = new ButtonGroup();
 	vPrincipalC principalC = new vPrincipalC();
+	vPrincipalU principalU = new vPrincipalU();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -37,7 +38,7 @@ public class vIngreso extends JFrame {
 	
 	
 	public vIngreso() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 385, 252);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -69,7 +70,7 @@ public class vIngreso extends JFrame {
 		rdbAlumno.setBackground(Color.WHITE);
 		rdbAlumno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//principalU.setVisible(true);
+				principalU.setVisible(true);
 			}
 		});
 		rdbAlumno.setBounds(123, 122, 109, 23);

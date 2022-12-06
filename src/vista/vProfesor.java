@@ -3,6 +3,7 @@ package vista;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
@@ -104,7 +105,7 @@ public class vProfesor extends JFrame {
 	public vProfesor() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vProfesor.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR PROFESOR");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1116, 406);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -104,7 +104,7 @@ public class vFoto extends JFrame {
  
 	public void limpiar() {
 		lblFoto.setText("");
-		lblIdFoto.setText("");
+		lblIdFoto.setText(imagenActual);
 	}
 	
 	public vFoto() {
@@ -150,7 +150,11 @@ public class vFoto extends JFrame {
 				fila = tblFotos.getSelectedRow();
 				foto = lista.get(fila);
 				lblIdFoto.setText("" + lista.get(fila).getIdFoto());
-				lblFoto.setText(foto.getFoto());
+				ImageIcon img = base64ToImage(foto.getFoto());
+				java.awt.Image image =img.getImage();
+		        java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), java.awt.Image.SCALE_SMOOTH);
+		        ImageIcon i = new ImageIcon(newimg);
+		        lblFoto.setIcon(i);
 			}
 		});
 		tblFotos.setModel(new DefaultTableModel(
@@ -175,7 +179,7 @@ public class vFoto extends JFrame {
 				try {
 					
 					Foto user = new Foto();
-					user.setFoto(lblFoto.getText());
+					user.setFoto(imagenActual);
 					if (dao.insertarFoto(user)) {
 						verTabla();
 						limpiar();
@@ -196,7 +200,7 @@ public class vFoto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					
-					foto.setFoto(lblFoto.getText());
+					foto.setFoto(imagenActual);
 					if (dao.editarFoto(foto)) {
 						verTabla();
 						limpiar();
@@ -241,6 +245,8 @@ public class vFoto extends JFrame {
 		btnLimpiar = new JButton("");
 		btnLimpiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblIdFoto.setText("");
+				lblFoto.setText(imagenActual);
 				limpiar();
 			}
 		});
@@ -321,29 +327,29 @@ public class vFoto extends JFrame {
 		btnNewButton = new JButton("CARGAR");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 JFileChooser selector = new JFileChooser();
-			        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
-			        selector.setFileFilter(filtroImagen);
-			        int r = selector.showOpenDialog(null);
-			        if (r == JFileChooser.APPROVE_OPTION) {
-			            try {
-			                File f = selector.getSelectedFile();
-			                ImageIcon img = new ImageIcon(selector.getSelectedFile().toURL());
-			                imgOri = img;
-			                java.awt.Image image =img.getImage();
-			                 // transform it
-			                java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), java.awt.Image.SCALE_SMOOTH);
-			                //Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_SMOOTH);
-			                URL urlImage = selector.getSelectedFile().toURL();
-			                imagenActual = convetirImagen(urlImage);
-			                lblFoto.setIcon(new ImageIcon(newimg));
-			            } catch (MalformedURLException ex) {
-			                Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
-			            }
+				JFileChooser selector = new JFileChooser();
+				FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png",
+				"gif");
+				selector.setFileFilter(filtroImagen);
+				int r = selector.showOpenDialog(null);
+				if (r == JFileChooser.APPROVE_OPTION) {
+				try {
+				File f = selector.getSelectedFile();
+				ImageIcon Img = new ImageIcon(selector.getSelectedFile().toURL());
+				imgOri = Img;
+				java.awt.Image Image = Img.getImage(); // transform it
+				java.awt.Image newimg = Image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
+				Image.SCALE_SMOOTH);
+				URL urlImage = selector.getSelectedFile().toURL();
+				imagenActual = convetirImagen(urlImage);
+				lblFoto.setIcon(new ImageIcon(newimg));
+				} catch (MalformedURLException ex) {
+				Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+				}
 			        }
 			}
 		});
-		btnNewButton.setBounds(270, 190, 89, 23);
+		btnNewButton.setBounds(280, 187, 89, 23);
 		contentPane.add(btnNewButton);
 	}
 	

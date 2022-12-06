@@ -20,9 +20,7 @@ public class vIngreso extends JFrame {
 	private JRadioButton rbdConsulta;
 	private JRadioButton rdbAlumno;
 	ButtonGroup grupo = new ButtonGroup();
-	vPrincipalU principalU = new vPrincipalU();
 	vPrincipalC principalC = new vPrincipalC();
-	vPrincipalP principalP = new vPrincipalP();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -71,7 +69,7 @@ public class vIngreso extends JFrame {
 		rdbAlumno.setBackground(Color.WHITE);
 		rdbAlumno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				principalU.setVisible(true);
+				//principalU.setVisible(true);
 			}
 		});
 		rdbAlumno.setBounds(123, 122, 109, 23);

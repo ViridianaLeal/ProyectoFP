@@ -124,7 +124,7 @@ public class vPromedio extends JFrame {
 	public vPromedio() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vPromedio.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR PROMEDIO");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1061, 422);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

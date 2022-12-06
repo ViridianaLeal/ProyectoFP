@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import Conexion.conexion;
 import modelo.Clase;
 import modelo.Profesor;
+import modelo.Usuario;
 
 public class daoClase {
 	conexion cx = null;
@@ -24,6 +25,7 @@ public class daoClase {
 			ps.setInt(3,user.getGrupo());
 			ps.setString(4, user.getClase());
 			ps.executeUpdate();
+			ps.close();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -66,6 +68,27 @@ public class daoClase {
         return lista2;
 
     }
+	
+	public boolean loginUniraClase(Clase user) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = cx.conectar().prepareStatement("SELECT *FROM clase WHERE clase=? AND clave=?");
+			ps.setString(1, user.getClase());
+			ps.setString(2, user.getClave());
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			return false;
+		}
+
+	}
 
 	public ArrayList<Clase> fetcClases() {
 		ArrayList<Clase> lista = new ArrayList<Clase>();

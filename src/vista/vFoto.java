@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import com.itextpdf.text.BaseColor;
@@ -20,8 +21,11 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import Decoder.BASE64Decoder;
+
 import dao.daoCarrera;
 import dao.daoFoto;
+
 import modelo.Carrera;
 import modelo.Foto;
 import modelo.Usuario;
@@ -31,22 +35,35 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 import javax.swing.border.BevelBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 public class vFoto extends JFrame {
 
@@ -63,6 +80,12 @@ public class vFoto extends JFrame {
 	ArrayList<Foto> lista = new ArrayList<Foto>();
 	Foto foto;
 	int fila = -1;
+
+    ImageIcon imgOri = null;
+    String imagenActual = "";
+    int index = -1;
+   
+	private JButton btnNewButton;
 	/**
 	 * Launch the application.
 	 */
@@ -144,7 +167,7 @@ public class vFoto extends JFrame {
 		modelo.addColumn("ID FOTO");
 		modelo.addColumn("FOTO");
 		tblFotos.setModel(modelo);
-		actualizarTabla();
+		verTabla();
 		
 		JButton btnAgregar = new JButton("");
 		btnAgregar.addActionListener(new ActionListener() {
@@ -154,7 +177,7 @@ public class vFoto extends JFrame {
 					Foto user = new Foto();
 					user.setFoto(lblFoto.getText());
 					if (dao.insertarFoto(user)) {
-						actualizarTabla();
+						verTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE AGREGO CORRECTAMENTE");
 					
@@ -175,7 +198,7 @@ public class vFoto extends JFrame {
 					
 					foto.setFoto(lblFoto.getText());
 					if (dao.editarFoto(foto)) {
-						actualizarTabla();
+						verTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
 					} else {
@@ -199,7 +222,7 @@ public class vFoto extends JFrame {
 							"ELIMINAR FOTO", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
 						if (dao.EliminarFoto(lista.get(fila).getIdFoto())) {
-							actualizarTabla();
+							verTabla();
 							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
@@ -294,20 +317,111 @@ public class vFoto extends JFrame {
 		btnPdf.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.setBounds(413, 441, 30, 30);
 		contentPane.add(btnPdf);
+		
+		btnNewButton = new JButton("CARGAR");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 JFileChooser selector = new JFileChooser();
+			        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+			        selector.setFileFilter(filtroImagen);
+			        int r = selector.showOpenDialog(null);
+			        if (r == JFileChooser.APPROVE_OPTION) {
+			            try {
+			                File f = selector.getSelectedFile();
+			                ImageIcon img = new ImageIcon(selector.getSelectedFile().toURL());
+			                imgOri = img;
+			                java.awt.Image image =img.getImage();
+			                 // transform it
+			                java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), java.awt.Image.SCALE_SMOOTH);
+			                //Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_SMOOTH);
+			                URL urlImage = selector.getSelectedFile().toURL();
+			                imagenActual = convetirImagen(urlImage);
+			                lblFoto.setIcon(new ImageIcon(newimg));
+			            } catch (MalformedURLException ex) {
+			                Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+			            }
+			        }
+			}
+		});
+		btnNewButton.setBounds(270, 190, 89, 23);
+		contentPane.add(btnNewButton);
 	}
 	
-	public void actualizarTabla() {
-		while (modelo.getRowCount() > 0) {
-			modelo.removeRow(0);
-		}
-		lista = dao.fetcFotos();
-		for (Foto u : lista) {
-			Object o[] = new Object[2];
-			o[0] = u.getIdFoto();
-			o[1] = u.getFoto();
-			modelo.addRow(o);
-		}
-		tblFotos.setModel(modelo);
-	}
+	public ImageIcon base64ToImage(String base64) {
+        ImageIcon image = null;
+        try {
+            byte[] imageByte;
+            BASE64Decoder decoder = new BASE64Decoder();
+            imageByte = decoder.decodeBuffer(base64);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            BufferedImage bufferedImage = ImageIO.read(bis);
+            image = new ImageIcon(bufferedImage);
+            bis.close();
+        } catch (IOException ex) {
+            Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return image;
+    }
+
+    public String convetirImagen(URL url) {
+        String base64 = "";
+        try {
+            BufferedImage bImage = ImageIO.read(new File(url.getPath()));
+            BufferedImage img = resize(bImage, 100, 100);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(img, "jpg", bos);
+            byte[] data = bos.toByteArray();
+            base64 = Base64.getEncoder().encodeToString(data);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(vFoto.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(vFoto.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+        return base64;
+    }
+
+    public BufferedImage resize(BufferedImage bufferedImage, int newW, int newH) {
+        int w = bufferedImage.getWidth();
+        int h = bufferedImage.getHeight();
+        BufferedImage bufim = new BufferedImage(newW, newH, bufferedImage.getType());
+        Graphics2D g = bufim.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(bufferedImage, 0, 0, newW, newH, 0, 0, w, h, null);
+        g.dispose();
+        return bufim;
+    }
+
+    public void verTabla() {
+        DefaultTableModel modeloTabla = new DefaultTableModel() {
+            @Override //Redefinimos el método getColumnClass
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return Object.class;
+                    case 1:
+                        return Object.class;
+                    case 2:
+                        return ImageIcon.class;
+                    default:
+                        return Object.class;
+                }
+            }
+        };
+        modeloTabla.addColumn("ID FOTO");
+        modeloTabla.addColumn("FOTO");
+        lista = dao.fetcFotos();
+        for (Foto  a : lista) {
+            Object[] columna = new Object[2];
+            columna[0] = a.getIdFoto();
+            columna[1] = base64ToImage(a.getFoto());
+            modeloTabla.addRow(columna);
+        }
+        tblFotos.setModel(modeloTabla);
+    }
+	
+	
 	
 }

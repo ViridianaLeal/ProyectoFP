@@ -6,10 +6,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.Toolkit;
@@ -43,9 +45,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 
 import javax.swing.DefaultComboBoxModel;
@@ -567,13 +573,14 @@ public class vAlumno extends JFrame {
 		lblNewLabel_2.setBounds(10, 354, 46, 14);
 		contentPane.add(lblNewLabel_2);
 		
-		btnCargarFoto = new JButton("CARGAR");
+		btnCargarFoto = new JButton("");
+		btnCargarFoto.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-foto-30.png")));
 		btnCargarFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		btnCargarFoto.setBounds(234, 448, 89, 23);
+		btnCargarFoto.setBounds(234, 441, 30, 30);
 		contentPane.add(btnCargarFoto);
 	}
 		

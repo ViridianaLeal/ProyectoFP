@@ -108,7 +108,7 @@ public class vClase extends JFrame {
 	public vClase() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vClase.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR CLASE");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 634, 562);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

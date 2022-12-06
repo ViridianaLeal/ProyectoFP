@@ -104,7 +104,7 @@ public class vCalif extends JFrame {
 	public vCalif() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vCalif.class.getResource("/img/DeoClass.png")));
 		setTitle("CALIFICACIONES");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1132, 512);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

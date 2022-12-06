@@ -96,7 +96,7 @@ public class vEntrega extends JFrame {
 	public vEntrega() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vEntrega.class.getResource("/img/DeoClass.png")));
 		setTitle("ENTREGA");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 672, 520);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

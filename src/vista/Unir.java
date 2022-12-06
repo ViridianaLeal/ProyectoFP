@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class Unir extends JFrame {
 
@@ -27,6 +28,7 @@ public class Unir extends JFrame {
 	private JTextField txtClase;
 	private JTextField txtClave;
 	daoClase dao = new daoClase();
+	private JLabel lblCerrar;
 
 	/**
 	 * Launch the application.
@@ -98,6 +100,15 @@ public class Unir extends JFrame {
 		lblClave.setFont(new Font("Consolas", Font.PLAIN, 20));
 		lblClave.setBounds(73, 130, 150, 36);
 		contentPane.add(lblClave);
+		
+		lblCerrar = new JLabel("");
+		lblCerrar.setIcon(new ImageIcon(Unir.class.getResource("/img/icons8-eliminar-30 (1).png")));
+		lblCerrar.setBounds(394, 11, 46, 36);
+		contentPane.add(lblCerrar);
+		
+		JButton btnCerrar = new JButton("");
+		btnCerrar.setBorder(null);
+		btnCerrar.setBounds(387, 11, 46, 36);
+		contentPane.add(btnCerrar);
 	}
-
 }

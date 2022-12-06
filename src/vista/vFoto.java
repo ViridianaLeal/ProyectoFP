@@ -27,6 +27,7 @@ import dao.daoCarrera;
 import dao.daoFoto;
 
 import modelo.Carrera;
+import modelo.Clase;
 import modelo.Foto;
 import modelo.Usuario;
 
@@ -80,12 +81,12 @@ public class vFoto extends JFrame {
 	ArrayList<Foto> lista = new ArrayList<Foto>();
 	Foto foto;
 	int fila = -1;
+	ImageIcon imgOri = null;
+	String imagenActual = "";
+	int index = -1;
 
-    ImageIcon imgOri = null;
-    String imagenActual = "";
-    int index = -1;
-   
 	private JButton btnNewButton;
+
 	/**
 	 * Launch the application.
 	 */
@@ -101,12 +102,12 @@ public class vFoto extends JFrame {
 			}
 		});
 	}
- 
+
 	public void limpiar() {
 		lblFoto.setText("");
 		lblIdFoto.setText(imagenActual);
 	}
-	
+
 	public vFoto() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vFoto.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR FOTOS");
@@ -116,33 +117,34 @@ public class vFoto extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("ID FOTO");
 		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 18));
-		lblNewLabel.setBounds(22, 36, 102, 25);
+		lblNewLabel.setBounds(22, 21, 102, 25);
 		contentPane.add(lblNewLabel);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("FOTO");
 		lblNewLabel_1.setFont(new Font("Consolas", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(21, 75, 91, 31);
+		lblNewLabel_1.setBounds(22, 57, 91, 31);
 		contentPane.add(lblNewLabel_1);
-		
+
 		lblIdFoto = new JLabel("0");
 		lblIdFoto.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblIdFoto.setBounds(134, 36, 115, 18);
+		lblIdFoto.setBounds(143, 19, 115, 18);
 		contentPane.add(lblIdFoto);
-		
+
 		lblFoto = new JLabel("");
 		lblFoto.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		lblFoto.setBounds(132, 82, 138, 131);
+		lblFoto.setBounds(134, 57, 124, 134);
 		contentPane.add(lblFoto);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 237, 498, 183);
+		scrollPane.setBounds(10, 245, 498, 183);
 		contentPane.add(scrollPane);
-		
+
 		tblFotos = new JTable();
 		tblFotos.addMouseListener(new MouseAdapter() {
 			@Override
@@ -151,58 +153,55 @@ public class vFoto extends JFrame {
 				foto = lista.get(fila);
 				lblIdFoto.setText("" + lista.get(fila).getIdFoto());
 				ImageIcon img = base64ToImage(foto.getFoto());
-				java.awt.Image image =img.getImage();
-		        java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), java.awt.Image.SCALE_SMOOTH);
-		        ImageIcon i = new ImageIcon(newimg);
-		        lblFoto.setIcon(i);
+				java.awt.Image image = img.getImage();
+				java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
+						java.awt.Image.SCALE_SMOOTH);
+				ImageIcon i = new ImageIcon(newimg);
+				lblFoto.setIcon(i);
 			}
 		});
-		tblFotos.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null},
-				{null, null},
-				{null, null},
-			},
-			new String[] {
-				"New column", "New column"
-			}
-		));
+		tblFotos.setModel(new DefaultTableModel(new Object[][] { { null, null }, { null, null }, { null, null }, },
+				new String[] { "New column", "New column" }));
 		scrollPane.setViewportView(tblFotos);
 		modelo.addColumn("ID FOTO");
 		modelo.addColumn("FOTO");
 		tblFotos.setModel(modelo);
-		verTabla();
-		
+		actualizarTabla();
+
 		JButton btnAgregar = new JButton("");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
 					Foto user = new Foto();
 					user.setFoto(imagenActual);
+					System.out.print(""+imagenActual);
 					if (dao.insertarFoto(user)) {
-						verTabla();
+						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE AGREGO CORRECTAMENTE");
-					
+					} else {
+
+						JOptionPane.showMessageDialog(null, "ERROR");
 					}
 				} catch (Exception ex) {
+					ex.printStackTrace();
 					JOptionPane.showMessageDialog(null, "ERROR");
 				}
+
 			}
 		});
 		btnAgregar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
 		btnAgregar.setBounds(77, 441, 30, 30);
 		contentPane.add(btnAgregar);
-		
+
 		btnEditar = new JButton("");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
+
 					foto.setFoto(imagenActual);
 					if (dao.editarFoto(foto)) {
-						verTabla();
+						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
 					} else {
@@ -216,7 +215,7 @@ public class vFoto extends JFrame {
 		btnEditar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-lápiz-30.png")));
 		btnEditar.setBounds(146, 441, 30, 30);
 		contentPane.add(btnEditar);
-		
+
 		btnEliminar = new JButton("");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -226,7 +225,7 @@ public class vFoto extends JFrame {
 							"ELIMINAR FOTO", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
 						if (dao.EliminarFoto(lista.get(fila).getIdFoto())) {
-							verTabla();
+							actualizarTabla();
 							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
@@ -241,7 +240,7 @@ public class vFoto extends JFrame {
 		btnEliminar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-eliminar-30.png")));
 		btnEliminar.setBounds(240, 441, 30, 30);
 		contentPane.add(btnEliminar);
-		
+
 		btnLimpiar = new JButton("");
 		btnLimpiar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -253,7 +252,7 @@ public class vFoto extends JFrame {
 		btnLimpiar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-broom-with-a-lot-of-dust-30.png")));
 		btnLimpiar.setBounds(329, 441, 30, 30);
 		contentPane.add(btnLimpiar);
-		
+
 		btnPdf = new JButton("");
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -265,7 +264,8 @@ public class vFoto extends JFrame {
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					java.awt.Image img2 = Toolkit.getDefaultToolkit()
+							.getImage(getClass().getResource("/img/DeoClass.png"));
 					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
 					img.scaleToFit(200, 200);
@@ -318,116 +318,110 @@ public class vFoto extends JFrame {
 					e1.printStackTrace();
 				}
 			}
-			
+
 		});
 		btnPdf.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.setBounds(413, 441, 30, 30);
 		contentPane.add(btnPdf);
-		
-		btnNewButton = new JButton("CARGAR");
+
+		btnNewButton = new JButton("");
+		btnNewButton.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-foto-30.png")));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser selector = new JFileChooser();
-				FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png",
-				"gif");
-				selector.setFileFilter(filtroImagen);
-				int r = selector.showOpenDialog(null);
-				if (r == JFileChooser.APPROVE_OPTION) {
-				try {
-				File f = selector.getSelectedFile();
-				ImageIcon Img = new ImageIcon(selector.getSelectedFile().toURL());
-				imgOri = Img;
-				java.awt.Image Image = Img.getImage(); // transform it
-				java.awt.Image newimg = Image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
-				Image.SCALE_SMOOTH);
-				URL urlImage = selector.getSelectedFile().toURL();
-				imagenActual = convetirImagen(urlImage);
-				lblFoto.setIcon(new ImageIcon(newimg));
-				} catch (MalformedURLException ex) {
-				Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+		        selector.setFileFilter(filtroImagen);
+		        int r = selector.showOpenDialog(null);
+		        if (r == JFileChooser.APPROVE_OPTION) {
+		            try {
+		                File f = selector.getSelectedFile();
+		                ImageIcon img = new ImageIcon(selector.getSelectedFile().toURL());
+		                imgOri = img;
+		                java.awt.Image image = img.getImage(); // transform it
+		                java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), java.awt.Image.SCALE_SMOOTH);
+		                URL urlImage = selector.getSelectedFile().toURL();
+		                imagenActual = convetirImagen(urlImage);
+		                System.out.print(imagenActual);
+		                lblFoto.setIcon(new ImageIcon(newimg));
+		            } catch (MalformedURLException ex) {
+		                Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		            }
 				}
-			        }
 			}
 		});
-		btnNewButton.setBounds(280, 187, 89, 23);
+		btnNewButton.setBounds(276, 157, 30, 31);
 		contentPane.add(btnNewButton);
 	}
-	
+
 	public ImageIcon base64ToImage(String base64) {
-        ImageIcon image = null;
-        try {
-            byte[] imageByte;
-            BASE64Decoder decoder = new BASE64Decoder();
-            imageByte = decoder.decodeBuffer(base64);
-            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-            BufferedImage bufferedImage = ImageIO.read(bis);
-            image = new ImageIcon(bufferedImage);
-            bis.close();
-        } catch (IOException ex) {
-            Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return image;
-    }
+		ImageIcon image = null;
+		try {
+			byte[] imageByte;
+			BASE64Decoder decoder = new BASE64Decoder();
+			imageByte = decoder.decodeBuffer(base64);
+			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+			BufferedImage bufferedImage = ImageIO.read(bis);
+			image = new ImageIcon(bufferedImage);
+			bis.close();
+		} catch (IOException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return image;
+	}
 
-    public String convetirImagen(URL url) {
-        String base64 = "";
-        try {
-            BufferedImage bImage = ImageIO.read(new File(url.getPath()));
-            BufferedImage img = resize(bImage, 100, 100);
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ImageIO.write(img, "jpg", bos);
-            byte[] data = bos.toByteArray();
-            base64 = Base64.getEncoder().encodeToString(data);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(vFoto.class
-                    .getName()).log(Level.SEVERE, null, ex);
+	public String convetirImagen(URL url) {
+		String base64 = "";
+		try {
+			BufferedImage bImage = ImageIO.read(new File(url.getPath()));
+			BufferedImage img = resize(bImage, 100, 100);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ImageIO.write(img, "jpg", bos);
+			byte[] data = bos.toByteArray();
+			base64 = Base64.getEncoder().encodeToString(data);
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
 
-        } catch (IOException ex) {
-            Logger.getLogger(vFoto.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return base64;
-    }
+		} catch (IOException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return base64;
+	}
 
-    public BufferedImage resize(BufferedImage bufferedImage, int newW, int newH) {
-        int w = bufferedImage.getWidth();
-        int h = bufferedImage.getHeight();
-        BufferedImage bufim = new BufferedImage(newW, newH, bufferedImage.getType());
-        Graphics2D g = bufim.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(bufferedImage, 0, 0, newW, newH, 0, 0, w, h, null);
-        g.dispose();
-        return bufim;
-    }
+	public BufferedImage resize(BufferedImage bufferedImage, int newW, int newH) {
+		int w = bufferedImage.getWidth();
+		int h = bufferedImage.getHeight();
+		BufferedImage bufim = new BufferedImage(newW, newH, bufferedImage.getType());
+		Graphics2D g = bufim.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.drawImage(bufferedImage, 0, 0, newW, newH, 0, 0, w, h, null);
+		g.dispose();
+		return bufim;
+	}
 
-    public void verTabla() {
-        DefaultTableModel modeloTabla = new DefaultTableModel() {
-            @Override //Redefinimos el método getColumnClass
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Object.class;
-                    case 1:
-                        return Object.class;
-                    case 2:
-                        return ImageIcon.class;
-                    default:
-                        return Object.class;
-                }
-            }
-        };
-        modeloTabla.addColumn("ID FOTO");
-        modeloTabla.addColumn("FOTO");
-        lista = dao.fetcFotos();
-        for (Foto  a : lista) {
-            Object[] columna = new Object[2];
-            columna[0] = a.getIdFoto();
-            columna[1] = base64ToImage(a.getFoto());
-            modeloTabla.addRow(columna);
-        }
-        tblFotos.setModel(modeloTabla);
-    }
-	
-	
-	
+	public void actualizarTabla() {
+		DefaultTableModel modeloTabla = new DefaultTableModel() {
+			@Override // Redefinimos el método getColumnClass
+			public Class getColumnClass(int column) {
+				switch (column) {
+				case 0:
+					return Object.class;
+				case 1:
+					return ImageIcon.class;
+				default:
+					return Object.class;
+				}
+			}
+		};
+		modeloTabla.addColumn("ID FOTO");
+		modeloTabla.addColumn("FOTO");
+		lista = dao.fetcFotos();
+		for (Foto a : lista) {
+			Object[] columna = new Object[2];
+			columna[0] = a.getIdFoto();
+			columna[1] = base64ToImage(a.getFoto());
+			modeloTabla.addRow(columna);
+		}
+		tblFotos.setModel(modeloTabla);
+	}
+
 }

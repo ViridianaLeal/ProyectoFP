@@ -145,7 +145,7 @@ public class vLogin extends JFrame {
 		
 		
 		txtUser = new PlaceHolderTextField(); //JTEXTFLIED MEJORADO CON MARCA DE AGUA O PLACEHOLDER
-		txtUser.setForeground(Color.LIGHT_GRAY);
+		txtUser.setForeground(Color.BLACK);
 		txtUser.setBounds(27, 97, 234, 30);
         txtUser.setPlaceholder("Introduce usuario"); //TEXTO DE MARCA DE AGUA
         txtUser.setBorder(null);// QUITAR BORDE DE CAMPO DE TEXTO

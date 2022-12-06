@@ -188,10 +188,12 @@ public class vPrincipalU extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR ESTE USUARIO?",
+					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO QUE DESEA SALIR DE ESTA CUENTA?",
 							"ELIMINAR USUARIO", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
 						JOptionPane.showMessageDialog(null, "ADIOS");
+						vLogin login = new vLogin();
+						login.setVisible(true);
 						System.exit(0);
 
 					} else {

@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Toolkit;
@@ -56,7 +57,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class vClase extends JFrame {
+public class vClase extends JInternalFrame {
 
 	private JPanel contentPane;
 	private JLabel lblIdClase;
@@ -106,11 +107,11 @@ public class vClase extends JFrame {
 	
 
 	public vClase() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(vClase.class.getResource("/img/DeoClass.png")));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(vClase.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR CLASE");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 634, 562);
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

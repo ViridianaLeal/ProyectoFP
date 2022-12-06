@@ -52,7 +52,7 @@ public class vPrincipalU extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panelPrincipal = new JPanel();
-		panelPrincipal.setBounds(0, 0, 434, 261);
+		panelPrincipal.setBounds(0, 0, 434, 450);
 
 		contentPane.add(panelPrincipal);
 		panelPrincipal.setLayout(null);
@@ -70,28 +70,31 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("PROFESOR");
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
-		JMenu mnNewMenu_1 = new JMenu("REPOTES");
+		JMenuItem mntmNewMenuItem_13 = new JMenuItem("PLANTELES");
+		mnNewMenu.add(mntmNewMenuItem_13);
+		
+		JMenu mnNewMenu_1 = new JMenu("REPORTES");
 		menuBar.add(mnNewMenu_1);
 		
-		JMenuItem mntmNewMenuItem_6 = new JMenuItem("New menu item");
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("ALUMNOS");
 		mnNewMenu_1.add(mntmNewMenuItem_6);
 		
-		JMenuItem mntmNewMenuItem_8 = new JMenuItem("New menu item");
+		JMenuItem mntmNewMenuItem_8 = new JMenuItem("PROFESORES");
 		mnNewMenu_1.add(mntmNewMenuItem_8);
 		
-		JMenuItem mntmNewMenuItem_9 = new JMenuItem("New menu item");
+		JMenuItem mntmNewMenuItem_9 = new JMenuItem("CALIFICACIONES");
 		mnNewMenu_1.add(mntmNewMenuItem_9);
 		
-		JMenuItem mntmNewMenuItem_10 = new JMenuItem("New menu item");
+		JMenuItem mntmNewMenuItem_10 = new JMenuItem("PROMEDIO");
 		mnNewMenu_1.add(mntmNewMenuItem_10);
 		
-		JMenuItem mntmNewMenuItem_7 = new JMenuItem("New menu item");
+		JMenuItem mntmNewMenuItem_7 = new JMenuItem("PLANTEL");
 		mnNewMenu_1.add(mntmNewMenuItem_7);
 		
-		JMenuItem mntmNewMenuItem_11 = new JMenuItem("New menu item");
+		JMenuItem mntmNewMenuItem_11 = new JMenuItem("GRUPOS");
 		mnNewMenu_1.add(mntmNewMenuItem_11);
 		
-		JMenuItem mntmNewMenuItem_12 = new JMenuItem("New menu item");
+		JMenuItem mntmNewMenuItem_12 = new JMenuItem("CARRERAS");
 		mnNewMenu_1.add(mntmNewMenuItem_12);
 		
 		JMenu mnNewMenu_2 = new JMenu("SALIR");
@@ -117,7 +120,7 @@ public class vPrincipalU extends JFrame {
 		panelPrincipal.add(panelSuperior);
 		
 		JPanel panelCentral = new JPanel();
-		panelCentral.setBounds(0, 58, 434, 175);
+		panelCentral.setBounds(0, 58, 434, 402);
 		panelPrincipal.add(panelCentral);
 		panelCentral.setLayout(null);
 		
@@ -148,7 +151,7 @@ public class vPrincipalU extends JFrame {
 		panel.add(btnNewButton_3);
 		
 		JPanel misPaneles = new JPanel();
-		misPaneles.setBounds(116, -15, 498, 426);
+		misPaneles.setBounds(154, -15, 460, 426);
 		panelCentral.add(misPaneles);
 		
 		JPanel panelInferior = new JPanel();

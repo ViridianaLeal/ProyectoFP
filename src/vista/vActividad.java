@@ -14,9 +14,14 @@ import java.awt.Toolkit;
 import com.toedter.calendar.JDayChooser;
 
 import dao.daoActividades;
+import dao.daoClase;
 import dao.daoProfesor;
 import modelo.Actividades;
 import modelo.Alumno;
+import modelo.Carrera;
+import modelo.Clase;
+import modelo.Grupo;
+import modelo.Plantel;
 import modelo.Profesor;
 
 import com.itextpdf.text.BaseColor;
@@ -50,9 +55,12 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class vActividad extends JFrame {
 
@@ -73,10 +81,11 @@ public class vActividad extends JFrame {
 	ArrayList<Actividades> lista = new ArrayList<Actividades>();
 	Actividades actividades;
 	int fila = -1;
+	daoClase daoCla = new daoClase();
+	ArrayList<Clase> listaClases = new ArrayList<Clase>();
+		
 
-	/**
-	 * Launch the application.
-	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -88,6 +97,16 @@ public class vActividad extends JFrame {
 				}
 			}
 		});
+	}
+	
+	
+	public void cargarClases() {
+		listaClases = daoCla.fetcClases();
+		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
+		for (Clase clases : listaClases) {
+			modelcombo.addElement(clases.getClase());
+		}
+		cboClase.setModel(modelcombo);
 	}
 
 	public void limpiar() {
@@ -139,11 +158,17 @@ public class vActividad extends JFrame {
 		lblFecha.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		cboClase = new JComboBox();
-		cboClase.setBounds(117, 109, 123, 22);
+		cboClase.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				cargarClases();
+			}
+		});
+		cboClase.setBounds(117, 109, 270, 22);
 		contentPane.add(cboClase);
 		
 		txtAsignatura = new JTextField();
-		txtAsignatura.setBounds(117, 79, 123, 20);
+		txtAsignatura.setBounds(117, 79, 270, 20);
 		contentPane.add(txtAsignatura);
 		txtAsignatura.setColumns(10);
 		
@@ -204,7 +229,7 @@ public class vActividad extends JFrame {
 					Actividades user = new Actividades();
 					user.setActividad(txtActividad.getText());
 					user.setAsignatura(txtAsignatura.getText());
-					user.setClase(""+cboClase.getSelectedItem());
+					user.setClase(listaClases.get(cboClase.getSelectedIndex()).getIdClase());
 					user.setFecha(dcFecha.getDateFormatString());
 					if (dao.insertarActividad(user)) {
 						actualizarTabla();
@@ -234,7 +259,7 @@ public class vActividad extends JFrame {
 					}
 					actividades.setActividad(txtActividad.getText());
 					actividades.setAsignatura(txtAsignatura.getText());
-					actividades.setClase(""+cboClase.getSelectedItem());
+					actividades.setClase(listaClases.get(cboClase.getSelectedIndex()).getIdClase());
 					actividades.setFecha(dcFecha.getDateFormatString());
 					if (dao.editarActividades(actividades)) {
 						actualizarTabla();
@@ -361,7 +386,20 @@ public class vActividad extends JFrame {
 		contentPane.add(btnPdf);
 	}
 	
+	public String buscarClases(int idClases) {
+
+		String ca = "";
+		for (Clase cat : listaClases) {
+			if (cat.getIdClase() == idClases) {
+				ca = cat.getClase();
+			}
+		}
+		System.out.print("" + ca);
+		return ca;
+	}
+	
 	public void actualizarTabla() {
+		cargarClases();
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
@@ -371,7 +409,7 @@ public class vActividad extends JFrame {
 			o[0] = u.getIdActividades();
 			o[1] = u.getActividad();
 			o[2] = u.getAsignatura();
-			o[3] = u.getClase();
+			o[3] = buscarClases(u.getClase());
 			o[4] = u.getFecha();
 			modelo.addRow(o);
 		}

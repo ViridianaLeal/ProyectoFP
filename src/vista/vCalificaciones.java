@@ -20,9 +20,9 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import dao.daoAsignatura;
+
 import dao.daoCalificaciones;
-import modelo.Asignatura;
+
 import modelo.Calificaciones;
 import modelo.Usuario;
 

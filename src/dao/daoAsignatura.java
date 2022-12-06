@@ -1,29 +1,24 @@
 package dao;
 
-import java.io.FileInputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import Conexion.conexion;
+import modelo.Alumno;
 import modelo.Asignatura;
-import modelo.Usuario;
 
 public class daoAsignatura {
 	conexion cx = null;
-	FileInputStream fis;
-	int longitudBytes;
-
-	public daoAsignatura() {
+	public void daoAsignatura() {
 		cx = new conexion();
 	}
-
+	
 	public boolean insertarAsignatura(Asignatura user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO asignatura VALUES(null,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO asignatura  VALUES(null,?,?)");
 			ps.setString(1, user.getProfesor());
 			ps.setString(2, user.getAsignatura());
 			ps.executeUpdate();
@@ -34,18 +29,22 @@ public class daoAsignatura {
 		}
 
 	}
+	
+	
 
-	public ArrayList<Asignatura> fetchAsignatura() {
+	
+
+	public ArrayList<Asignatura> fetcAsignaturas() {
 		ArrayList<Asignatura> lista = new ArrayList<Asignatura>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = cx.conectar().prepareStatement("SELECT * FROM asignatura");
+			ps = cx.conectar().prepareStatement("SELECT *FROM asignatura");
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Asignatura u = new Asignatura();
-				u.setIDasignatura(rs.getInt("idasignatura"));
-				u.setProfesor(rs.getString("profesor"));				
+				u.setIdAsignatura(rs.getInt("idAsignatura"));
+				u.setProfesor(rs.getString("profesor"));
 				u.setAsignatura(rs.getString("asignatura"));
 				lista.add(u);
 			}
@@ -59,7 +58,7 @@ public class daoAsignatura {
 	public boolean EliminarAsignatura(int Id) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("DELETE FROM asignatura WHERE idasignatura=?");
+			ps = cx.conectar().prepareStatement("DELETE  FROM asignatura WHERE idAsignatura=?");
 			ps.setInt(1, Id);
 			ps.executeUpdate();
 			return true;
@@ -73,9 +72,10 @@ public class daoAsignatura {
 	public boolean editarAsignatura(Asignatura user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("UPDATE asignatura SET profesor=?, asignatura=?  WHERE  idasignatura");
+			ps = cx.conectar().prepareStatement("UPDATE asignatura SET profesor=?,asignatura=? WHERE idAsignatura=?");
 			ps.setString(1, user.getProfesor());
 			ps.setString(2, user.getAsignatura());
+			ps.setInt(10, user.getIdAsignatura());
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {

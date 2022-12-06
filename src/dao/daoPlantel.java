@@ -37,24 +37,7 @@ public class daoPlantel {
 
 	}
 	
-	public ArrayList<Plantel> selectPlantel() {
-        ArrayList<Plantel> listax = new ArrayList<Plantel>();
-        try {
-            String sql="SELECT * FROM plantel";
-            PreparedStatement st = cx.conectar().prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-            	Plantel x = new Plantel();
-                x.setIdPlantel(rs.getInt("idPlantel"));
-                x.setPlantel(rs.getString("plantel"));
-                listax.add(x);
-            }
-            cx.desconectar();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return listax;
-    }
+	
 
 	public ArrayList<Plantel> fetchPlantels() {
 		ArrayList<Plantel> lista = new ArrayList<Plantel>();

@@ -348,7 +348,7 @@ public class vEntrega extends JFrame {
 			modelo.removeRow(0);
 		}
 		lista = dao.fetcEntregas();
-		for (Entrega u : lista) {
+		for (Entrega u : lista) {   
 			Object o[] = new Object[5];
 			o[0] = u.getIdEntrega();
 			o[1] = u.getClase();

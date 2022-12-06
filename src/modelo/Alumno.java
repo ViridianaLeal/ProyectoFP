@@ -3,14 +3,14 @@
 public class Alumno {
 	int idalumno;
 	int numerocontrol;
-	String plantel;
+	int plantel;
 	String turno;
-	String semestre;
-	String carrera;
+	int semestre;
+	int carrera;
 	int grupo;
 	String nombre;
 	String apellidos;
-	String foto;
+	String imagen;
 	
 	public Alumno() {
 		
@@ -32,11 +32,11 @@ public class Alumno {
 		this.numerocontrol = numerocontrol;
 	}
 
-	public String getPlantel() {
+	public int getPlantel() {
 		return plantel;
 	}
 
-	public void setPlantel(String plantel) {
+	public void setPlantel(int plantel) {
 		this.plantel = plantel;
 	}
 
@@ -48,19 +48,19 @@ public class Alumno {
 		this.turno = turno;
 	}
 
-	public String getSemestre() {
+	public int getSemestre() {
 		return semestre;
 	}
 
-	public void setSemestre(String semestre) {
+	public void setSemestre(int semestre) {
 		this.semestre = semestre;
 	}
 
-	public String getCarrera() {
+	public int getCarrera() {
 		return carrera;
 	}
 
-	public void setCarrera(String carrera) {
+	public void setCarrera(int carrera) {
 		this.carrera = carrera;
 	}
 
@@ -88,13 +88,18 @@ public class Alumno {
 		this.apellidos = apellidos;
 	}
 
-	public String getFoto() {
-		return foto;
+	public String getImagen() {
+		return imagen;
 	}
 
-	public void setFoto(String foto) {
-		this.foto = foto;
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
+
+	
+	
+
+	
 	
 
 }

@@ -6,7 +6,7 @@ public class Actividades {
 	int idActividades;
 	String actividad;
 	String asignatura;
-	String clase;
+	int clase;
 	String profesor;
 	String fecha;
 	
@@ -38,11 +38,11 @@ public class Actividades {
 		this.asignatura = asignatura;
 	}
 
-	public String getClase() {
+	public int getClase() {
 		return clase;
 	}
 
-	public void setClase(String clase) {
+	public void setClase(int clase) {
 		this.clase = clase;
 	}
 
@@ -61,6 +61,7 @@ public class Actividades {
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
+
 
 	
 	

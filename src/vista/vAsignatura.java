@@ -1,54 +1,68 @@
 package vista;
 
-import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.management.modelmbean.InvalidTargetObjectTypeException;
-import javax.swing.JButton;
+
 import java.awt.Font;
-import javax.swing.border.BevelBorder;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import dao.daoAsignatura;
-import dao.daoUsuario;
+import modelo.Alumno;
 import modelo.Asignatura;
-import modelo.Usuario;
-import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Toolkit;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class vAsignatura extends JFrame {
 
 	private JPanel contentPane;
-	
-	private JTable tblca;
-	private JLabel lblAsig;
+	private JLabel lblIdAsignatura;
+	private JTextField txtAsig;
+	private JComboBox cboProfesor;
+	private JTable tblAsig;
 	private JButton btnAgregar;
+	private JButton btnPdf;
 	private JButton btnEliminar;
 	private JButton btnEditar;
-	private JButton btnBorrar;
-	private JScrollPane scrollPane;
-	daoAsignatura dao = new daoAsignatura();
 	DefaultTableModel modelo = new DefaultTableModel();
-	ArrayList<Asignatura> lista =new ArrayList<Asignatura>();
-	int fila = -1;
+	daoAsignatura dao = new daoAsignatura();
 	Asignatura asignatura;
-	private JTextField txtAsignatura;
-	private JComboBox cboProfe;
-	private JLabel lblIdAsignatura;
+	int fila = -1;
+	ArrayList<Asignatura> lista = new ArrayList<Asignatura>();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -63,49 +77,91 @@ public class vAsignatura extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public void limpiar() {
-		txtAsignatura.setText(null);
+		lblIdAsignatura.setText("");
+		cboProfesor.setSelectedItem("");
+		txtAsig.setText("");
 	}
 
 	public vAsignatura() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(vAsignatura.class.getResource("/img/Java.jpg")));
-		setTitle("CRUD ASIGNATURA");
+		setTitle("ASIGNATURAS");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(vAsignatura.class.getResource("/img/logoclass.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 566, 401);
-		setLocationRelativeTo(null);
+		setBounds(100, 100, 593, 542);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		JLabel lblNewLabel = new JLabel("ID profesor");
-		lblNewLabel.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel.setBounds(10, 32, 113, 23);
+
+		JLabel lblNewLabel = new JLabel("ID ASIGNATURA");
+		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblNewLabel.setBounds(33, 33, 204, 24);
 		contentPane.add(lblNewLabel);
-		lblAsig = new JLabel("1");
-		lblAsig.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblAsig.setBounds(144, 73, 63, 23);
-		contentPane.add(lblAsig);
-		JLabel lblNewLabel_1_2 = new JLabel("Asignatura");
-		lblNewLabel_1_2.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblNewLabel_1_2.setBounds(10, 115, 109, 23);
-		contentPane.add(lblNewLabel_1_2);
-		btnAgregar = new JButton("Agregar");
+
+		JLabel lblProfesor = new JLabel("PROFESOR");
+		lblProfesor.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblProfesor.setBounds(33, 81, 204, 24);
+		contentPane.add(lblProfesor);
+
+		JLabel lblIasignatura = new JLabel("ASIGNATURA");
+		lblIasignatura.setFont(new Font("Consolas", Font.PLAIN, 20));
+		lblIasignatura.setBounds(33, 126, 204, 24);
+		contentPane.add(lblIasignatura);
+
+		lblIdAsignatura = new JLabel("");
+		lblIdAsignatura.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblIdAsignatura.setBounds(263, 21, 84, 30);
+		contentPane.add(lblIdAsignatura);
+
+		txtAsig = new JTextField();
+		txtAsig.setBounds(261, 127, 230, 20);
+		contentPane.add(txtAsig);
+		txtAsig.setColumns(10);
+
+		cboProfesor = new JComboBox();
+		cboProfesor.setBounds(263, 81, 228, 22);
+		contentPane.add(cboProfesor);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 174, 556, 238);
+		contentPane.add(scrollPane);
+
+		tblAsig = new JTable();
+		tblAsig.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				fila = tblAsig.getSelectedRow();
+				asignatura = lista.get(fila);
+				lblIasignatura.setText("" + lista.get(fila).getIdAsignatura());
+				cboProfesor.setSelectedItem("" + asignatura.getProfesor());
+				txtAsig.setText(asignatura.getAsignatura());
+			}
+		});
+		tblAsig.setModel(new DefaultTableModel(
+				new Object[][] { { null, null, null }, { null, null, null }, { null, null, null }, },
+				new String[] { "New column", "New column", "New column" }));
+		scrollPane.setViewportView(tblAsig);
+		modelo.addColumn("ID ASIGNATURA");
+		modelo.addColumn("PROFESOR");
+		modelo.addColumn("ASIGNATURA");
+		tblAsig.setModel(modelo);
+
+		btnAgregar = new JButton("");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (txtAsignatura.getText().equals("")|| cboProfe.getSelectedItem().equals("")) {
-						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
+					if (txtAsig.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS");
 						return;
 					}
 					Asignatura user = new Asignatura();
-					user.setProfesor(cboProfe.getSelectedItem().toString());
-					user.setAsignatura(txtAsignatura.getText());
+					user.setProfesor("" + cboProfesor.getSelectedIndex());
+					user.setAsignatura(txtAsig.getText());
 					if (dao.insertarAsignatura(user)) {
 						actualizarTabla();
-						JOptionPane.showMessageDialog(null, "LA ASIGNATURA SE AGREGO CORRECTAMENTE");
+						limpiar();
+						JOptionPane.showMessageDialog(null, "SE AGREGO CORRECTAMENTE");
 					} else {
 						JOptionPane.showMessageDialog(null, "ERROR");
 					}
@@ -115,47 +171,47 @@ public class vAsignatura extends JFrame {
 				}
 			}
 		});
-		btnAgregar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(293, 21, 118, 34);
+		btnAgregar.setIcon(new ImageIcon(vAsignatura.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
+		btnAgregar.setBounds(72, 458, 30, 30);
 		contentPane.add(btnAgregar);
 
-		btnEditar = new JButton("Editar");
+		btnEditar = new JButton("");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (cboProfe.getSelectedItem().equals("") || txtAsignatura.getText().equals("")) {
+					if (txtAsig.getText().equals("")) {
 						JOptionPane.showMessageDialog(null, "CAMPOS VACIOS ");
 						return;
 					}
-					asignatura.setProfesor(""+cboProfe.getSelectedItem());
-					asignatura.setAsignatura(txtAsignatura.getText());
+					asignatura.setProfesor("" + cboProfesor.getSelectedIndex());
+					asignatura.setAsignatura(txtAsig.getText());
 					if (dao.editarAsignatura(asignatura)) {
 						actualizarTabla();
+						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
 					} else {
 						JOptionPane.showMessageDialog(null, "ERROR");
 					}
 				} catch (Exception e2) {
-					e2.printStackTrace();
 					JOptionPane.showMessageDialog(null, "ERROR");
 				}
 			}
 		});
-		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnEditar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEditar.setBounds(439, 21, 96, 34);
+		btnEditar.setIcon(new ImageIcon(vAsignatura.class.getResource("/img/icons8-lápiz-30.png")));
+		btnEditar.setBounds(139, 458, 30, 30);
 		contentPane.add(btnEditar);
-		btnEliminar = new JButton("Eliminar");
+
+		btnEliminar = new JButton("");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR LA ASIGNATURA?",
+
+					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO DE ELIMINAR ESTA ASIGNATURA?",
 							"ELIMINAR ASIGNATURA", JOptionPane.YES_NO_OPTION);
 					if (opcion == 0) {
-						if (dao.EliminarAsignatura(lista.get(fila).getIDasignatura())) {
+						if (dao.EliminarAsignatura(lista.get(fila).getIdAsignatura())) {
 							actualizarTabla();
+							limpiar();
 							JOptionPane.showMessageDialog(null, "SE ELIMINO CORRECTAMENTE");
 						} else {
 							JOptionPane.showMessageDialog(null, "ERROR");
@@ -166,78 +222,96 @@ public class vAsignatura extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(293, 82, 118, 34);
+		btnEliminar.setIcon(new ImageIcon(vAsignatura.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setBounds(207, 458, 30, 30);
 		contentPane.add(btnEliminar);
-		btnBorrar = new JButton("Borrar");
-		btnBorrar.addActionListener(new ActionListener() {
+
+		btnPdf = new JButton("");
+		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtAsignatura.setText(null);
-				limpiar();
+				try {
+
+					FileOutputStream archivo;
+					URI uri = new URI(getClass().getResource("/pdf/RAsignatura.pdf").toString());
+					File file = new File(uri);
+					archivo = new FileOutputStream(file);
+					Document doc = new Document();
+					PdfWriter.getInstance(doc, archivo);
+					doc.open();
+					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
+					img.setAlignment(Element.ALIGN_CENTER);
+					img.scaleToFit(200, 200);
+					doc.add(img);
+					Paragraph p = new Paragraph(10);
+					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+					p.add(Chunk.NEWLINE);
+					p.add("CATALOGO DE ASIGNATURAS");
+					p.add(Chunk.NEWLINE);
+					p.add(Chunk.NEWLINE);
+					p.setAlignment(Element.ALIGN_CENTER);
+					doc.add(p);
+					// Tabla de datos
+					PdfPTable tabla = new PdfPTable(3);
+					tabla.setWidthPercentage(100);
+					PdfPCell c1 = new PdfPCell(new Phrase("ID ASIGNATURA", negrita));
+					PdfPCell c2 = new PdfPCell(new Phrase("PROFESOR", negrita));
+					PdfPCell c3 = new PdfPCell(new Phrase("ASIGNATURA", negrita));
+					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+					c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					tabla.addCell(c1);
+					tabla.addCell(c2);
+					tabla.addCell(c3);
+					// Agregar los registros
+					for (Asignatura pro : lista) {
+						tabla.addCell("" + pro.getIdAsignatura());
+						tabla.addCell("" + pro.getProfesor());
+						tabla.addCell(pro.getAsignatura());
+					}
+					doc.add(tabla);
+					Paragraph p1 = new Paragraph(10);
+					p1.add(Chunk.NEWLINE);
+					p1.add("NÚMERO DE REGISTROS: " + lista.size());
+					p1.add(Chunk.NEWLINE);
+					p1.add(Chunk.NEWLINE);
+					p1.setAlignment(Element.ALIGN_RIGHT);
+					doc.add(p1);
+					doc.close();
+					archivo.close();
+					Desktop.getDesktop().open(file);
+				} catch (FileNotFoundException ex) {
+
+				} catch (DocumentException ex) {
+
+				} catch (IOException ex) {
+
+				} catch (URISyntaxException e1) {
+
+					e1.printStackTrace();
+				}
 			}
 		});
-		btnBorrar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnBorrar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnBorrar.setBounds(439, 82, 96, 34);
-		contentPane.add(btnBorrar);
-		scrollPane = new JScrollPane();
-		scrollPane.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		scrollPane.setBounds(25, 170, 503, 158);
-		contentPane.add(scrollPane);
-		tblca = new JTable();
-		tblca.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				fila = tblca.getSelectedRow();
-				asignatura = lista.get(fila);
-				lblAsig.setText("" + lista.get(fila).getIDasignatura());
-				cboProfe.setSelectedItem(""+asignatura.getProfesor());
-				txtAsignatura.setText(asignatura.getAsignatura());
-			}
-		});
-		tblca.setModel(new DefaultTableModel(
-				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, },
-				new String[] { "New column", "New column", "New column", "New column" }));
-		scrollPane.setViewportView(tblca);
-		modelo.addColumn("ID asignatura");
-		modelo.addColumn("profesor");
-		modelo.addColumn("asignatura");
-		tblca.setModel(modelo);
-		
-		txtAsignatura = new JTextField();
-		txtAsignatura.setBounds(144, 114, 127, 33);
-		contentPane.add(txtAsignatura);
-		txtAsignatura.setColumns(10);
-		
-		cboProfe = new JComboBox();
-		cboProfe.setModel(new DefaultComboBoxModel(new String[] {"436738", "78270", "6832"}));
-		cboProfe.setBounds(144, 31, 127, 33);
-		contentPane.add(cboProfe);
-		
-		lblIdAsignatura = new JLabel("ID asignatura");
-		lblIdAsignatura.setFont(new Font("Nirmala UI", Font.BOLD, 19));
-		lblIdAsignatura.setBounds(10, 67, 128, 30);
-		contentPane.add(lblIdAsignatura);
-		actualizarTabla();
+		btnPdf.setIcon(new ImageIcon(vAsignatura.class.getResource("/img/icons8-pdf-30.png")));
+		btnPdf.setBounds(284, 458, 30, 30);
+		contentPane.add(btnPdf);
 	}
 
 	public void actualizarTabla() {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
-		lista = dao.fetchAsignatura();
+		lista = dao.fetcAsignaturas();
 		for (Asignatura u : lista) {
 			Object o[] = new Object[3];
-			o[0] = u.getIDasignatura();
+			o[0] = u.getIdAsignatura();
 			o[1] = u.getProfesor();
 			o[2] = u.getAsignatura();
 			modelo.addRow(o);
 		}
-		tblca.setModel(modelo);
+		tblAsig.setModel(modelo);
 	}
 }

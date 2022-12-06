@@ -74,6 +74,7 @@ public class vProfesor extends JFrame {
 	Profesor profesor;
 	int fila = -1;
 	private JScrollPane scrollPane;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -166,7 +167,7 @@ public class vProfesor extends JFrame {
 
 		lblFoto = new JLabel("");
 		lblFoto.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		lblFoto.setBounds(145, 184, 225, 156);
+		lblFoto.setBounds(66, 178, 225, 156);
 		contentPane.add(lblFoto);
 
 		scrollPane = new JScrollPane();
@@ -397,6 +398,11 @@ public class vProfesor extends JFrame {
 		txtBuscar.setBounds(587, 316, 282, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
+		
+		btnNewButton = new JButton("");
+		btnNewButton.setIcon(new ImageIcon(vProfesor.class.getResource("/img/icons8-foto-30.png")));
+		btnNewButton.setBounds(302, 303, 30, 29);
+		contentPane.add(btnNewButton);
 	}
 
 	public void actualizarTabla() {

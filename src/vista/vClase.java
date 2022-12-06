@@ -35,8 +35,10 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import dao.daoClase;
+import dao.daoGrupo;
 import dao.daoProfesor;
 import modelo.Clase;
+import modelo.Grupo;
 import modelo.Profesor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -48,6 +50,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class vClase extends JFrame {
 
@@ -68,6 +72,8 @@ public class vClase extends JFrame {
 	Clase clase;
 	int fila = -1;
 	private JComboBox cboGrupo;
+	daoGrupo daoG = new daoGrupo();
+	ArrayList<Grupo> listaGrupos = new ArrayList<Grupo>();
 
 	/**
 	 * Launch the application.
@@ -92,7 +98,16 @@ public class vClase extends JFrame {
 		cboGrupo.setSelectedItem("");
 		txtClase.setText("");
 	}
-	
+
+	public void cargarGrupos() {
+		listaGrupos = daoG.fetchGrupos();
+		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
+		for (Grupo grupo : listaGrupos) {
+			modelcombo.addElement(grupo.getGrupo());
+		}
+		cboGrupo.setModel(modelcombo);
+	}
+
 	public vClase() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vClase.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR CLASE");
@@ -104,61 +119,67 @@ public class vClase extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("ID CLASE");
 		lblNewLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
 		lblNewLabel.setBounds(10, 11, 111, 24);
 		contentPane.add(lblNewLabel);
-		
+
 		JLabel lblClave = new JLabel("CLAVE");
 		lblClave.setFont(new Font("Consolas", Font.PLAIN, 20));
 		lblClave.setBounds(10, 46, 111, 24);
 		contentPane.add(lblClave);
-		
+
 		JLabel lblProfesor = new JLabel("PROFESOR");
 		lblProfesor.setFont(new Font("Consolas", Font.PLAIN, 20));
 		lblProfesor.setBounds(10, 86, 111, 24);
 		contentPane.add(lblProfesor);
-		
+
 		JLabel lblGrupo = new JLabel("GRUPO");
 		lblGrupo.setFont(new Font("Consolas", Font.PLAIN, 20));
 		lblGrupo.setBounds(10, 127, 111, 24);
 		contentPane.add(lblGrupo);
-		
+
 		JLabel lblClase = new JLabel("CLASE");
 		lblClase.setFont(new Font("Consolas", Font.PLAIN, 20));
 		lblClase.setBounds(10, 166, 111, 24);
 		contentPane.add(lblClase);
-		
+
 		lblIdClase = new JLabel("");
 		lblIdClase.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblIdClase.setBounds(153, 15, 46, 14);
 		contentPane.add(lblIdClase);
-		
+
 		txtclave = new JTextField();
 		txtclave.setBounds(150, 47, 170, 20);
 		contentPane.add(txtclave);
 		txtclave.setColumns(10);
-		
+
 		txtProfesor = new JTextField();
 		txtProfesor.setColumns(10);
 		txtProfesor.setBounds(150, 87, 170, 20);
 		contentPane.add(txtProfesor);
-		
+
 		txtClase = new JTextField();
 		txtClase.setColumns(10);
 		txtClase.setBounds(150, 167, 170, 20);
 		contentPane.add(txtClase);
-		
+
 		cboGrupo = new JComboBox();
-		cboGrupo.setModel(new DefaultComboBoxModel(new String[] {"305", "505"}));
+		cboGrupo.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				cargarGrupos();
+			}
+		});
+		cboGrupo.setModel(new DefaultComboBoxModel(new String[] { "305", "505" }));
 		cboGrupo.setBounds(153, 127, 167, 22);
 		contentPane.add(cboGrupo);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 208, 584, 233);
 		contentPane.add(scrollPane);
-		
+
 		tblClases = new JTable();
 		tblClases.addMouseListener(new MouseAdapter() {
 			@Override
@@ -168,22 +189,15 @@ public class vClase extends JFrame {
 				lblIdClase.setText("" + lista.get(fila).getIdClase());
 				txtclave.setText(clase.getClave());
 				txtProfesor.setText(clase.getProfesor());
-				cboGrupo.setSelectedItem(""+clase.getGrupo());
+				cboGrupo.setSelectedItem("" + clase.getGrupo());
 				txtClase.setText(clase.getClase());
 			}
 		});
 		tblClases.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column"
-			}
-		));
+				new Object[][] { { null, null, null, null, null }, { null, null, null, null, null },
+						{ null, null, null, null, null }, { null, null, null, null, null },
+						{ null, null, null, null, null }, },
+				new String[] { "New column", "New column", "New column", "New column", "New column" }));
 		scrollPane.setViewportView(tblClases);
 		modelo.addColumn("ID CLASE");
 		modelo.addColumn("CLAVE");
@@ -191,7 +205,8 @@ public class vClase extends JFrame {
 		modelo.addColumn("GRUPO");
 		modelo.addColumn("CLASE");
 		tblClases.setModel(modelo);
-		
+		actualizarTabla();
+
 		btnAgregar = new JButton("");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -204,7 +219,7 @@ public class vClase extends JFrame {
 					Clase user = new Clase();
 					user.setClave(txtclave.getText());
 					user.setProfesor(txtProfesor.getText());
-					user.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
+					user.setGrupo(listaGrupos.get(cboGrupo.getSelectedIndex()).getIdGrupo());
 					user.setClase(txtClase.getText());
 					if (dao.insertarClase(user)) {
 						actualizarTabla();
@@ -223,7 +238,7 @@ public class vClase extends JFrame {
 		btnAgregar.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
 		btnAgregar.setBounds(358, 100, 30, 30);
 		contentPane.add(btnAgregar);
-		
+
 		btnEditar = new JButton("");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -235,7 +250,7 @@ public class vClase extends JFrame {
 					}
 					clase.setClave(txtclave.getText());
 					clase.setProfesor(txtProfesor.getText());
-					clase.setGrupo(Integer.parseInt(cboGrupo.getSelectedItem().toString()));
+					clase.setGrupo(listaGrupos.get(cboGrupo.getSelectedIndex()).getIdGrupo());
 					clase.setClase(txtClase.getText());
 					if (dao.editarClase(clase)) {
 						actualizarTabla();
@@ -252,7 +267,7 @@ public class vClase extends JFrame {
 		btnEditar.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-lápiz-30.png")));
 		btnEditar.setBounds(417, 100, 30, 30);
 		contentPane.add(btnEditar);
-		
+
 		btnEliminar = new JButton("");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -277,7 +292,7 @@ public class vClase extends JFrame {
 		btnEliminar.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-eliminar-30.png")));
 		btnEliminar.setBounds(483, 100, 30, 30);
 		contentPane.add(btnEliminar);
-		
+
 		btnPdf = new JButton("");
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -325,13 +340,12 @@ public class vClase extends JFrame {
 					tabla.addCell(c3);
 					tabla.addCell(c4);
 					tabla.addCell(c5);
-					
 
 					for (Clase u : lista) {
 						tabla.addCell("" + u.getIdClase());
 						tabla.addCell(u.getClave());
 						tabla.addCell(u.getProfesor());
-						tabla.addCell(""+u.getGrupo());
+						tabla.addCell("" + buscarGrupos(u.getGrupo()));
 						tabla.addCell(u.getClase());
 
 					}
@@ -359,12 +373,12 @@ public class vClase extends JFrame {
 		btnPdf.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.setBounds(550, 100, 30, 30);
 		contentPane.add(btnPdf);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-buscar-cliente-30.png")));
 		lblNewLabel_1.setBounds(131, 471, 30, 30);
 		contentPane.add(lblNewLabel_1);
-		
+
 		txtBuscar = new JTextField();
 		txtBuscar.addKeyListener(new KeyAdapter() {
 			@Override
@@ -376,8 +390,21 @@ public class vClase extends JFrame {
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
 	}
-	
+
+	public int buscarGrupos(int idGrupo) {
+
+		int gr = 0;
+		for (Grupo gru : listaGrupos) {
+			if (gru.getIdGrupo() == idGrupo) {
+				gr = gru.getGrupo();
+			}
+		}
+		System.out.print("" + gr);
+		return gr;
+	}
+
 	public void actualizarTabla() {
+		cargarGrupos();
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
@@ -387,14 +414,15 @@ public class vClase extends JFrame {
 			o[0] = u.getIdClase();
 			o[1] = u.getClave();
 			o[2] = u.getProfesor();
-			o[3] = u.getGrupo();
+			o[3] = buscarGrupos(u.getGrupo());
 			o[4] = u.getClase();
 			modelo.addRow(o);
 		}
 		tblClases.setModel(modelo);
 	}
-	
+
 	public void refrescarTabla2(String palabra) {
+		cargarGrupos();
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
@@ -404,9 +432,9 @@ public class vClase extends JFrame {
 			item[0] = p.getIdClase();
 			item[1] = p.getClave();
 			item[2] = p.getProfesor();
-			item[3] = p. getGrupo();
+			item[3] = buscarGrupos(p.getGrupo());
 			item[4] = p.getClass();
-			
+
 			modelo.addRow(item);
 		}
 		tblClases.setModel(modelo);

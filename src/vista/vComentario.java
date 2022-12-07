@@ -81,7 +81,7 @@ public class vComentario extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vComentario.class.getResource("/img/logoDeo.png")));
 		setTitle("COMENTARIO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 925, 668);
+		setBounds(100, 100, 620, 668);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,7 +138,7 @@ public class vComentario extends JFrame {
 		});
 		btnAgregar.setBorder(new EtchedBorder(EtchedBorder.LOWERED, UIManager.getColor("Button.focus"), Color.LIGHT_GRAY));
 		btnAgregar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnAgregar.setBounds(810, 312, 73, 73);
+		btnAgregar.setBounds(359, 299, 73, 73);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("Modificar");
@@ -167,7 +167,7 @@ public class vComentario extends JFrame {
 		});
 		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEditar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEditar.setBounds(619, 306, 89, 34);
+		btnEditar.setBounds(359, 383, 89, 34);
 		contentPane.add(btnEditar);
 		btnEliminar = new JButton("");
 		btnEliminar.setIcon(new ImageIcon(vComentario.class.getResource("/img/Bote.jpg")));
@@ -192,7 +192,7 @@ public class vComentario extends JFrame {
 		});
 		btnEliminar.setBorder(new EtchedBorder(EtchedBorder.RAISED, UIManager.getColor("Button.focus"), new Color(192, 192, 192)));
 		btnEliminar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnEliminar.setBounds(718, 312, 66, 73);
+		btnEliminar.setBounds(473, 299, 66, 73);
 		contentPane.add(btnEliminar);
 		btnBorrar = new JButton("Borrar ambos campos");
 		btnBorrar.addActionListener(new ActionListener() {
@@ -204,7 +204,7 @@ public class vComentario extends JFrame {
 		});
 		btnBorrar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnBorrar.setFont(new Font("Imprint MT Shadow", Font.ITALIC, 17));
-		btnBorrar.setBounds(539, 351, 169, 34);
+		btnBorrar.setBounds(279, 150, 169, 34);
 		contentPane.add(btnBorrar);
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
@@ -212,7 +212,7 @@ public class vComentario extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		scrollPane.setBounds(25, 460, 856, 158);
+		scrollPane.setBounds(25, 460, 540, 158);
 		contentPane.add(scrollPane);
 		tblConsulta = new JTable();
 		tblConsulta.addMouseListener(new MouseAdapter() {

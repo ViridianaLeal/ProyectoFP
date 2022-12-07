@@ -199,37 +199,37 @@ public class vCalif extends JFrame {
 		contentPane.add(lblIdCali);
 		
 		txtAlumno = new JTextField();
-		txtAlumno.setBounds(239, 80, 201, 20);
+		txtAlumno.setBounds(239, 73, 201, 27);
 		contentPane.add(txtAlumno);
 		txtAlumno.setColumns(10);
 		
 		txtProfesor = new JTextField();
 		txtProfesor.setColumns(10);
-		txtProfesor.setBounds(239, 123, 201, 20);
+		txtProfesor.setBounds(239, 116, 201, 27);
 		contentPane.add(txtProfesor);
 		
 		txtSemestre = new JTextField();
 		txtSemestre.setColumns(10);
-		txtSemestre.setBounds(239, 170, 201, 20);
+		txtSemestre.setBounds(239, 163, 201, 27);
 		contentPane.add(txtSemestre);
 		
 		txtCarrera = new JTextField();
 		txtCarrera.setColumns(10);
-		txtCarrera.setBounds(239, 209, 201, 20);
+		txtCarrera.setBounds(239, 209, 201, 27);
 		contentPane.add(txtCarrera);
 		
 		txtGrupo = new JTextField();
 		txtGrupo.setColumns(10);
-		txtGrupo.setBounds(239, 270, 201, 20);
+		txtGrupo.setBounds(239, 263, 201, 27);
 		contentPane.add(txtGrupo);
 		
 		txtAsignatura = new JTextField();
 		txtAsignatura.setColumns(10);
-		txtAsignatura.setBounds(239, 324, 201, 20);
+		txtAsignatura.setBounds(239, 317, 201, 27);
 		contentPane.add(txtAsignatura);
 		
 		spnCalif = new JSpinner();
-		spnCalif.setBounds(239, 381, 201, 20);
+		spnCalif.setBounds(239, 374, 201, 27);
 		contentPane.add(spnCalif);
 		
 		btnAgregar = new JButton("");

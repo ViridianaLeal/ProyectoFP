@@ -117,7 +117,7 @@ public class vEntrega extends JFrame {
 		
 		JLabel lblActividad = new JLabel("ACTIVIDAD");
 		lblActividad.setFont(new Font("Consolas", Font.PLAIN, 18));
-		lblActividad.setBounds(20, 94, 149, 22);
+		lblActividad.setBounds(20, 94, 121, 22);
 		contentPane.add(lblActividad);
 		
 		JLabel lblFecha = new JLabel("FECHA");
@@ -346,7 +346,7 @@ public class vEntrega extends JFrame {
 		txtClase.setColumns(10);
 		
 		txtActividad = new JTextField();
-		txtActividad.setBounds(145, 94, 198, 20);
+		txtActividad.setBounds(149, 94, 194, 20);
 		contentPane.add(txtActividad);
 		txtActividad.setColumns(10);
 	}

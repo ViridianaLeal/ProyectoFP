@@ -113,7 +113,8 @@ public class vAsignatura extends JFrame {
 		contentPane.add(lblIdAsignatura);
 
 		txtAsig = new JTextField();
-		txtAsig.setBounds(273, 69, 230, 20);
+		txtAsig.setFont(new Font("Verdana", Font.BOLD, 15));
+		txtAsig.setBounds(273, 69, 230, 30);
 		contentPane.add(txtAsig);
 		txtAsig.setColumns(10);
 
@@ -127,7 +128,7 @@ public class vAsignatura extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				fila = tblAsig.getSelectedRow();
 				asignatura = lista.get(fila);
-				lblIasignatura.setText("" + lista.get(fila).getIdAsignatura());
+				lblIdAsignatura.setText("" + lista.get(fila).getIdAsignatura());
 				txtAsig.setText(asignatura.getAsignatura());
 			}
 		});

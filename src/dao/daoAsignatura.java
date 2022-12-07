@@ -11,7 +11,7 @@ import modelo.Asignatura;
 
 public class daoAsignatura {
 	conexion cx = null;
-	public void daoAsignatura() {
+	public daoAsignatura() {
 		cx = new conexion();
 	}
 	

@@ -12,7 +12,7 @@ public class conexion {
 			Class.forName("org.sqlite.JDBC");
 			cx = DriverManager.getConnection("jdbc:sqlite:fourprogramming.db");
 			//Class.forName("com.mysql.cj.jdbc.Driver");
-			//cx = DriverManager.getConnection("jdbc:mysql://localhost:3306/sistema","root","");
+			//cx = DriverManager.getConnection("jdbc:mysql://localhost:3306/fourprogramming","root","");
 			System.out.print("Conexión exitosa");
 
 		} catch (ClassNotFoundException | SQLException e) {

@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+import java.awt.SystemColor;
 
 public class Unir extends JFrame {
 
@@ -28,7 +29,7 @@ public class Unir extends JFrame {
 	private JTextField txtClase;
 	private JTextField txtClave;
 	daoClase dao = new daoClase();
-	private JLabel lblCerrar;
+	private JButton btnSalir;
 
 	/**
 	 * Launch the application.
@@ -46,9 +47,7 @@ public class Unir extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	
 	public Unir() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Unir.class.getResource("/img/DeoClass.png")));
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,6 +55,7 @@ public class Unir extends JFrame {
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
+		contentPane.setBackground(SystemColor.menu);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
@@ -101,14 +101,17 @@ public class Unir extends JFrame {
 		lblClave.setBounds(73, 130, 150, 36);
 		contentPane.add(lblClave);
 		
-		lblCerrar = new JLabel("");
-		lblCerrar.setIcon(new ImageIcon(Unir.class.getResource("/img/icons8-eliminar-30 (1).png")));
-		lblCerrar.setBounds(394, 11, 46, 36);
-		contentPane.add(lblCerrar);
-		
-		JButton btnCerrar = new JButton("");
-		btnCerrar.setBorder(null);
-		btnCerrar.setBounds(387, 11, 46, 36);
-		contentPane.add(btnCerrar);
+		btnSalir = new JButton("");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		btnSalir.setIcon(new ImageIcon(Unir.class.getResource("/img/icons8-eliminar-30 (1).png")));
+		btnSalir.setBackground(SystemColor.menu);
+		btnSalir.setBorder(null);
+		btnSalir.setBounds(405, 11, 35, 30);
+		contentPane.add(btnSalir);
+
 	}
 }

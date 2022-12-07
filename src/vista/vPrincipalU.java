@@ -186,27 +186,8 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("CERRAR SESIÓN");
 		mntmNewMenuItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-
-					int opcion = JOptionPane.showConfirmDialog(null, "¿ESTA SEGURO QUE DESEA SALIR DE ESTA CUENTA?",
-							"ELIMINAR USUARIO", JOptionPane.YES_NO_OPTION);
-					if (opcion == 0) {
-						JOptionPane.showMessageDialog(null, "ADIOS");
-						vLogin login = new vLogin();
-						login.setVisible(true);
-						System.exit(0);
-
-					} else {
-						JOptionPane.showMessageDialog(null, "ERROR");
-					}
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(null, "ERROR");
-				}
-				vLogin login = new vLogin();
-				login.setVisible(true);
-				vPrincipalU principalU = new vPrincipalU();
-
 			}
+			
 		});
 		mnNewMenu_2.add(mntmNewMenuItem_4);
 

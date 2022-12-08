@@ -21,12 +21,13 @@ public class vCargando extends JFrame {
 
 	private JPanel contentPane;
 	private JProgressBar barCargando = new JProgressBar();
+	int idUsuario=-1;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vCargando frame = new vCargando();
+					vCargando frame = new vCargando(-1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,7 +50,7 @@ public class vCargando extends JFrame {
 					}
 					if(i==100) {
 						setVisible(false);
-						vIngreso p=new vIngreso();
+						vIngreso p=new vIngreso(idUsuario);
 						p.setVisible(true);
 					}
 				}
@@ -58,7 +59,8 @@ public class vCargando extends JFrame {
 		hilo.start();
 	}
 
-	public vCargando() {
+	public vCargando(int idUsuario) {
+		this.idUsuario=idUsuario;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 737, 96);
 		contentPane = new JPanel();

@@ -32,25 +32,36 @@ public class daoUsuario {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
 	
 	public ArrayList<Usuario> buscar(String palabra) {
         ArrayList<Usuario> lista2 = new ArrayList<Usuario>();
+        PreparedStatement ps = null;
+		ResultSet rs = null;
         try {
             String sql = "SELECT * FROM usuario WHERE "
                     + "(id LIKE ?) OR "
                     + "(user LIKE ?) OR"
                     + "(password LIKE ?) OR "
                     + "(nombre LIKE ?); ";
-            PreparedStatement ps = cx.conectar().prepareStatement(sql);
+            ps = cx.conectar().prepareStatement(sql);
             ps.setString(1, "%" + palabra + "%");
             ps.setString(2, "%" + palabra + "%");
             ps.setString(3, "%" + palabra + "%");
             ps.setString(4, "%" + palabra + "%");
             //System.out.println("CONSULTA" + ps.toString());
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Usuario p = new Usuario();
                 p.setId(rs.getInt("id"));
@@ -59,13 +70,21 @@ public class daoUsuario {
                 p.setNombre(rs.getString("nombre"));               
                 lista2.add(p);
             }
-            ps.close();
-            ps = null;
-            cx.desconectar();
         } catch (SQLException ex) {
         	ex.printStackTrace();
             System.out.println("Error en BUSCAR");
-        }
+        }finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs=null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
+		}
         return lista2;
 
     }
@@ -76,7 +95,7 @@ public class daoUsuario {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = cx.conectar().prepareStatement("SELECT *FROM usuario");
+			ps = cx.conectar().prepareStatement("SELECT * FROM usuario");
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Usuario u = new Usuario();
@@ -89,28 +108,51 @@ public class daoUsuario {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs=null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
 
-	public boolean loginUsuario(Usuario user) {
+	public int loginUsuario(Usuario user) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		int id=-1;
 		try {
-			ps = cx.conectar().prepareStatement("SELECT *FROM usuario WHERE user=? AND password=?");
+			ps = cx.conectar().prepareStatement("SELECT * FROM usuario WHERE user=? AND password=?");
 			ps.setString(1, user.getUser());
 			ps.setString(2, convertirSHA256(user.getPassword()));
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				return true;
+				id=rs.getInt("id");
 			} else {
-				return false;
+				id=-1;
 			}
 		} catch (SQLException e) {
-
 			e.printStackTrace();
-			return false;
+			id=-1;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs=null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
+		return id;
 
 	}
 
@@ -124,6 +166,15 @@ public class daoUsuario {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -141,6 +192,15 @@ public class daoUsuario {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}

@@ -30,12 +30,23 @@ public class daoPromedio {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 	public ArrayList<Promedio> buscar(String palabra) {
 		ArrayList<Promedio> lista2 = new ArrayList<Promedio>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			String sql = "SELECT * FROM promedio WHERE "
 		            + "(idPromedio LIKE ?) OR " 
@@ -46,7 +57,7 @@ public class daoPromedio {
 					+ "(grupo LIKE ?) OR "
 					+ "(asignatura LIKE ?) OR " 
 					+ "(promedio LIKE ?); ";
-			PreparedStatement ps = cx.conectar().prepareStatement(sql);
+			ps = cx.conectar().prepareStatement(sql);
 			ps.setString(1, "%" + palabra + "%");
 			ps.setString(2, "%" + palabra + "%");
 			ps.setString(3, "%" + palabra + "%");
@@ -56,7 +67,7 @@ public class daoPromedio {
 			ps.setString(7, "%" + palabra + "%");
 			ps.setString(8, "%" + palabra + "%");
 			// System.out.println("CONSULTA" + ps.toString());
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				Promedio p = new Promedio();
 				p.setIdPromedio(rs.getInt("idPromedio"));
@@ -75,6 +86,17 @@ public class daoPromedio {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			System.out.println("Error en BUSCAR");
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs=null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 		return lista2;
 
@@ -102,6 +124,17 @@ public class daoPromedio {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs=null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
@@ -116,6 +149,15 @@ public class daoPromedio {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -137,6 +179,15 @@ public class daoPromedio {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}

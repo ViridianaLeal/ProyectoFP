@@ -19,36 +19,49 @@ public class daoClase {
 	public boolean insertarClase(Clase user) {
 		PreparedStatement ps = null;
 		try {
-			ps = cx.conectar().prepareStatement("INSERT INTO clase VALUES(null,?,?,?,?)");
+			ps = cx.conectar().prepareStatement("INSERT INTO clase VALUES(null,?,?,?,?,?)");
 			ps.setString(1, user.getClave());
 			ps.setString(2, user.getProfesor());
 			ps.setInt(3,user.getGrupo());
 			ps.setString(4, user.getClase());
-			ps.executeUpdate();
+			ps.setInt(5,user.getIdusuario());
+			ps.execute();
 			ps.close();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
 	
-	public ArrayList<Clase> buscar(String palabra) {
+	public ArrayList<Clase> buscar(String palabra, int idUsuario) {
         ArrayList<Clase> lista2 = new ArrayList<Clase>();
+        PreparedStatement ps = null;
+		ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM clase WHERE "
+            String sql = "SELECT * FROM clase WHERE  ("
                     + "(profesor LIKE ?) OR"
                     + "(grupo LIKE ?) OR "
                     + "(clave LIKE ?) OR "
-                    + "(clase LIKE ?); ";
-            PreparedStatement ps = cx.conectar().prepareStatement(sql);
+                    + "(clase LIKE ?) ) AND idUsuario=?";
+            ps = cx.conectar().prepareStatement(sql);
             ps.setString(1, "%" + palabra + "%");
             ps.setString(2, "%" + palabra + "%");
             ps.setString(3, "%" + palabra + "%");
             ps.setString(4, "%" + palabra + "%");
+            ps.setInt(5, idUsuario);
             //System.out.println("CONSULTA" + ps.toString());
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Clase p = new Clase();
                 p.setIdClase(rs.getInt("idClase"));
@@ -58,13 +71,21 @@ public class daoClase {
                 p.setClase(rs.getString("clase")); 
                 lista2.add(p);
             }
-            ps.close();
-            ps = null;
-            cx.desconectar();
         } catch (SQLException ex) {
         	ex.printStackTrace();
             System.out.println("Error en BUSCAR");
-        }
+        }finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
+		}
         return lista2;
 
     }
@@ -86,16 +107,28 @@ public class daoClase {
 
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
 
-	public ArrayList<Clase> fetcClases() {
+	public ArrayList<Clase> fetcClases(int idUsuario) {
 		ArrayList<Clase> lista = new ArrayList<Clase>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = cx.conectar().prepareStatement("SELECT *FROM clase");
+			ps = cx.conectar().prepareStatement("SELECT * FROM clase WHERE idusuario=?");
+			ps.setInt(1,idUsuario);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Clase u = new Clase();
@@ -109,6 +142,17 @@ public class daoClase {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
@@ -125,6 +169,15 @@ public class daoClase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -143,6 +196,15 @@ public class daoClase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}

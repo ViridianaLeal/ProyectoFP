@@ -29,12 +29,23 @@ public class daoActividades {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
 	
 	public ArrayList<Actividades> buscar(String palabra) {
         ArrayList<Actividades> lista2 = new ArrayList<Actividades>();
+        PreparedStatement ps=null;
+        ResultSet rs=null;
         try {
             String sql = "SELECT * FROM actividades WHERE "
                     + "(actividad LIKE ?) OR "
@@ -42,14 +53,14 @@ public class daoActividades {
                     + "(clase LIKE ?) OR "
                     + "(profesor LIKE ?) OR "
                     + "(fecha LIKE ?); ";
-            PreparedStatement ps = cx.conectar().prepareStatement(sql);
+            ps = cx.conectar().prepareStatement(sql);
             ps.setString(1, "%" + palabra + "%");
             ps.setString(2, "%" + palabra + "%");
             ps.setString(3, "%" + palabra + "%");
             ps.setString(4, "%" + palabra + "%");
             ps.setString(5, "%" + palabra + "%");
             //System.out.println("CONSULTA" + ps.toString());
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 Actividades p = new Actividades();
                 p.setActividad(rs.getString("actividad"));
@@ -59,13 +70,21 @@ public class daoActividades {
                 p.setFecha(rs.getString("fecha"));
                 lista2.add(p);
             }
-            ps.close();
-            ps = null;
-            cx.desconectar();
         } catch (SQLException ex) {
         	ex.printStackTrace();
             System.out.println("Error en BUSCAR");
-        }
+        }finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
+		}
         return lista2;
 
     }
@@ -75,7 +94,7 @@ public class daoActividades {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = cx.conectar().prepareStatement("SELECT *FROM actividades");
+			ps = cx.conectar().prepareStatement("SELECT * FROM actividades");
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Actividades u = new Actividades();
@@ -90,6 +109,17 @@ public class daoActividades {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
@@ -106,6 +136,15 @@ public class daoActividades {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -125,6 +164,15 @@ public class daoActividades {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}

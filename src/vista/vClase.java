@@ -79,6 +79,7 @@ public class vClase extends JFrame {
 	ArrayList<Grupo> listaGrupos = new ArrayList<Grupo>();
 	private JTextField txtGrupo;
 	private JButton btnLimpiar;
+	int idUsuario=-1;
 
 	/**
 	 * Launch the application.
@@ -87,7 +88,7 @@ public class vClase extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vClase frame = new vClase();
+					vClase frame = new vClase(-1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -106,7 +107,8 @@ public class vClase extends JFrame {
 
 	
 
-	public vClase() {
+	public vClase(int idUsuario) {
+		this.idUsuario=idUsuario;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vClase.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR CLASE");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -208,6 +210,7 @@ public class vClase extends JFrame {
 					user.setProfesor(txtProfesor.getText());
 					user.setGrupo(Integer.parseInt(txtGrupo.getText().toString()));
 					user.setClase(txtClase.getText());
+					user.setIdusuario(idUsuario);
 					if (dao.insertarClase(user)) {
 						actualizarTabla();
 						limpiar();
@@ -402,7 +405,7 @@ public class vClase extends JFrame {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
-		lista = dao.fetcClases();
+		lista = dao.fetcClases(idUsuario);
 		for (Clase u : lista) {
 			Object o[] = new Object[5];
 			o[0] = u.getIdClase();
@@ -420,7 +423,7 @@ public class vClase extends JFrame {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
 		}
-		lista = dao.buscar(palabra);
+		lista = dao.buscar(palabra, idUsuario);
 		for (Clase p : lista) {
 			Object item[] = new Object[5];
 			item[0] = p.getIdClase();

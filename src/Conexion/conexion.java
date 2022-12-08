@@ -25,6 +25,7 @@ public class conexion {
 	 public void desconectar() {
 	        try {
 	            cx.close();
+	            cx=null;
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }

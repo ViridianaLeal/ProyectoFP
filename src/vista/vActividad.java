@@ -101,7 +101,7 @@ public class vActividad extends JFrame {
 	
 	
 	public void cargarClases() {
-		listaClases = daoCla.fetcClases();
+		listaClases = daoCla.fetcClases(-1);
 		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
 		for (Clase clases : listaClases) {
 			modelcombo.addElement(clases.getClase());

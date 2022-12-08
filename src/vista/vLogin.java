@@ -120,6 +120,7 @@ public class vLogin extends JFrame {
         txtPassword.setPlaceholder("Introduce password");
         txtPassword.setBorder(null);
         txtPassword.setFont(lemon);
+        txtPassword.setText("admin");
         txtPassword.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -150,6 +151,7 @@ public class vLogin extends JFrame {
         txtUser.setPlaceholder("Introduce usuario"); //TEXTO DE MARCA DE AGUA
         txtUser.setBorder(null);// QUITAR BORDE DE CAMPO DE TEXTO
         txtUser.setFont(new Font("Calibri Light", Font.BOLD, 15));//ASIGNAR EL TIPO DE FUENTE DE TEXTO
+        txtUser.setText("admin");
         txtUser.addKeyListener(new KeyListener() {// METODO PARA VALIDAR EL NÚMERO DE CARACTERES A 20 LETRAS
             @Override
             public void keyTyped(KeyEvent e) {
@@ -187,9 +189,11 @@ public class vLogin extends JFrame {
 				Usuario user = new Usuario();
 				user.setUser(txtUser.getText());
 				user.setPassword(String.valueOf(txtPassword.getPassword()));
-				if (dao.loginUsuario(user)) {
+				int id=-1;
+				id=dao.loginUsuario(user);
+				if (id>0) {
 					JOptionPane.showMessageDialog(null, "BIENVENIDO");
-					vCargando cargando = new vCargando();
+					vCargando cargando = new vCargando(id);
 					setVisible(false);
 					cargando.setVisible(true);
 				} else {

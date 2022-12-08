@@ -20,14 +20,15 @@ public class vIngreso extends JFrame {
 	private JRadioButton rbdConsulta;
 	private JRadioButton rdbAlumno;
 	ButtonGroup grupo = new ButtonGroup();
-	vPrincipalC principalC = new vPrincipalC();
-	vPrincipalU principalU = new vPrincipalU();
+	vPrincipalC principalC = null;
+	vPrincipalU principalU = null;
+	int idUsuario=-1;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vIngreso frame = new vIngreso();
+					vIngreso frame = new vIngreso(-1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +38,10 @@ public class vIngreso extends JFrame {
 	}
 	
 	
-	public vIngreso() {
+	public vIngreso(int idUsuario) {
+		this.idUsuario=idUsuario;
+		principalC = new vPrincipalC(idUsuario);
+		principalU = new vPrincipalU(idUsuario);
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 385, 252);
 		contentPane = new JPanel();
@@ -60,7 +64,8 @@ public class vIngreso extends JFrame {
 		rbdConsulta.setBackground(Color.WHITE);
 		rbdConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				principalC.setVisible(true);
+				setVisible(false);
+				principalC.setVisible(true);				
 			}
 		});
 		rbdConsulta.setBounds(123, 75, 109, 23);
@@ -70,6 +75,7 @@ public class vIngreso extends JFrame {
 		rdbAlumno.setBackground(Color.WHITE);
 		rdbAlumno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
 				principalU.setVisible(true);
 			}
 		});

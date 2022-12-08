@@ -6,10 +6,22 @@ public class Clase {
 	String Profesor;
 	int grupo;
 	String clase;
+	int idusuario;
 	
 	public Clase() {
 		
 	}
+
+	
+	public int getIdusuario() {
+		return idusuario;
+	}
+
+
+	public void setIdusuario(int idusuario) {
+		this.idusuario = idusuario;
+	}
+
 
 	public int getIdClase() {
 		return idClase;

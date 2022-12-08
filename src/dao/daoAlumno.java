@@ -36,6 +36,15 @@ public class daoAlumno {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -44,11 +53,13 @@ public class daoAlumno {
 
 	public ArrayList<Alumno> buscar(String palabra) {
 		ArrayList<Alumno> lista2 = new ArrayList<Alumno>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			String sql = "SELECT * FROM alumno WHERE " + "(idAlumno LIKE ?) OR " + "(numerocontrol LIKE ?) OR"
 					+ "(plantel LIKE ?) OR " + "(turno LIKE ?) OR " + "(semestre LIKE ?) OR " + "(carrera LIKE ?) OR "
 					+ "(grupo LIKE ?) OR " + "(nombre LIKE ?) OR " + "(apellido LIKE ?) OR " + "(foto LIKE ?); ";
-			PreparedStatement ps = cx.conectar().prepareStatement(sql);
+			ps = cx.conectar().prepareStatement(sql);
 			ps.setString(1, "%" + palabra + "%");
 			ps.setString(2, "%" + palabra + "%");
 			ps.setString(3, "%" + palabra + "%");
@@ -60,7 +71,7 @@ public class daoAlumno {
 			ps.setString(9, "%" + palabra + "%");
 			ps.setString(10, "%" + palabra + "%");
 			// System.out.println("CONSULTA" + ps.toString());
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			while (rs.next()) {
 				Alumno p = new Alumno();
 				p.setIdalumno(rs.getInt("idAlumno"));
@@ -81,6 +92,17 @@ public class daoAlumno {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			System.out.println("Error en BUSCAR");
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 		return lista2;
 
@@ -110,6 +132,17 @@ public class daoAlumno {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				rs.close();
+				rs = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 		return lista;
 	}
@@ -124,6 +157,15 @@ public class daoAlumno {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -147,6 +189,15 @@ public class daoAlumno {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}finally {
+			try {
+				ps.close();
+				ps = null;
+				cx.desconectar();
+			} catch (SQLException e) {
+				System.out.println("ERROR AL CERRAR EDITAR USUARIO");
+				e.printStackTrace();
+			}
 		}
 
 	}

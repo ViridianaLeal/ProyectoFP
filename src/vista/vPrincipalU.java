@@ -25,7 +25,7 @@ public class vPrincipalU extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel panelSuperior;
-	vLogin login = new vLogin();
+	int idUsuario=-1;
 
 	/**
 	 * Launch the application.
@@ -34,7 +34,7 @@ public class vPrincipalU extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vPrincipalU frame = new vPrincipalU();
+					vPrincipalU frame = new vPrincipalU(-1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +43,8 @@ public class vPrincipalU extends JFrame {
 		});
 	}
 
-	public vPrincipalU() {
+	public vPrincipalU(int idUsuario) {
+		this.idUsuario=idUsuario;
 		setTitle("DeoClass");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vPrincipalU.class.getResource("/img/DeoClass.png")));
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -265,24 +266,24 @@ public class vPrincipalU extends JFrame {
 		panelInferior.setBounds(0, 244, 434, 17);
 		panelPrincipal.add(panelInferior);
 
-		JButton btnNewButton_4 = new JButton("UNIR");
-		btnNewButton_4.addActionListener(new ActionListener() {
+		JButton btnUnirClase = new JButton("UNIR");
+		btnUnirClase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Unir unir = new Unir();
 				unir.setVisible(true);
 			}
 		});
-		btnNewButton_4.setBounds(258, 43, 89, 23);
-		panelPrincipal.add(btnNewButton_4);
+		btnUnirClase.setBounds(258, 43, 89, 23);
+		panelPrincipal.add(btnUnirClase);
 
-		JButton btnNewButton_5 = new JButton("CREAR");
-		btnNewButton_5.addActionListener(new ActionListener() {
+		JButton btnCrearClase = new JButton("CREAR");
+		btnCrearClase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vClase clase = new vClase();
+				vClase clase = new vClase(idUsuario);
 				clase.setVisible(true);
 			}
 		});
-		btnNewButton_5.setBounds(345, 43, 89, 23);
-		panelPrincipal.add(btnNewButton_5);
+		btnCrearClase.setBounds(345, 43, 89, 23);
+		panelPrincipal.add(btnCrearClase);
 	}
 }

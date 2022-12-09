@@ -49,6 +49,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -236,7 +237,7 @@ public class vActividad extends JFrame {
 					user.setActividad(txtActividad.getText());
 					user.setAsignatura(txtAsignatura.getText());
 					user.setClase(listaClases.get(cboClase.getSelectedIndex()).getIdClase());
-					user.setFecha(dcFecha.getDateFormatString());
+					user.setFecha(dcFecha.getDate().toString());
 					if (dao.insertarActividad(user)) {
 						actualizarTabla();
 						limpiar();
@@ -269,7 +270,7 @@ public class vActividad extends JFrame {
 					actividades.setActividad(txtActividad.getText());
 					actividades.setAsignatura(txtAsignatura.getText());
 					actividades.setClase(listaClases.get(cboClase.getSelectedIndex()).getIdClase());
-					actividades.setFecha(dcFecha.getDateFormatString());
+					actividades.setFecha(dcFecha.getDate().toString());
 					if (dao.editarActividades(actividades)) {
 						actualizarTabla();
 						limpiar();
@@ -323,10 +324,11 @@ public class vActividad extends JFrame {
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					FileOutputStream archivo;
-					URI uri = new URI(getClass().getResource("/pdf/ReporteActividad.pdf").toString());
-					File file = new File(uri);
-					archivo = new FileOutputStream(file);
+					FileOutputStream archivo;				
+		            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteActividades.pdf");
+		            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/ReporteActividades.pdf");
+		            FileOutputStream flujoSalida = new FileOutputStream(temp);         
+					archivo = new FileOutputStream(temp);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
@@ -386,16 +388,14 @@ public class vActividad extends JFrame {
 					doc.add(p1);
 					doc.close();
 					archivo.close();
-					Desktop.getDesktop().open(file);
+					Desktop.getDesktop().open(temp);
 				} catch (FileNotFoundException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
 				} catch (DocumentException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
-			} catch (URISyntaxException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+			
 				}
 			}
 		});

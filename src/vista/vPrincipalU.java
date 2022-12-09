@@ -373,7 +373,7 @@ public class vPrincipalU extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(vPrincipalU.class.getResource("/img/DeoClass.png")));
-		lblNewLabel.setBounds(602, 153, 623, 517);
+		lblNewLabel.setBounds(724, 136, 623, 517);
 		desktopPane.add(lblNewLabel);
 		
 		btnAlumnos = new JButton("ALUMNOS");

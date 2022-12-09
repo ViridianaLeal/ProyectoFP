@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.event.KeyAdapter;
@@ -287,10 +288,11 @@ public class vClase extends JFrame {
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					FileOutputStream archivo;
-					URI uri = new URI(getClass().getResource("/pdf/ReporteClases.pdf").toString());
-					File file = new File(uri);
-					archivo = new FileOutputStream(file);
+					FileOutputStream archivo;				
+		            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteClases.pdf");
+		            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/ReporteClases.pdf");
+		            FileOutputStream flujoSalida = new FileOutputStream(temp);         
+					archivo = new FileOutputStream(temp);
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
@@ -349,16 +351,13 @@ public class vClase extends JFrame {
 					doc.add(p1);
 					doc.close();
 					archivo.close();
-					Desktop.getDesktop().open(file);
+					Desktop.getDesktop().open(temp);
 				} catch (FileNotFoundException ex) {
 
 				} catch (DocumentException ex) {
 
 				} catch (IOException ex) {
 
-				} catch (URISyntaxException e1) {
-					
-					e1.printStackTrace();
 				}
 			}
 		});

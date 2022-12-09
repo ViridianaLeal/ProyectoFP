@@ -2,6 +2,9 @@ package vista;
 
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,6 +32,8 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import Decoder.BASE64Decoder;
 import dao.daoAlumno;
 import dao.daoCarrera;
 import dao.daoGrupo;
@@ -36,11 +41,14 @@ import dao.daoPlantel;
 import dao.daoSemestre;
 import modelo.Alumno;
 import modelo.Carrera;
+import modelo.Foto;
 import modelo.Grupo;
 import modelo.Plantel;
 import modelo.Semestre;
 
 import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -50,18 +58,22 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.border.BevelBorder;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.SystemColor;
 
 public class vAlumno extends JFrame {
 
@@ -89,15 +101,16 @@ public class vAlumno extends JFrame {
 	private JButton btnLimpiar;
 	private JButton btnAgregar;
 	ImageIcon imgOri = null;
-    String imagenActual = "";
-    daoPlantel daopla = new daoPlantel();
+	String imagenActual = "";
+	daoPlantel daopla = new daoPlantel();
 	ArrayList<Plantel> listaPlanteles = new ArrayList<Plantel>();
 	daoSemestre daoS = new daoSemestre();
-	ArrayList<Semestre> listaSemestre=new ArrayList<Semestre>();
+	ArrayList<Semestre> listaSemestre = new ArrayList<Semestre>();
 	daoCarrera daoCa = new daoCarrera();
-	ArrayList<Carrera> listaCarreras= new ArrayList<Carrera>();
+	ArrayList<Carrera> listaCarreras = new ArrayList<Carrera>();
 	daoGrupo daoG = new daoGrupo();
-	ArrayList<Grupo> listaGrupos=new ArrayList<Grupo>();
+	ArrayList<Grupo> listaGrupos = new ArrayList<Grupo>();
+	
 
 	private JButton btnCargarFoto;
 
@@ -131,9 +144,9 @@ public class vAlumno extends JFrame {
 		cboGrupo.setSelectedItem("");
 		txtNombre.setText("");
 		txtApellidos.setText("");
-		lblImagen.setText("");
+		lblImagen.setText(imagenActual);
 	}
-	
+
 	public void cargarPlanteles() {
 		listaPlanteles = daopla.fetchPlantels();
 		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
@@ -142,7 +155,7 @@ public class vAlumno extends JFrame {
 		}
 		cboPlantel.setModel(modelcombo);
 	}
-	
+
 	public void cargarSemestres() {
 		listaSemestre = daoS.fetchSemestres();
 		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
@@ -151,7 +164,7 @@ public class vAlumno extends JFrame {
 		}
 		cboSemestre.setModel(modelcombo);
 	}
-	
+
 	public void cargarCarreras() {
 		listaCarreras = daoCa.fetchCarreras();
 		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
@@ -160,7 +173,7 @@ public class vAlumno extends JFrame {
 		}
 		cboCarrera.setModel(modelcombo);
 	}
-	
+
 	public void cargarGrupos() {
 		listaGrupos = daoG.fetchGrupos();
 		DefaultComboBoxModel modelcombo = new DefaultComboBoxModel();
@@ -173,7 +186,7 @@ public class vAlumno extends JFrame {
 	public vAlumno() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vAlumno.class.getResource("/img/DeoClass.png")));
 		setTitle("CRUD ALUMNOS");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 1197, 540);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -290,6 +303,7 @@ public class vAlumno extends JFrame {
 		tblAlumnos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				fila = tblAlumnos.getSelectedRow();
 				alumno = lista.get(fila);
 				lblIdAlumno.setText("" + lista.get(fila).getIdalumno());
@@ -301,7 +315,12 @@ public class vAlumno extends JFrame {
 				cboGrupo.setSelectedItem("" + alumno.getGrupo());
 				txtNombre.setText(alumno.getNombre());
 				txtApellidos.setText(alumno.getApellidos());
-				lblImagen.setText(alumno.getImagen());
+				ImageIcon img = base64ToImage(alumno.getImagen());
+				java.awt.Image image = img.getImage();
+				java.awt.Image newimg = image.getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(),java.awt.Image.SCALE_SMOOTH);
+				ImageIcon i = new ImageIcon(newimg);
+				lblImagen.setIcon(i);
+				actualizarTabla();
 			}
 		});
 		tblAlumnos.setModel(
@@ -326,6 +345,7 @@ public class vAlumno extends JFrame {
 		actualizarTabla();
 
 		btnEditar = new JButton("");
+		btnEditar.setForeground(SystemColor.menu);
 		btnEditar.setBorder(null);
 		btnEditar.setHideActionText(true);
 		btnEditar.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-lápiz-30.png")));
@@ -345,7 +365,7 @@ public class vAlumno extends JFrame {
 					alumno.setGrupo(listaGrupos.get(cboGrupo.getSelectedIndex()).getIdGrupo());
 					alumno.setNombre(txtNombre.getText());
 					alumno.setApellidos(txtApellidos.getText());
-					alumno.setImagen(lblImagen.getText());
+					alumno.setImagen(imagenActual);
 					if (dao.editarAlumno(alumno)) {
 						actualizarTabla();
 						limpiar();
@@ -361,12 +381,13 @@ public class vAlumno extends JFrame {
 			}
 
 		});
-		btnEditar.setBounds(1107, 127, 30, 30);
+		btnEditar.setBounds(1107, 161, 30, 30);
 		contentPane.add(btnEditar);
 
 		btnEliminar = new JButton("");
+		btnEliminar.setForeground(SystemColor.menu);
 		btnEliminar.setBorder(null);
-		btnEliminar.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vAlumno.class.getResource("/img/eli.png")));
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -387,10 +408,11 @@ public class vAlumno extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setBounds(1107, 179, 30, 30);
+		btnEliminar.setBounds(1107, 208, 30, 30);
 		contentPane.add(btnEliminar);
 
 		btnPdf = new JButton("");
+		btnPdf.setForeground(SystemColor.menu);
 		btnPdf.setBorder(null);
 		btnPdf.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.addActionListener(new ActionListener() {
@@ -403,7 +425,8 @@ public class vAlumno extends JFrame {
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					java.awt.Image img2 = Toolkit.getDefaultToolkit()
+							.getImage(getClass().getResource("/img/DeoClass.png"));
 					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
 					img.scaleToFit(200, 200);
@@ -467,10 +490,10 @@ public class vAlumno extends JFrame {
 						tabla.addCell(pro.getTurno());
 						tabla.addCell(buscarSemestre(pro.getSemestre()));
 						tabla.addCell(buscarCarreras(pro.getCarrera()));
-						tabla.addCell(""+buscarGrupos(pro.getGrupo()));
+						tabla.addCell("" + buscarGrupos(pro.getGrupo()));
 						tabla.addCell(pro.getNombre());
 						tabla.addCell(pro.getApellidos());
-						tabla.addCell(pro.getImagen());
+						tabla.addCell(""+base64ToImage(pro.getImagen()));
 					}
 					doc.add(tabla);
 					Paragraph p1 = new Paragraph(10);
@@ -490,12 +513,12 @@ public class vAlumno extends JFrame {
 				} catch (IOException ex) {
 
 				} catch (URISyntaxException e1) {
-					
+
 					e1.printStackTrace();
 				}
 			}
 		});
-		btnPdf.setBounds(1107, 220, 30, 30);
+		btnPdf.setBounds(1107, 263, 30, 30);
 		contentPane.add(btnPdf);
 
 		lblImagen = new JLabel("");
@@ -519,8 +542,9 @@ public class vAlumno extends JFrame {
 		txtBuscar.setBounds(447, 406, 229, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
-		
+
 		btnLimpiar = new JButton("");
+		btnLimpiar.setForeground(SystemColor.menu);
 		btnLimpiar.setBorder(null);
 		btnLimpiar.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-broom-with-a-lot-of-dust-30.png")));
 		btnLimpiar.addActionListener(new ActionListener() {
@@ -528,12 +552,14 @@ public class vAlumno extends JFrame {
 				limpiar();
 			}
 		});
-		btnLimpiar.setBounds(1107, 266, 30, 30);
+		btnLimpiar.setBounds(1107, 311, 30, 30);
 		contentPane.add(btnLimpiar);
-		
+
 		btnAgregar = new JButton("");
+		btnAgregar.setForeground(SystemColor.controlHighlight);
 		btnAgregar.setBorder(null);
-		btnAgregar.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-añadir-grupo-de-usuarios-hombre-hombre-30.png")));
+		btnAgregar.setIcon(
+				new ImageIcon(vAlumno.class.getResource("/img/icons8-añadir-grupo-de-usuarios-hombre-hombre-30.png")));
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -566,29 +592,50 @@ public class vAlumno extends JFrame {
 				}
 			}
 		});
-		btnAgregar.setBounds(1107, 73, 30, 30);
+		btnAgregar.setBounds(1107, 108, 30, 30);
 		contentPane.add(btnAgregar);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("FOTO");
 		lblNewLabel_2.setBounds(10, 354, 46, 14);
 		contentPane.add(lblNewLabel_2);
-		
+
 		btnCargarFoto = new JButton("");
+		btnCargarFoto.setBorder(null);
+		btnCargarFoto.setForeground(SystemColor.menu);
 		btnCargarFoto.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-foto-30.png")));
 		btnCargarFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				JFileChooser selector = new JFileChooser();
+				FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png",
+						"gif");
+				selector.setFileFilter(filtroImagen);
+				int r = selector.showOpenDialog(null);
+				if (r == JFileChooser.APPROVE_OPTION) {
+					try {
+						File f = selector.getSelectedFile();
+						ImageIcon img = new ImageIcon(selector.getSelectedFile().toURL());
+						imgOri = img;
+						java.awt.Image image = img.getImage(); // transform it
+						java.awt.Image newimg = image.getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(),
+								java.awt.Image.SCALE_SMOOTH);
+						URL urlImage = selector.getSelectedFile().toURL();
+						imagenActual = convetirImagen(urlImage);
+						System.out.print(imagenActual);
+						lblImagen.setIcon(new ImageIcon(newimg));
+					} catch (MalformedURLException ex) {
+						Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+					}
+				}
 			}
 		});
 		btnCargarFoto.setBounds(234, 441, 30, 30);
 		contentPane.add(btnCargarFoto);
 	}
-		
 
 	public String buscarPlantel(int idPlantel) {
 
 		String pl = "";
-		for (Plantel pla  : listaPlanteles) {
+		for (Plantel pla : listaPlanteles) {
 			if (pla.getIdPlantel() == idPlantel) {
 				pl = pla.getPlantel();
 			}
@@ -596,7 +643,7 @@ public class vAlumno extends JFrame {
 		System.out.print("" + pl);
 		return pl;
 	}
-	
+
 	public String buscarSemestre(int idSemestre) {
 
 		String se = "";
@@ -608,7 +655,7 @@ public class vAlumno extends JFrame {
 		System.out.print("" + se);
 		return se;
 	}
-	
+
 	public String buscarCarreras(int idCarreras) {
 
 		String ca = "";
@@ -620,7 +667,7 @@ public class vAlumno extends JFrame {
 		System.out.print("" + ca);
 		return ca;
 	}
-	
+
 	public int buscarGrupos(int idGrupo) {
 
 		int gr = 0;
@@ -632,35 +679,32 @@ public class vAlumno extends JFrame {
 		System.out.print("" + gr);
 		return gr;
 	}
-	
 
-	
-
-	public void actualizarTabla() {
-		cargarPlanteles();
-		cargarSemestres();
-		cargarCarreras();
-		cargarGrupos();
-		while (modelo.getRowCount() > 0) {
-			modelo.removeRow(0);
-		}
-		lista = dao.fetcAlumnos();
-		for (Alumno u : lista) {
-			Object o[] = new Object[10];
-			o[0] = u.getIdalumno();
-			o[1] = u.getNumerocontrol();
-			o[2] = buscarPlantel(u.getPlantel());
-			o[3] = u.getTurno();
-			o[4] = buscarSemestre(u.getSemestre());
-			o[5] = buscarCarreras(u.getCarrera());
-			o[6] = buscarGrupos(u.getGrupo());
-			o[7] = u.getNombre();
-			o[8] = u.getApellidos();
-			o[9] = u.getImagen();
-			modelo.addRow(o);
-		}
-		tblAlumnos.setModel(modelo);
-	}
+	// public void actualizarTabla() {
+	// cargarPlanteles();
+	// cargarSemestres();
+	// cargarCarreras();
+	// cargarGrupos();
+	// while (modelo.getRowCount() > 0) {
+	// modelo.removeRow(0);
+	// }
+	// lista = dao.fetcAlumnos();
+	// for (Alumno u : lista) {
+	// Object o[] = new Object[10];
+	// o[0] = u.getIdalumno();
+	// o[1] = u.getNumerocontrol();
+	// o[2] = buscarPlantel(u.getPlantel());
+	// o[3] = u.getTurno();
+	// o[4] = buscarSemestre(u.getSemestre());
+	// o[5] = buscarCarreras(u.getCarrera());
+	// o[6] = buscarGrupos(u.getGrupo());
+	//// o[7] = u.getNombre();
+	// o[8] = u.getApellidos();
+	/// o[9] = u.getImagen();
+	/// modelo.addRow(o);
+	// }
+	// tblAlumnos.setModel(modelo);
+//}
 
 	public void refrescarTabla2(String palabra) {
 		cargarPlanteles();
@@ -688,6 +732,110 @@ public class vAlumno extends JFrame {
 		tblAlumnos.setModel(modelo);
 
 	}
-	
-	
+
+	public ImageIcon base64ToImage(String base64) {
+		ImageIcon image = null;
+		try {
+			byte[] imageByte;
+			BASE64Decoder decoder = new BASE64Decoder();
+			imageByte = decoder.decodeBuffer(base64);
+			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+			BufferedImage bufferedImage = ImageIO.read(bis);
+			image = new ImageIcon(bufferedImage);
+			bis.close();
+		} catch (IOException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return image;
+	}
+
+	public String convetirImagen(URL url) {
+		String base64 = "";
+		try {
+			BufferedImage bImage = ImageIO.read(new File(url.getPath()));
+			BufferedImage img = resize(bImage, 100, 100);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ImageIO.write(img, "jpg", bos);
+			byte[] data = bos.toByteArray();
+			base64 = Base64.getEncoder().encodeToString(data);
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+
+		} catch (IOException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return base64;
+	}
+
+	public BufferedImage resize(BufferedImage bufferedImage, int newW, int newH) {
+		int w = bufferedImage.getWidth();
+		int h = bufferedImage.getHeight();
+		BufferedImage bufim = new BufferedImage(newW, newH, bufferedImage.getType());
+		Graphics2D g = bufim.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.drawImage(bufferedImage, 0, 0, newW, newH, 0, 0, w, h, null);
+		g.dispose();
+		return bufim;
+	}
+
+	public void actualizarTabla() {
+		cargarPlanteles();
+		cargarSemestres();
+		cargarCarreras();
+		cargarGrupos();
+		DefaultTableModel modeloTabla = new DefaultTableModel() {
+			@Override // Redefinimos el método getColumnClass
+			public Class getColumnClass(int column) {
+				switch (column) {
+				case 0:
+					return Object.class;
+				case 1:
+					return Object.class;
+				case 2:
+					return Object.class;
+				case 3:
+					return Object.class;
+				case 4:
+					return Object.class;
+				case 5:
+					return Object.class;
+				case 6:
+					return Object.class;
+				case 7:
+					return Object.class;
+				case 8:
+					return Object.class;
+				default:
+					return ImageIcon.class;
+				}
+			}
+		};
+		modeloTabla.addColumn("ID ALUMNO");
+		modeloTabla.addColumn("N° CONTROL");
+		modeloTabla.addColumn("PLANTEL");
+		modeloTabla.addColumn("TURNO");
+		modeloTabla.addColumn("SEMESTRE");
+		modeloTabla.addColumn("CARRERA");
+		modeloTabla.addColumn("GRUPO");
+		modeloTabla.addColumn("NOMBRE");
+		modeloTabla.addColumn("APELLIDOS");
+		modeloTabla.addColumn("FOTO");
+		lista = dao.fetcAlumnos();
+		for (Alumno a : lista) {
+			Object columna[] = new Object[10];
+			columna[0] = a.getIdalumno();
+			columna[1] = a.getNumerocontrol();
+			columna[2] = buscarPlantel(a.getPlantel());
+			columna[3] = a.getTurno();
+			columna[4] = buscarSemestre(a.getSemestre());
+			columna[5] = buscarCarreras(a.getCarrera());
+			columna[6] = buscarGrupos(a.getGrupo());
+			columna[7] = a.getNombre();
+			columna[8] = a.getApellidos();
+			columna[9] = base64ToImage(a.getImagen());
+			modeloTabla.addRow(columna);
+		}
+		tblAlumnos.setModel(modeloTabla);
+
+	}
 }

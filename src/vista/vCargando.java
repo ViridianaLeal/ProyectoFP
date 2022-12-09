@@ -50,7 +50,7 @@ public class vCargando extends JFrame {
 					}
 					if(i==100) {
 						setVisible(false);
-						vIngreso p=new vIngreso(idUsuario);
+						vPrincipalU p=new vPrincipalU(idUsuario);
 						p.setVisible(true);
 					}
 				}
@@ -67,13 +67,6 @@ public class vCargando extends JFrame {
 		this.setUndecorated(true);
 		this.setLocationRelativeTo(null);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		
-		
-		
-		
-
-
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		barCargando.setForeground(Color.WHITE);
@@ -85,10 +78,9 @@ public class vCargando extends JFrame {
 		barCargando.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		barCargando.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		barCargando.setBackground(new Color(43, 81, 111));
-
 		barCargando.setForeground(SystemColor.activeCaption);
 		barCargando.setStringPainted(true);
-		barCargando.setBounds(0, 0, 726, 61);
+		barCargando.setBounds(0, 0, 726, 96);
 		contentPane.add(barCargando);
 		Cargar();
 	}

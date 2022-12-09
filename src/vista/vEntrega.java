@@ -135,6 +135,10 @@ public class vEntrega extends JFrame {
 		contentPane.add(lblIdEntrega);
 		
 		dcFecha = new JDateChooser();
+		dcFecha.getCalendarButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		dcFecha.setBounds(149, 136, 194, 20);
 		contentPane.add(dcFecha);
 		

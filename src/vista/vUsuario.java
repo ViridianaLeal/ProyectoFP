@@ -100,7 +100,7 @@ public class vUsuario extends JFrame {
 		setFont(new Font("Arial", Font.ITALIC, 12));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vUsuario.class.getResource("/img/logoDeo.png")));
 		setTitle("USUARIO");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 566, 503);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

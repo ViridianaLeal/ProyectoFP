@@ -93,7 +93,7 @@ public class vGrupo extends JFrame {
 	public vGrupo() {
 		setTitle("AGREGAR GRUPOS");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vCarrera.class.getResource("/img/DeoClass.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 460, 376);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

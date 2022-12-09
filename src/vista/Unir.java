@@ -50,7 +50,7 @@ public class Unir extends JFrame {
 	
 	public Unir() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Unir.class.getResource("/img/DeoClass.png")));
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setUndecorated(true);
 		setLocationRelativeTo(null);
 		setBounds(100, 100, 450, 300);
@@ -79,9 +79,9 @@ public class Unir extends JFrame {
 			user.setClave(txtClave.getText());
 			if (dao.loginUniraClase(user)) {
 				JOptionPane.showMessageDialog(null, "BIENVENIDO");
-				vEntrega entrega = new vEntrega();
+				VMiclase clasess = new VMiclase();
 				setVisible(false);
-				entrega.setVisible(true);
+				clasess.setVisible(true);
 			} else {
 
 				JOptionPane.showMessageDialog(null, "No se puedo unir a la clase");
@@ -104,7 +104,7 @@ public class Unir extends JFrame {
 		btnSalir = new JButton("");
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				dispose();
 			}
 		});
 		btnSalir.setIcon(new ImageIcon(Unir.class.getResource("/img/icons8-eliminar-30 (1).png")));

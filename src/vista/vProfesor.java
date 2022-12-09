@@ -6,10 +6,14 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.JScrollPane;
@@ -28,31 +32,45 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import Decoder.BASE64Decoder;
 import dao.daoProfesor;
 import dao.daoUsuario;
 import modelo.Alumno;
+import modelo.Foto;
 import modelo.Profesor;
 import modelo.Usuario;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.SystemColor;
 
 public class vProfesor extends JFrame {
 
@@ -75,7 +93,10 @@ public class vProfesor extends JFrame {
 	Profesor profesor;
 	int fila = -1;
 	private JScrollPane scrollPane;
-	private JButton btnNewButton;
+	private JButton btnCargar;
+	ImageIcon imgOri = null;
+	String imagenActual = "";
+	private JButton btnEliminar;
 
 	/**
 	 * Launch the application.
@@ -99,13 +120,14 @@ public class vProfesor extends JFrame {
 		txtApellidos.setText("");
 		txtClave.setText("");
 		txtCarrera.setText("");
-		lblFoto.setText("");
+		lblFoto.setText(imagenActual);
 	}
 
 	public vProfesor() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vProfesor.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR PROFESOR");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		setBounds(100, 100, 1116, 406);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -168,7 +190,7 @@ public class vProfesor extends JFrame {
 
 		lblFoto = new JLabel("");
 		lblFoto.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		lblFoto.setBounds(66, 178, 225, 156);
+		lblFoto.setBounds(66, 178, 119, 138);
 		contentPane.add(lblFoto);
 
 		scrollPane = new JScrollPane();
@@ -186,7 +208,12 @@ public class vProfesor extends JFrame {
 				txtApellidos.setText(profesor.getApellidos());
 				txtClave.setText("" + profesor.getClave());
 				txtCarrera.setText(profesor.getCarrera());
-				lblFoto.setText(profesor.getFoto());
+				ImageIcon img = base64ToImage(profesor.getFoto());
+				java.awt.Image image = img.getImage();
+				java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
+						java.awt.Image.SCALE_SMOOTH);
+				ImageIcon i = new ImageIcon(newimg);
+				lblFoto.setIcon(i);
 			}
 		});
 		tblProfesotes.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null, null },
@@ -204,7 +231,10 @@ public class vProfesor extends JFrame {
 		actualizarTabla();
 
 		btnAgregar = new JButton("");
-		btnAgregar.setIcon(new ImageIcon(vProfesor.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
+		btnAgregar.setBackground(SystemColor.menu);
+		btnAgregar.setBorder(null);
+		btnAgregar.setForeground(SystemColor.menu);
+		btnAgregar.setIcon(new ImageIcon(vProfesor.class.getResource("/img/icons8-más-2-matemáticas-29 (1).png")));
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -218,7 +248,8 @@ public class vProfesor extends JFrame {
 					user.setApellidos(txtApellidos.getText());
 					user.setClave(Integer.parseInt(txtClave.getText().toString()));
 					user.setCarrera(txtCarrera.getText());
-					user.setFoto(lblFoto.getText());
+					user.setFoto(imagenActual);
+					System.out.print(""+imagenActual);
 					if (dao.insertarProfesor(user)) {
 						actualizarTabla();
 						limpiar();
@@ -238,6 +269,8 @@ public class vProfesor extends JFrame {
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("");
+		btnEditar.setBorder(null);
+		btnEditar.setBackground(SystemColor.menu);
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -250,15 +283,18 @@ public class vProfesor extends JFrame {
 					profesor.setApellidos(txtApellidos.getText());
 					profesor.setClave(Integer.parseInt(txtClave.getText().toString()));
 					profesor.setCarrera(txtCarrera.getText());
-					profesor.setFoto(lblFoto.getText());
+					profesor.setFoto(imagenActual);
+					System.out.print(""+imagenActual);
 					if (dao.editarProfesor(profesor)) {
 						actualizarTabla();
 						limpiar();
 						JOptionPane.showMessageDialog(null, "SE ACTUALIZO  CORRECTAMENTE");
 					} else {
+						
 						JOptionPane.showMessageDialog(null, "ERROR");
 					}
 				} catch (Exception e2) {
+					e2.printStackTrace();
 					JOptionPane.showMessageDialog(null, "ERROR");
 				}
 			}
@@ -268,7 +304,9 @@ public class vProfesor extends JFrame {
 		btnEditar.setBounds(960, 303, 30, 31);
 		contentPane.add(btnEditar);
 
-		JButton btnEliminar = new JButton("");
+		btnEliminar = new JButton("");
+		btnEliminar.setBorder(null);
+		btnEliminar.setBackground(SystemColor.menu);
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -289,12 +327,14 @@ public class vProfesor extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vProfesor.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vProfesor.class.getResource("/img/eli.png")));
 		btnEliminar.setPreferredSize(new Dimension(30, 30));
 		btnEliminar.setBounds(1000, 303, 30, 31);
 		contentPane.add(btnEliminar);
 
 		btnPdf = new JButton("");
+		btnPdf.setBorder(null);
+		btnPdf.setBackground(SystemColor.menu);
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -305,7 +345,8 @@ public class vProfesor extends JFrame {
 					Document doc = new Document();
 					PdfWriter.getInstance(doc, archivo);
 					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+					java.awt.Image img2 = Toolkit.getDefaultToolkit()
+							.getImage(getClass().getResource("/img/DeoClass.png"));
 					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
 					img.setAlignment(Element.ALIGN_CENTER);
 					img.scaleToFit(200, 200);
@@ -345,15 +386,14 @@ public class vProfesor extends JFrame {
 					tabla.addCell(c4);
 					tabla.addCell(c5);
 					tabla.addCell(c6);
-					
 
 					for (Profesor u : lista) {
 						tabla.addCell("" + u.getIdProfesor());
 						tabla.addCell(u.getNombre());
 						tabla.addCell(u.getApellidos());
-						tabla.addCell(""+u.getClave());
+						tabla.addCell("" + u.getClave());
 						tabla.addCell(u.getCarrera());
-						tabla.addCell(u.getFoto());
+						tabla.addCell(""+base64ToImage(u.getFoto()));
 
 					}
 
@@ -378,7 +418,7 @@ public class vProfesor extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			
+
 			}
 		});
 		btnPdf.setIcon(new ImageIcon(vProfesor.class.getResource("/img/icons8-pdf-30.png")));
@@ -402,31 +442,58 @@ public class vProfesor extends JFrame {
 		txtBuscar.setBounds(587, 316, 282, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
-		
-		btnNewButton = new JButton("");
-		btnNewButton.setIcon(new ImageIcon(vProfesor.class.getResource("/img/icons8-foto-30.png")));
-		btnNewButton.setBounds(302, 303, 30, 29);
-		contentPane.add(btnNewButton);
+
+		btnCargar = new JButton("");
+		btnCargar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser selector = new JFileChooser();
+				FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png",
+						"gif");
+				selector.setFileFilter(filtroImagen);
+				int r = selector.showOpenDialog(null);
+				if (r == JFileChooser.APPROVE_OPTION) {
+					try {
+						File f = selector.getSelectedFile();
+						ImageIcon img = new ImageIcon(selector.getSelectedFile().toURL());
+						imgOri = img;
+						java.awt.Image image = img.getImage(); // transform it
+						java.awt.Image newimg = image.getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(),
+								java.awt.Image.SCALE_SMOOTH);
+						URL urlImage = selector.getSelectedFile().toURL();
+						imagenActual = convetirImagen(urlImage);
+						System.out.print(imagenActual);
+						lblFoto.setIcon(new ImageIcon(newimg));
+					} catch (MalformedURLException ex) {
+						Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+					}
+				}
+			}
+		});
+		btnCargar.setBackground(SystemColor.menu);
+		btnCargar.setBorder(null);
+		btnCargar.setIcon(new ImageIcon(vProfesor.class.getResource("/img/icons8-foto-30.png")));
+		btnCargar.setBounds(213, 287, 30, 29);
+		contentPane.add(btnCargar);
 	}
 
-	public void actualizarTabla() {
-		while (modelo.getRowCount() > 0) {
-			modelo.removeRow(0);
-		}
-		lista = dao.fetcProfesors();
-		for (Profesor u : lista) {
-			Object o[] = new Object[6];
-			o[0] = u.getIdProfesor();
-			o[1] = u.getNombre();
-			o[2] = u.getApellidos();
-			o[3] = u.getClave();
-			o[4] = u.getCarrera();
-			o[5] = u.getFoto();
-			modelo.addRow(o);
-		}
-		tblProfesotes.setModel(modelo);
-	}
-	
+	// public void actualizarTabla2() {
+	// while (modelo.getRowCount() > 0) {
+	// modelo.removeRow(0);
+	// }
+	// lista = dao.fetcProfesors();
+	// for (Profesor u : lista) {
+	// Object o[] = new Object[6];
+	// o[0] = u.getIdProfesor();
+	// o[1] = u.getNombre();
+	/// o[2] = u.getApellidos();
+	// o[3] = u.getClave();
+	// o[4] = u.getCarrera();
+	// o[5] = u.getFoto();
+	// modelo.addRow(o);
+	// }
+	// tblProfesotes.setModel(modelo);
+	// }//
+
 	public void refrescarTabla2(String palabra) {
 		while (modelo.getRowCount() > 0) {
 			modelo.removeRow(0);
@@ -440,10 +507,98 @@ public class vProfesor extends JFrame {
 			item[3] = p.getClave();
 			item[4] = p.getCarrera();
 			item[5] = p.getFoto();
-			
+
 			modelo.addRow(item);
 		}
 		tblProfesotes.setModel(modelo);
 
+	}
+
+
+
+	public ImageIcon base64ToImage(String base64) {
+		ImageIcon image = null;
+		try {
+			byte[] imageByte;
+			BASE64Decoder decoder = new BASE64Decoder();
+			imageByte = decoder.decodeBuffer(base64);
+			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+			BufferedImage bufferedImage = ImageIO.read(bis);
+			image = new ImageIcon(bufferedImage);
+			bis.close();
+		} catch (IOException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return image;
+	}
+
+	public String convetirImagen(URL url) {
+		String base64 = "";
+		try {
+			BufferedImage bImage = ImageIO.read(new File(url.getPath()));
+			BufferedImage img = resize(bImage, 100, 100);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ImageIO.write(img, "jpg", bos);
+			byte[] data = bos.toByteArray();
+			base64 = Base64.getEncoder().encodeToString(data);
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+
+		} catch (IOException ex) {
+			Logger.getLogger(vFoto.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return base64;
+	}
+
+	public BufferedImage resize(BufferedImage bufferedImage, int newW, int newH) {
+		int w = bufferedImage.getWidth();
+		int h = bufferedImage.getHeight();
+		BufferedImage bufim = new BufferedImage(newW, newH, bufferedImage.getType());
+		Graphics2D g = bufim.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.drawImage(bufferedImage, 0, 0, newW, newH, 0, 0, w, h, null);
+		g.dispose();
+		return bufim;
+	}
+	
+	public void actualizarTabla() {
+		DefaultTableModel modeloTabla = new DefaultTableModel() {
+			@Override // Redefinimos el método getColumnClass
+			public Class getColumnClass(int column) {
+				switch (column) {
+				case 0:
+					return Object.class;
+				case 1:
+					return Object.class;
+				case 2:
+					return Object.class;
+				case 3:
+					return Object.class;
+				case 4:
+					return Object.class;
+				default:
+					return ImageIcon.class;
+				}
+			}
+		};
+		modeloTabla.addColumn("ID PROFESOR");
+		modeloTabla.addColumn("NOMBRE");
+		modeloTabla.addColumn("APELLIDO");
+		modeloTabla.addColumn("CLAVE");
+		modeloTabla.addColumn("CARRERA");
+		modeloTabla.addColumn("FOTO");
+		lista = dao.fetcProfesors();
+		for (Profesor a : lista) {
+			Object[] columna = new Object[6];
+			columna[0] = a.getIdProfesor();
+			columna[1] = a.getNombre();
+			columna[2] = a.getApellidos();
+			columna[3] = a.getClave();
+			columna[4] = a.getCarrera();
+			columna[5] = base64ToImage(a.getFoto());
+			modeloTabla.addRow(columna);
+
+		}
+		tblProfesotes.setModel(modeloTabla);
 	}
 }

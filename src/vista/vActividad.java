@@ -61,6 +61,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.SystemColor;
 
 public class vActividad extends JFrame {
 
@@ -83,6 +84,7 @@ public class vActividad extends JFrame {
 	int fila = -1;
 	daoClase daoCla = new daoClase();
 	ArrayList<Clase> listaClases = new ArrayList<Clase>();
+	private JButton btnEntregar;
 		
 
 	
@@ -119,7 +121,8 @@ public class vActividad extends JFrame {
 	public vActividad() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vActividad.class.getResource("/img/DeoClass.png")));
 		setTitle("ACTIVIDADES");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setUndecorated(true);
 		setBounds(100, 100, 558, 478);
 		setLocationRelativeTo(cboClase);
 		contentPane = new JPanel();
@@ -219,6 +222,9 @@ public class vActividad extends JFrame {
 		actualizarTabla();
 		
 		btnAgregar = new JButton("");
+		btnAgregar.setBorder(null);
+		btnAgregar.setBackground(SystemColor.menu);
+		btnAgregar.setForeground(SystemColor.menu);
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -250,6 +256,9 @@ public class vActividad extends JFrame {
 		contentPane.add(btnAgregar);
 		
 		btnEditar = new JButton("");
+		btnEditar.setBorder(null);
+		btnEditar.setBackground(SystemColor.menu);
+		btnEditar.setForeground(SystemColor.menu);
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -279,6 +288,9 @@ public class vActividad extends JFrame {
 		contentPane.add(btnEditar);
 		
 		btnEliminar = new JButton("");
+		btnEliminar.setBorder(null);
+		btnEliminar.setBackground(SystemColor.menu);
+		btnEliminar.setForeground(SystemColor.menu);
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -300,11 +312,14 @@ public class vActividad extends JFrame {
 			}
 			
 		});
-		btnEliminar.setIcon(new ImageIcon(vActividad.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vActividad.class.getResource("/img/eli.png")));
 		btnEliminar.setBounds(117, 392, 30, 30);
 		contentPane.add(btnEliminar);
 		
 		btnPdf = new JButton("");
+		btnPdf.setBorder(null);
+		btnPdf.setBackground(SystemColor.menu);
+		btnPdf.setForeground(SystemColor.menu);
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -387,6 +402,29 @@ public class vActividad extends JFrame {
 		btnPdf.setIcon(new ImageIcon(vActividad.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.setBounds(172, 392, 30, 30);
 		contentPane.add(btnPdf);
+		
+		JButton btnNewButton = new JButton("");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnNewButton.setIcon(new ImageIcon(vActividad.class.getResource("/img/icons8-eliminar-30 (1).png")));
+		btnNewButton.setBorder(null);
+		btnNewButton.setBackground(SystemColor.menu);
+		btnNewButton.setBounds(503, 22, 30, 30);
+		contentPane.add(btnNewButton);
+		
+		btnEntregar = new JButton("ENTREGAR ACTIVIDAD");
+		btnEntregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				vEntrega entrega = new vEntrega();
+				entrega.setVisible(true);
+			}
+		});
+		btnEntregar.setBackground(SystemColor.desktop);
+		btnEntregar.setBounds(320, 406, 183, 23);
+		contentPane.add(btnEntregar);
 	}
 	
 	public String buscarClases(int idClases) {

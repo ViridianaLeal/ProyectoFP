@@ -91,7 +91,7 @@ public class vSemestre extends JFrame {
 	public vSemestre() {
 		setTitle("AGREGAR SEMESTRES");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vCarrera.class.getResource("/img/DeoClass.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 460, 376);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -215,7 +215,7 @@ public class vSemestre extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vSemestre.class.getResource("/img/eli.png")));
 		btnEliminar.setBounds(215, 260, 30, 30);
 		contentPane.add(btnEliminar);
 

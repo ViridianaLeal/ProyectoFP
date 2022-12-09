@@ -223,7 +223,7 @@ public class vAsignatura extends JFrame {
 				try {
 
 					FileOutputStream archivo;
-					URI uri = new URI(getClass().getResource("/pdf/RAsignatura.pdf").toString());
+					URI uri = new URI(getClass().getResource("/pdf/ReporteAsignatura.pdf").toString());
 					File file = new File(uri);
 					archivo = new FileOutputStream(file);
 					Document doc = new Document();

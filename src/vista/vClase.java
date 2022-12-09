@@ -225,7 +225,7 @@ public class vClase extends JFrame {
 				}
 			}
 		});
-		btnAgregar.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-más-2-matemáticas-30.png")));
+		btnAgregar.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-más-2-matemáticas-29 (1).png")));
 		btnAgregar.setBounds(358, 100, 30, 30);
 		contentPane.add(btnAgregar);
 
@@ -279,7 +279,7 @@ public class vClase extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vClase.class.getResource("/img/eli.png")));
 		btnEliminar.setBounds(483, 100, 30, 30);
 		contentPane.add(btnEliminar);
 

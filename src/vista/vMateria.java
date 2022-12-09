@@ -88,7 +88,7 @@ public class vMateria extends JFrame {
 	public vMateria() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vMateria.class.getResource("/img/DeoClass.png")));
 		setTitle("MATERIAS");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 631, 477);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

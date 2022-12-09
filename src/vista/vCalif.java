@@ -320,7 +320,7 @@ public class vCalif extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vCalif.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vCalif.class.getResource("/img/eli.png")));
 		btnEliminar.setBounds(98, 432, 30, 30);
 		contentPane.add(btnEliminar);
 		

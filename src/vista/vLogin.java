@@ -97,13 +97,7 @@ public class vLogin extends JFrame {
 		btnCancelar.setFont(new Font("Consolas", Font.PLAIN, 14));
 		btnCancelar.setForeground(Color.WHITE);
 		btnCancelar.setBorder(null);
-		btnCancelar.setBorderPainted(false);
-		btnCancelar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnCancelar.setBackground(new Color(0, 156, 223));
-			}
-		});
+		btnCancelar.setBorderPainted(false);	
 		btnCancelar.setBackground(new Color(43, 81, 111));
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

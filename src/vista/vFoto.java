@@ -111,7 +111,7 @@ public class vFoto extends JFrame {
 	public vFoto() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vFoto.class.getResource("/img/DeoClass.png")));
 		setTitle("AGREGAR FOTOS");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 534, 526);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -142,7 +142,7 @@ public class vFoto extends JFrame {
 		contentPane.add(lblFoto);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 245, 498, 183);
+		scrollPane.setBounds(22, 246, 498, 183);
 		contentPane.add(scrollPane);
 
 		tblFotos = new JTable();
@@ -237,7 +237,7 @@ public class vFoto extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vFoto.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vFoto.class.getResource("/img/eli.png")));
 		btnEliminar.setBounds(240, 441, 30, 30);
 		contentPane.add(btnEliminar);
 

@@ -333,7 +333,7 @@ public class vPromedio extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vPromedio.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vPromedio.class.getResource("/img/eli.png")));
 		btnEliminar.setBounds(900, 349, 30, 30);
 		contentPane.add(btnEliminar);
 		

@@ -39,6 +39,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.UIManager;
+import java.awt.SystemColor;
 
 public class vComentario extends JFrame {
 
@@ -80,7 +81,8 @@ public class vComentario extends JFrame {
 	public vComentario() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(vComentario.class.getResource("/img/logoDeo.png")));
 		setTitle("COMENTARIO");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setUndecorated(true);
 		setBounds(100, 100, 620, 668);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -262,6 +264,18 @@ public class vComentario extends JFrame {
 		txtC.setBounds(25, 299, 301, 118);
 		contentPane.add(txtC);
 		txtC.setColumns(10);
+		
+		JButton btnNewButton = new JButton("");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnNewButton.setBorder(null);
+		btnNewButton.setBackground(SystemColor.menu);
+		btnNewButton.setIcon(new ImageIcon(vComentario.class.getResource("/img/icons8-eliminar-30 (1).png")));
+		btnNewButton.setBounds(546, 26, 46, 40);
+		contentPane.add(btnNewButton);
 		actualizarTabla();
 	}
 

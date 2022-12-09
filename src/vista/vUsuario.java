@@ -72,6 +72,7 @@ public class vUsuario extends JFrame {
 	int fila = -1;
 	private JLabel lblNewLabel_2;
 	private JTextField txtBuscar;
+	private JButton btnLimpiar;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -173,7 +174,7 @@ public class vUsuario extends JFrame {
 		});
 		btnAgregar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnAgregar.setFont(new Font("Calibri Light", Font.BOLD, 18));
-		btnAgregar.setBounds(47, 187, 95, 23);
+		btnAgregar.setBounds(25, 186, 95, 23);
 		contentPane.add(btnAgregar);
 
 		btnEditar = new JButton("EDITAR");
@@ -208,7 +209,7 @@ public class vUsuario extends JFrame {
 		});
 		btnEditar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEditar.setFont(new Font("Consolas", Font.PLAIN, 14));
-		btnEditar.setBounds(283, 187, 89, 23);
+		btnEditar.setBounds(243, 187, 89, 23);
 		contentPane.add(btnEditar);
 
 		btnEliminar = new JButton("ELIMINAR");
@@ -240,7 +241,7 @@ public class vUsuario extends JFrame {
 		});
 		btnEliminar.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnEliminar.setFont(new Font("Consolas", Font.PLAIN, 14));
-		btnEliminar.setBounds(159, 187, 103, 23);
+		btnEliminar.setBounds(130, 187, 103, 23);
 		contentPane.add(btnEliminar);
 
 		btnPdf = new JButton("PDF");
@@ -326,7 +327,7 @@ public class vUsuario extends JFrame {
 		});
 		btnPdf.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnPdf.setFont(new Font("Consolas", Font.PLAIN, 14));
-		btnPdf.setBounds(404, 187, 89, 23);
+		btnPdf.setBounds(346, 187, 89, 23);
 		contentPane.add(btnPdf);
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
@@ -375,6 +376,21 @@ public class vUsuario extends JFrame {
 		txtBuscar.setBounds(204, 422, 221, 23);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
+		
+		btnLimpiar = new JButton("LIMPIAR");
+		btnLimpiar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiar();
+			}
+		});
+		btnLimpiar.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnLimpiar.setForeground(Color.WHITE);
+		btnLimpiar.setFont(new Font("Calibri Light", Font.PLAIN, 14));
+		btnLimpiar.setBorderPainted(false);
+		btnLimpiar.setBorder(null);
+		btnLimpiar.setBackground(new Color(43, 81, 111));
+		btnLimpiar.setBounds(445, 187, 89, 23);
+		contentPane.add(btnLimpiar);
 		actualizarTabla();
 	}
 

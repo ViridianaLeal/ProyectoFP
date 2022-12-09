@@ -213,7 +213,7 @@ public class vPlantel extends JFrame {
 				}
 			}
 		});
-		btnEliminar.setIcon(new ImageIcon(vCarrera.class.getResource("/img/icons8-eliminar-30.png")));
+		btnEliminar.setIcon(new ImageIcon(vPlantel.class.getResource("/img/eli.png")));
 		btnEliminar.setBounds(215, 260, 30, 30);
 		contentPane.add(btnEliminar);
 

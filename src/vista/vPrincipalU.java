@@ -19,7 +19,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -47,6 +50,7 @@ public class vPrincipalU extends JFrame {
 	private JButton btnFotos;
 	private JButton btnProfesores;
 	private JButton btnAlumnos;
+	vUsuario vUsuario = new vUsuario();
 
 	/**
 	 * Launch the application.
@@ -160,12 +164,9 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_6 = new JMenuItem("USUARIOS");
 		mntmNewMenuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File path = new File("src\\pdf\\ReporteUsuarios.pdf");
-					Desktop.getDesktop().open(path);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				vUsuario.GenerarReportePDF();
+					
+
 			}
 		});
 		mnNewMenu_1.add(mntmNewMenuItem_6);
@@ -173,12 +174,8 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("ALUMNOS");
 		mntmNewMenuItem_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File path = new File("src\\pdf\\RAlumnos.pdf");
-					Desktop.getDesktop().open(path);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				vAlumno vAlumno = new vAlumno();
+				vAlumno.GenerarPDF();
 			}
 		});
 		mnNewMenu_1.add(mntmNewMenuItem_5);
@@ -186,12 +183,8 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_8 = new JMenuItem("PROFESORES");
 		mntmNewMenuItem_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File path = new File("src\\pdf\\ReporteProfesores.pdf");
-					Desktop.getDesktop().open(path);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				vProfesor vProfesor = new vProfesor();
+				vProfesor.GenerarPDF();
 			}
 		});
 		mnNewMenu_1.add(mntmNewMenuItem_8);
@@ -199,12 +192,8 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_7 = new JMenuItem("CALIFICACIONES");
 		mntmNewMenuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File path = new File("src\\pdf\\ReporteCalificaciones.pdf");
-					Desktop.getDesktop().open(path);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				vCalif vCalif = new vCalif();
+				vCalif.GenerarPDF();
 			}
 		});
 		mnNewMenu_1.add(mntmNewMenuItem_7);
@@ -212,12 +201,8 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_10 = new JMenuItem("ACTIVIDADES");
 		mntmNewMenuItem_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File path = new File("src\\pdf\\ReporteActividades.pdf");
-					Desktop.getDesktop().open(path);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				vActividad vActividad = new vActividad();
+				vActividad.GenerarPDF();
 			}
 		});
 		mnNewMenu_1.add(mntmNewMenuItem_10);
@@ -225,12 +210,8 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_9 = new JMenuItem("CLASES");
 		mntmNewMenuItem_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File path = new File("src\\pdf\\ReporteClases.pdf");
-					Desktop.getDesktop().open(path);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				vClase vClase =new vClase(idUsuario);
+				vClase.GenerarPDF();
 			}
 		});
 		mnNewMenu_1.add(mntmNewMenuItem_9);
@@ -238,12 +219,8 @@ public class vPrincipalU extends JFrame {
 		JMenuItem mntmNewMenuItem_11 = new JMenuItem("ASIGNATURA");
 		mntmNewMenuItem_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					File path = new File("src\\pdf\\ReporteAsignatura.pdf");
-					Desktop.getDesktop().open(path);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				vAsignatura vAsignatura = new vAsignatura();
+				vAsignatura.GenerarPDF();
 			}
 		});
 		mnNewMenu_1.add(mntmNewMenuItem_11);
@@ -251,7 +228,30 @@ public class vPrincipalU extends JFrame {
 		JMenu mnNewMenu_2 = new JMenu("ACERCA DE");
 		menuBar.add(mnNewMenu_2);
 		
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("USO");
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("MANUAL USUARIO");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+
+					FileOutputStream archivo;
+					File temp = new File(System.getProperty("java.io.tmpdir") + "MANUALUSUARIO.pdf");
+					InputStream flujoEntrada = (InputStream) this.getClass().getResourceAsStream("/pdf/MANUALUSUARIO.pdf");
+					FileOutputStream flujoSalida = new FileOutputStream(temp);
+					archivo = new FileOutputStream(temp);
+					 FileWriter fw = new FileWriter(temp);
+					           byte[] buffer = new byte[1024*512];
+					           int control;
+					           while ((control = flujoEntrada.read(buffer)) != -1){
+					               flujoSalida.write(buffer, 0, control);
+					           }
+					Desktop.getDesktop().open(temp);
+					} catch (IOException ex) {
+					System.out.println(ex);
+					}
+
+			}
+			
+		});
 		mnNewMenu_2.add(mntmNewMenuItem_4);
 		
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("CONTACTO");
@@ -261,6 +261,31 @@ public class vPrincipalU extends JFrame {
 				con.setVisible(true);
 			}
 		});
+		
+		JMenuItem mntmNewMenuItem_19 = new JMenuItem("MANUAL TECNICO");
+		mntmNewMenuItem_19.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+
+					FileOutputStream archivo;
+					File temp = new File(System.getProperty("java.io.tmpdir") + "MANUALTECNICO.pdf");
+					InputStream flujoEntrada = (InputStream) this.getClass().getResourceAsStream("/pdf/MANUALTECNICO.pdf");
+					FileOutputStream flujoSalida = new FileOutputStream(temp);
+					archivo = new FileOutputStream(temp);
+					 FileWriter fw = new FileWriter(temp);
+					           byte[] buffer = new byte[1024*512];
+					           int control;
+					           while ((control = flujoEntrada.read(buffer)) != -1){
+					               flujoSalida.write(buffer, 0, control);
+					           }
+					Desktop.getDesktop().open(temp);
+					} catch (IOException ex) {
+					System.out.println(ex);
+					}
+
+			}
+		});
+		mnNewMenu_2.add(mntmNewMenuItem_19);
 		mnNewMenu_2.add(mntmNewMenuItem_3);
 		
 		JMenu mnNewMenu_3 = new JMenu("SALIR");

@@ -418,104 +418,7 @@ public class vAlumno extends JFrame {
 		btnPdf.setIcon(new ImageIcon(vAlumno.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					FileOutputStream archivo;				
-		            File temp = new File(System.getProperty("java.io.tmpdir") + "RAlumnos.pdf");
-		            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/RAlumnos.pdf");
-		            FileOutputStream flujoSalida = new FileOutputStream(temp);         
-					archivo = new FileOutputStream(temp);
-					Document doc = new Document();
-					PdfWriter.getInstance(doc, archivo);
-					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit()
-							.getImage(getClass().getResource("/img/DeoClass.png"));
-					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
-					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(200, 200);
-					doc.add(img);
-					Paragraph p = new Paragraph(10);
-					Font negrita = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
-					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE ALUMNOS");
-					p.add(Chunk.NEWLINE);
-					p.add(Chunk.NEWLINE);
-					p.setAlignment(Element.ALIGN_CENTER);
-					doc.add(p);
-					// Tabla de datos
-					PdfPTable tabla = new PdfPTable(10);
-					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase("ID ALUMNO", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase("N°CONTROL", negrita));
-					PdfPCell c3 = new PdfPCell(new Phrase("PLANTEL", negrita));
-					PdfPCell c4 = new PdfPCell(new Phrase("TURNO", negrita));
-					PdfPCell c5 = new PdfPCell(new Phrase("SEMESTRE", negrita));
-					PdfPCell c6 = new PdfPCell(new Phrase("CARRERA", negrita));
-					PdfPCell c7 = new PdfPCell(new Phrase("GRUPO", negrita));
-					PdfPCell c8 = new PdfPCell(new Phrase("NOMBRE", negrita));
-					PdfPCell c9 = new PdfPCell(new Phrase("APELLIDOS", negrita));
-					PdfPCell c10 = new PdfPCell(new Phrase("FOTO", negrita));
-					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c4.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c5.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c6.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c7.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c8.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c9.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c10.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c7.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c8.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c9.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c10.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					tabla.addCell(c1);
-					tabla.addCell(c2);
-					tabla.addCell(c3);
-					tabla.addCell(c4);
-					tabla.addCell(c5);
-					tabla.addCell(c6);
-					tabla.addCell(c7);
-					tabla.addCell(c8);
-					tabla.addCell(c9);
-					tabla.addCell(c10);
-					// Agregar los registros
-					for (Alumno pro : lista) {
-						tabla.addCell("" + pro.getIdalumno());
-						tabla.addCell("" + pro.getNumerocontrol());
-						tabla.addCell(buscarPlantel(pro.getPlantel()));
-						tabla.addCell(pro.getTurno());
-						tabla.addCell(buscarSemestre(pro.getSemestre()));
-						tabla.addCell(buscarCarreras(pro.getCarrera()));
-						tabla.addCell("" + buscarGrupos(pro.getGrupo()));
-						tabla.addCell(pro.getNombre());
-						tabla.addCell(pro.getApellidos());
-						tabla.addCell(""+base64ToImage(pro.getImagen()));
-					}
-					doc.add(tabla);
-					Paragraph p1 = new Paragraph(10);
-					p1.add(Chunk.NEWLINE);
-					p1.add("NÚMERO DE REGISTROS: " + lista.size());
-					p1.add(Chunk.NEWLINE);
-					p1.add(Chunk.NEWLINE);
-					p1.setAlignment(Element.ALIGN_RIGHT);
-					doc.add(p1);
-					doc.close();
-					archivo.close();
-					Desktop.getDesktop().open(temp);
-				} catch (FileNotFoundException ex) {
-
-				} catch (DocumentException ex) {
-
-				} catch (IOException ex) {
-
-				
-				}
+				GenerarPDF();
 			}
 		});
 		btnPdf.setBounds(1107, 263, 30, 30);
@@ -630,6 +533,107 @@ public class vAlumno extends JFrame {
 		});
 		btnCargarFoto.setBounds(234, 441, 30, 30);
 		contentPane.add(btnCargarFoto);
+	}
+	
+	public void GenerarPDF() {
+		try {
+			FileOutputStream archivo;				
+            File temp = new File(System.getProperty("java.io.tmpdir") + "RAlumnos.pdf");
+            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/RAlumnos.pdf");
+            FileOutputStream flujoSalida = new FileOutputStream(temp);         
+			archivo = new FileOutputStream(temp);
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			doc.open();
+			java.awt.Image img2 = Toolkit.getDefaultToolkit()
+					.getImage(getClass().getResource("/img/DeoClass.png"));
+			Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
+			img.setAlignment(Element.ALIGN_CENTER);
+			img.scaleToFit(200, 200);
+			doc.add(img);
+			Paragraph p = new Paragraph(10);
+			Font negrita = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			p.add(Chunk.NEWLINE);
+			p.add("CATALOGO DE ALUMNOS");
+			p.add(Chunk.NEWLINE);
+			p.add(Chunk.NEWLINE);
+			p.setAlignment(Element.ALIGN_CENTER);
+			doc.add(p);
+			// Tabla de datos
+			PdfPTable tabla = new PdfPTable(10);
+			tabla.setWidthPercentage(100);
+			PdfPCell c1 = new PdfPCell(new Phrase("ID ALUMNO", negrita));
+			PdfPCell c2 = new PdfPCell(new Phrase("N°CONTROL", negrita));
+			PdfPCell c3 = new PdfPCell(new Phrase("PLANTEL", negrita));
+			PdfPCell c4 = new PdfPCell(new Phrase("TURNO", negrita));
+			PdfPCell c5 = new PdfPCell(new Phrase("SEMESTRE", negrita));
+			PdfPCell c6 = new PdfPCell(new Phrase("CARRERA", negrita));
+			PdfPCell c7 = new PdfPCell(new Phrase("GRUPO", negrita));
+			PdfPCell c8 = new PdfPCell(new Phrase("NOMBRE", negrita));
+			PdfPCell c9 = new PdfPCell(new Phrase("APELLIDOS", negrita));
+			PdfPCell c10 = new PdfPCell(new Phrase("FOTO", negrita));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c6.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c7.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c8.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c9.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c10.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c7.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c8.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c9.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c10.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			tabla.addCell(c1);
+			tabla.addCell(c2);
+			tabla.addCell(c3);
+			tabla.addCell(c4);
+			tabla.addCell(c5);
+			tabla.addCell(c6);
+			tabla.addCell(c7);
+			tabla.addCell(c8);
+			tabla.addCell(c9);
+			tabla.addCell(c10);
+			// Agregar los registros
+			for (Alumno pro : lista) {
+				tabla.addCell("" + pro.getIdalumno());
+				tabla.addCell("" + pro.getNumerocontrol());
+				tabla.addCell(buscarPlantel(pro.getPlantel()));
+				tabla.addCell(pro.getTurno());
+				tabla.addCell(buscarSemestre(pro.getSemestre()));
+				tabla.addCell(buscarCarreras(pro.getCarrera()));
+				tabla.addCell("" + buscarGrupos(pro.getGrupo()));
+				tabla.addCell(pro.getNombre());
+				tabla.addCell(pro.getApellidos());
+				tabla.addCell(""+base64ToImage(pro.getImagen()));
+			}
+			doc.add(tabla);
+			Paragraph p1 = new Paragraph(10);
+			p1.add(Chunk.NEWLINE);
+			p1.add("NÚMERO DE REGISTROS: " + lista.size());
+			p1.add(Chunk.NEWLINE);
+			p1.add(Chunk.NEWLINE);
+			p1.setAlignment(Element.ALIGN_RIGHT);
+			doc.add(p1);
+			doc.close();
+			archivo.close();
+			Desktop.getDesktop().open(temp);
+		} catch (FileNotFoundException ex) {
+
+		} catch (DocumentException ex) {
+
+		} catch (IOException ex) {
+
+		
+		}
 	}
 
 	public String buscarPlantel(int idPlantel) {

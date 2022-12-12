@@ -220,70 +220,74 @@ public class vAsignatura extends JFrame {
 		btnPdf = new JButton("");
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-
-					FileOutputStream archivo;
-					URI uri = new URI(getClass().getResource("/pdf/ReporteAsignatura.pdf").toString());
-					File file = new File(uri);
-					archivo = new FileOutputStream(file);
-					Document doc = new Document();
-					PdfWriter.getInstance(doc, archivo);
-					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
-					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
-					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(200, 200);
-					doc.add(img);
-					Paragraph p = new Paragraph(10);
-					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
-					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE ASIGNATURAS");
-					p.add(Chunk.NEWLINE);
-					p.add(Chunk.NEWLINE);
-					p.setAlignment(Element.ALIGN_CENTER);
-					doc.add(p);
-					// Tabla de datos
-					PdfPTable tabla = new PdfPTable(2);
-					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase("ID ASIGNATURA", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase("ASIGNATURA", negrita));
-					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					tabla.addCell(c1);
-					tabla.addCell(c2);
-					// Agregar los registros
-					for (Asignatura pro : lista) {
-						tabla.addCell("" + pro.getIdAsignatura());
-						tabla.addCell(pro.getAsignatura());
-					}
-					doc.add(tabla);
-					Paragraph p1 = new Paragraph(10);
-					p1.add(Chunk.NEWLINE);
-					p1.add("NÚMERO DE REGISTROS: " + lista.size());
-					p1.add(Chunk.NEWLINE);
-					p1.add(Chunk.NEWLINE);
-					p1.setAlignment(Element.ALIGN_RIGHT);
-					doc.add(p1);
-					doc.close();
-					archivo.close();
-					Desktop.getDesktop().open(file);
-				} catch (FileNotFoundException ex) {
-
-				} catch (DocumentException ex) {
-
-				} catch (IOException ex) {
-
-				} catch (URISyntaxException e1) {
-
-					e1.printStackTrace();
-				}
+				GenerarPDF();
 			}
 		});
 		btnPdf.setIcon(new ImageIcon(vAsignatura.class.getResource("/img/icons8-pdf-30.png")));
 		btnPdf.setBounds(284, 458, 30, 30);
 		contentPane.add(btnPdf);
+	}
+	
+	public void GenerarPDF() {
+		try {
+
+			FileOutputStream archivo;
+			URI uri = new URI(getClass().getResource("/pdf/ReporteAsignatura.pdf").toString());
+			File file = new File(uri);
+			archivo = new FileOutputStream(file);
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			doc.open();
+			java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+			Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
+			img.setAlignment(Element.ALIGN_CENTER);
+			img.scaleToFit(200, 200);
+			doc.add(img);
+			Paragraph p = new Paragraph(10);
+			com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			p.add(Chunk.NEWLINE);
+			p.add("CATALOGO DE ASIGNATURAS");
+			p.add(Chunk.NEWLINE);
+			p.add(Chunk.NEWLINE);
+			p.setAlignment(Element.ALIGN_CENTER);
+			doc.add(p);
+			// Tabla de datos
+			PdfPTable tabla = new PdfPTable(2);
+			tabla.setWidthPercentage(100);
+			PdfPCell c1 = new PdfPCell(new Phrase("ID ASIGNATURA", negrita));
+			PdfPCell c2 = new PdfPCell(new Phrase("ASIGNATURA", negrita));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			tabla.addCell(c1);
+			tabla.addCell(c2);
+			// Agregar los registros
+			for (Asignatura pro : lista) {
+				tabla.addCell("" + pro.getIdAsignatura());
+				tabla.addCell(pro.getAsignatura());
+			}
+			doc.add(tabla);
+			Paragraph p1 = new Paragraph(10);
+			p1.add(Chunk.NEWLINE);
+			p1.add("NÚMERO DE REGISTROS: " + lista.size());
+			p1.add(Chunk.NEWLINE);
+			p1.add(Chunk.NEWLINE);
+			p1.setAlignment(Element.ALIGN_RIGHT);
+			doc.add(p1);
+			doc.close();
+			archivo.close();
+			Desktop.getDesktop().open(file);
+		} catch (FileNotFoundException ex) {
+
+		} catch (DocumentException ex) {
+
+		} catch (IOException ex) {
+
+		} catch (URISyntaxException e1) {
+
+			e1.printStackTrace();
+		}
 	}
 
 	public void actualizarTabla() {

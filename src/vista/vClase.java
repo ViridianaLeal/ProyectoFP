@@ -287,78 +287,8 @@ public class vClase extends JFrame {
 		btnPdf = new JButton("");
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					FileOutputStream archivo;				
-		            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteClases.pdf");
-		            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/ReporteClases.pdf");
-		            FileOutputStream flujoSalida = new FileOutputStream(temp);         
-					archivo = new FileOutputStream(temp);
-					Document doc = new Document();
-					PdfWriter.getInstance(doc, archivo);
-					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
-					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
-					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(200, 200);
-					doc.add(img);
-					Paragraph p = new Paragraph(10);
-					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
-							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
-					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE CLASES");
-					p.add(Chunk.NEWLINE);
-					p.add(Chunk.NEWLINE);
-					p.setAlignment(Element.ALIGN_CENTER);
-					doc.add(p);
-					// Tabla de datos
-					PdfPTable tabla = new PdfPTable(5);
-					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase("ID CLASE", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase("CLAVE", negrita));
-					PdfPCell c3 = new PdfPCell(new Phrase("PROFESOR", negrita));
-					PdfPCell c4 = new PdfPCell(new Phrase("GRUPO", negrita));
-					PdfPCell c5 = new PdfPCell(new Phrase("CLASE", negrita));
-					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c4.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c5.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					tabla.addCell(c1);
-					tabla.addCell(c2);
-					tabla.addCell(c3);
-					tabla.addCell(c4);
-					tabla.addCell(c5);
-					// Agregar los registros
-					for (Clase pro : lista) {
-						tabla.addCell("" + pro.getIdClase());
-						tabla.addCell("" + pro.getClave());
-						tabla.addCell(pro.getProfesor());
-						tabla.addCell(""+pro.getGrupo());
-						tabla.addCell(pro.getClase());
-					}
-					doc.add(tabla);
-					Paragraph p1 = new Paragraph(10);
-					p1.add(Chunk.NEWLINE);
-					p1.add("NÚMERO DE REGISTROS: " + lista.size());
-					p1.add(Chunk.NEWLINE);
-					p1.add(Chunk.NEWLINE);
-					p1.setAlignment(Element.ALIGN_RIGHT);
-					doc.add(p1);
-					doc.close();
-					archivo.close();
-					Desktop.getDesktop().open(temp);
-				} catch (FileNotFoundException ex) {
-
-				} catch (DocumentException ex) {
-
-				} catch (IOException ex) {
-
-				}
+				GenerarPDF();
+				
 			}
 		});
 		btnPdf.setIcon(new ImageIcon(vClase.class.getResource("/img/icons8-pdf-30.png")));
@@ -397,7 +327,80 @@ public class vClase extends JFrame {
 		contentPane.add(btnLimpiar);
 	}
 
-	
+	public void GenerarPDF() {
+		try {
+			FileOutputStream archivo;				
+            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteClases.pdf");
+            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/ReporteClases.pdf");
+            FileOutputStream flujoSalida = new FileOutputStream(temp);         
+			archivo = new FileOutputStream(temp);
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			doc.open();
+			java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+			Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
+			img.setAlignment(Element.ALIGN_CENTER);
+			img.scaleToFit(200, 200);
+			doc.add(img);
+			Paragraph p = new Paragraph(10);
+			com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
+					com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+			p.add(Chunk.NEWLINE);
+			p.add("CATALOGO DE CLASES");
+			p.add(Chunk.NEWLINE);
+			p.add(Chunk.NEWLINE);
+			p.setAlignment(Element.ALIGN_CENTER);
+			doc.add(p);
+			// Tabla de datos
+			PdfPTable tabla = new PdfPTable(5);
+			tabla.setWidthPercentage(100);
+			PdfPCell c1 = new PdfPCell(new Phrase("ID CLASE", negrita));
+			PdfPCell c2 = new PdfPCell(new Phrase("CLAVE", negrita));
+			PdfPCell c3 = new PdfPCell(new Phrase("PROFESOR", negrita));
+			PdfPCell c4 = new PdfPCell(new Phrase("GRUPO", negrita));
+			PdfPCell c5 = new PdfPCell(new Phrase("CLASE", negrita));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			tabla.addCell(c1);
+			tabla.addCell(c2);
+			tabla.addCell(c3);
+			tabla.addCell(c4);
+			tabla.addCell(c5);
+			// Agregar los registros
+			for (Clase pro : lista) {
+				tabla.addCell("" + pro.getIdClase());
+				tabla.addCell("" + pro.getClave());
+				tabla.addCell(pro.getProfesor());
+				tabla.addCell(""+pro.getGrupo());
+				tabla.addCell(pro.getClase());
+			}
+			doc.add(tabla);
+			Paragraph p1 = new Paragraph(10);
+			p1.add(Chunk.NEWLINE);
+			p1.add("NÚMERO DE REGISTROS: " + lista.size());
+			p1.add(Chunk.NEWLINE);
+			p1.add(Chunk.NEWLINE);
+			p1.setAlignment(Element.ALIGN_RIGHT);
+			doc.add(p1);
+			doc.close();
+			archivo.close();
+			Desktop.getDesktop().open(temp);
+		} catch (FileNotFoundException ex) {
+
+		} catch (DocumentException ex) {
+
+		} catch (IOException ex) {
+
+		}
+	}
 
 	public void actualizarTabla() {
 		

@@ -254,74 +254,7 @@ public class vUsuario extends JFrame {
 		btnPdf.setBackground(new Color(43, 81, 111));
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					FileOutputStream archivo;				
-		            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteUsuarios.pdf");
-		            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/Reporteusuarios.pdf");
-		            FileOutputStream flujoSalida = new FileOutputStream(temp);         
-					archivo = new FileOutputStream(temp);
-					Document doc = new Document();
-					PdfWriter.getInstance(doc, archivo);
-					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
-					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
-					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(200, 200);
-					doc.add(img);
-					Paragraph p = new Paragraph(10);
-					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
-							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
-					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE USUARIOS");
-					p.add(Chunk.NEWLINE);
-					p.add(Chunk.NEWLINE);
-					p.setAlignment(Element.ALIGN_CENTER);
-					doc.add(p);
-					PdfPTable tabla = new PdfPTable(4);
-					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase(" ID USUARIO", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase(" USUARIO", negrita));
-					PdfPCell c3 = new PdfPCell(new Phrase(" PASSWORD", negrita));
-					PdfPCell c4 = new PdfPCell(new Phrase(" NOMBRE", negrita));
-					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c4.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c1.setBackgroundColor(BaseColor.GRAY);
-					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					tabla.addCell(c1);
-					tabla.addCell(c2);
-					tabla.addCell(c3);
-					tabla.addCell(c4);
-
-					for (Usuario u : lista) {
-						tabla.addCell("" + u.getId());
-						tabla.addCell(u.getUser());
-						tabla.addCell(u.getPassword());
-						tabla.addCell(u.getNombre());
-
-					}
-
-					doc.add(tabla);
-					Paragraph p1 = new Paragraph(10);
-					p1.add(Chunk.NEWLINE);
-					p1.add("NÚMERO DE REGISTRO " + lista.size());
-					p1.add(Chunk.NEWLINE);
-					p1.add(Chunk.NEWLINE);
-					p1.setAlignment(Element.ALIGN_RIGHT);
-					doc.add(p1);
-					doc.close();
-					archivo.close();
-					Desktop.getDesktop().open(temp);
-				} catch (FileNotFoundException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
-				} catch (DocumentException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
-				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
-				}
+				GenerarReportePDF();
 			}
 		});
 		btnPdf.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -391,6 +324,77 @@ public class vUsuario extends JFrame {
 		btnLimpiar.setBounds(445, 187, 89, 23);
 		contentPane.add(btnLimpiar);
 		actualizarTabla();
+	}
+	
+	public void GenerarReportePDF() {
+		try {
+			FileOutputStream archivo;				
+            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteUsuarios.pdf");
+            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/Reporteusuarios.pdf");
+            FileOutputStream flujoSalida = new FileOutputStream(temp);         
+			archivo = new FileOutputStream(temp);
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			doc.open();
+			java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+			Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
+			img.setAlignment(Element.ALIGN_CENTER);
+			img.scaleToFit(200, 200);
+			doc.add(img);
+			Paragraph p = new Paragraph(10);
+			com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
+					com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+			p.add(Chunk.NEWLINE);
+			p.add("CATALOGO DE USUARIOS");
+			p.add(Chunk.NEWLINE);
+			p.add(Chunk.NEWLINE);
+			p.setAlignment(Element.ALIGN_CENTER);
+			doc.add(p);
+			PdfPTable tabla = new PdfPTable(4);
+			tabla.setWidthPercentage(100);
+			PdfPCell c1 = new PdfPCell(new Phrase(" ID USUARIO", negrita));
+			PdfPCell c2 = new PdfPCell(new Phrase(" USUARIO", negrita));
+			PdfPCell c3 = new PdfPCell(new Phrase(" PASSWORD", negrita));
+			PdfPCell c4 = new PdfPCell(new Phrase(" NOMBRE", negrita));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c1.setBackgroundColor(BaseColor.GRAY);
+			c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			tabla.addCell(c1);
+			tabla.addCell(c2);
+			tabla.addCell(c3);
+			tabla.addCell(c4);
+
+			for (Usuario u : lista) {
+				tabla.addCell("" + u.getId());
+				tabla.addCell(u.getUser());
+				tabla.addCell(u.getPassword());
+				tabla.addCell(u.getNombre());
+
+			}
+
+			doc.add(tabla);
+			Paragraph p1 = new Paragraph(10);
+			p1.add(Chunk.NEWLINE);
+			p1.add("NÚMERO DE REGISTRO " + lista.size());
+			p1.add(Chunk.NEWLINE);
+			p1.add(Chunk.NEWLINE);
+			p1.setAlignment(Element.ALIGN_RIGHT);
+			doc.add(p1);
+			doc.close();
+			archivo.close();
+			Desktop.getDesktop().open(temp);
+		} catch (FileNotFoundException e1) {
+			JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
+		} catch (DocumentException e1) {
+			JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
+		}
 	}
 
 	public void actualizarTabla() {

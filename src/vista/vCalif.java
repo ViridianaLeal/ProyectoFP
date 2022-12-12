@@ -338,96 +338,7 @@ public class vCalif extends JFrame {
 		btnPdf = new JButton("");
 		btnPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					FileOutputStream archivo;				
-		            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteCalificaciones.pdf");
-		            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/ReporteCalificaciones.pdf");
-		            FileOutputStream flujoSalida = new FileOutputStream(temp);         
-					archivo = new FileOutputStream(temp);
-					Document doc = new Document();
-					PdfWriter.getInstance(doc, archivo);
-					doc.open();
-					java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
-					Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
-					img.setAlignment(Element.ALIGN_CENTER);
-					img.scaleToFit(200, 200);
-					doc.add(img);
-					Paragraph p = new Paragraph(10);
-					com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
-							com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
-					p.add(Chunk.NEWLINE);
-					p.add("CATALOGO DE CALIFICACIONES");
-					p.add(Chunk.NEWLINE);
-					p.add(Chunk.NEWLINE);
-					p.setAlignment(Element.ALIGN_CENTER);
-					doc.add(p);
-					PdfPTable tabla = new PdfPTable(8);
-					tabla.setWidthPercentage(100);
-					PdfPCell c1 = new PdfPCell(new Phrase(" ID CALIFICACIÓN", negrita));
-					PdfPCell c2 = new PdfPCell(new Phrase(" ALUMNO", negrita));
-					PdfPCell c3 = new PdfPCell(new Phrase(" PROFESOR", negrita));
-					PdfPCell c4 = new PdfPCell(new Phrase(" SEMESTRE", negrita));
-					PdfPCell c5 = new PdfPCell(new Phrase(" CARRERA", negrita));
-					PdfPCell c6 = new PdfPCell(new Phrase(" GRUPO", negrita));
-					PdfPCell c7 = new PdfPCell(new Phrase(" ASIGNATURA", negrita));
-					PdfPCell c8 = new PdfPCell(new Phrase(" CALIFICACIÓN", negrita));
-					c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c3.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c4.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c5.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c6.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c7.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c8.setHorizontalAlignment(Element.ALIGN_CENTER);
-					c1.setBackgroundColor(BaseColor.GRAY);
-					c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c7.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					c8.setBackgroundColor(BaseColor.LIGHT_GRAY);
-					tabla.addCell(c1);
-					tabla.addCell(c2);
-					tabla.addCell(c3);
-					tabla.addCell(c4);
-					tabla.addCell(c5);
-					tabla.addCell(c6);
-					tabla.addCell(c7);
-					tabla.addCell(c8);
-					
-
-					for (Calificacion u : lista) {
-						tabla.addCell("" + u.getIdCali());
-						tabla.addCell(u.getAlumno());
-						tabla.addCell(u.getProfesor());
-						tabla.addCell(u.getSemestre());
-						tabla.addCell(u.getCarrera());
-						tabla.addCell(""+u.getGrupo());
-						tabla.addCell(u.getAsignatura());
-						tabla.addCell(""+u.getCalificacio());
-
-					}
-
-					doc.add(tabla);
-					Paragraph p1 = new Paragraph(10);
-					p1.add(Chunk.NEWLINE);
-					p1.add("NÚMERO DE REGISTRO " + lista.size());
-					p1.add(Chunk.NEWLINE);
-					p1.add(Chunk.NEWLINE);
-					p1.setAlignment(Element.ALIGN_RIGHT);
-					doc.add(p1);
-					doc.close();
-					archivo.close();
-					Desktop.getDesktop().open(temp);
-				} catch (FileNotFoundException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
-				} catch (DocumentException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
-				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
-				
-				}
+				GenerarPDF();
 			}
 		});
 		btnPdf.setIcon(new ImageIcon(vCalif.class.getResource("/img/icons8-pdf-30.png")));
@@ -449,6 +360,99 @@ public class vCalif extends JFrame {
 		txtBuscar.setBounds(660, 413, 350, 20);
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
+	}
+	
+	public void GenerarPDF() {
+		try {
+			FileOutputStream archivo;				
+            File temp = new File(System.getProperty("java.io.tmpdir") + "ReporteCalificaciones.pdf");
+            InputStream flujoEntrada = this.getClass().getResourceAsStream("/pdf/ReporteCalificaciones.pdf");
+            FileOutputStream flujoSalida = new FileOutputStream(temp);         
+			archivo = new FileOutputStream(temp);
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, archivo);
+			doc.open();
+			java.awt.Image img2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/DeoClass.png"));
+			Image img = Image.getInstance(getClass().getResource("/img/DeoClass.png"));
+			img.setAlignment(Element.ALIGN_CENTER);
+			img.scaleToFit(200, 200);
+			doc.add(img);
+			Paragraph p = new Paragraph(10);
+			com.itextpdf.text.Font negrita = new com.itextpdf.text.Font(
+					com.itextpdf.text.Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+			p.add(Chunk.NEWLINE);
+			p.add("CATALOGO DE CALIFICACIONES");
+			p.add(Chunk.NEWLINE);
+			p.add(Chunk.NEWLINE);
+			p.setAlignment(Element.ALIGN_CENTER);
+			doc.add(p);
+			PdfPTable tabla = new PdfPTable(8);
+			tabla.setWidthPercentage(100);
+			PdfPCell c1 = new PdfPCell(new Phrase(" ID CALIFICACIÓN", negrita));
+			PdfPCell c2 = new PdfPCell(new Phrase(" ALUMNO", negrita));
+			PdfPCell c3 = new PdfPCell(new Phrase(" PROFESOR", negrita));
+			PdfPCell c4 = new PdfPCell(new Phrase(" SEMESTRE", negrita));
+			PdfPCell c5 = new PdfPCell(new Phrase(" CARRERA", negrita));
+			PdfPCell c6 = new PdfPCell(new Phrase(" GRUPO", negrita));
+			PdfPCell c7 = new PdfPCell(new Phrase(" ASIGNATURA", negrita));
+			PdfPCell c8 = new PdfPCell(new Phrase(" CALIFICACIÓN", negrita));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c6.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c7.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c8.setHorizontalAlignment(Element.ALIGN_CENTER);
+			c1.setBackgroundColor(BaseColor.GRAY);
+			c2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c5.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c6.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c7.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			c8.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			tabla.addCell(c1);
+			tabla.addCell(c2);
+			tabla.addCell(c3);
+			tabla.addCell(c4);
+			tabla.addCell(c5);
+			tabla.addCell(c6);
+			tabla.addCell(c7);
+			tabla.addCell(c8);
+			
+
+			for (Calificacion u : lista) {
+				tabla.addCell("" + u.getIdCali());
+				tabla.addCell(u.getAlumno());
+				tabla.addCell(u.getProfesor());
+				tabla.addCell(u.getSemestre());
+				tabla.addCell(u.getCarrera());
+				tabla.addCell(""+u.getGrupo());
+				tabla.addCell(u.getAsignatura());
+				tabla.addCell(""+u.getCalificacio());
+
+			}
+
+			doc.add(tabla);
+			Paragraph p1 = new Paragraph(10);
+			p1.add(Chunk.NEWLINE);
+			p1.add("NÚMERO DE REGISTRO " + lista.size());
+			p1.add(Chunk.NEWLINE);
+			p1.add(Chunk.NEWLINE);
+			p1.setAlignment(Element.ALIGN_RIGHT);
+			doc.add(p1);
+			doc.close();
+			archivo.close();
+			Desktop.getDesktop().open(temp);
+		} catch (FileNotFoundException e1) {
+			JOptionPane.showMessageDialog(null, "ERROR AL CREAR ARCHIVO");
+		} catch (DocumentException e1) {
+			JOptionPane.showMessageDialog(null, "ERROR AL CREAR DOCUMENTO PDF");
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, "ERROR AL CREAR IO");
+		
+		}
 	}
 	
 public void actualizarTabla() {
